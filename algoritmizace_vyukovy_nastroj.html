@@ -190,7 +190,7 @@
                     %% Diagram se vygeneruje zde %%
                 </div>
             </div>
-        </div>
+        </section>
 
         <!-- Divider 2 -->
         <div id="gutter2" class="gutter-horizontal"></div>
@@ -535,9 +535,6 @@ sys.settrace(_trace_func)
             const userCode = pyEditor.getValue();
             // Wrap script with settrace hooks
             const fullScript = `
-_execution_trace.clear()
-_console_output.clear()
-
 ${pythonTracerScript}
 
 try:
@@ -550,11 +547,13 @@ finally:
                 await pyodideInstance.runPythonAsync(fullScript);
                 
                 // Retrieve execution trace from Python context
-                const rawTrace = pyodideInstance.globals.get('_execution_trace').toJs();
+                const rawTrace = pyodideInstance.globals.get('_execution_trace').toJs({
+                    dict_converter: Object.fromEntries
+                });
                 executionTrace = rawTrace.map(item => ({
-                    line: item.get('line'),
-                    locals: Object.fromEntries(item.get('locals')),
-                    stdout: item.get('stdout').toJs()
+                    line: item.line,
+                    locals: item.locals,
+                    stdout: item.stdout
                 }));
 
                 if (executionTrace.length > 0) {
