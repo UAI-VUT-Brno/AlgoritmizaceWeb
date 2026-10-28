@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="cs" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algoritmizace & Vývojové diagramy | Výukový nástroj</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkbg: '#0f172a',
+                        darkcard: '#1e293b',
+                        darkaccent: '#334155',
+                        brand: '#3b82f6',
+                        brandhover: '#2563eb',
+                        activeLine: '#374151',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- CodeMirror 5 (Syntax highlighting for Pseudocode and Python) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/dracula.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/python/python.min.js"></script>
+    <!-- Mermaid.js for Flowcharts -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <!-- Pyodide CDN -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+
+    <style>
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            overflow: hidden;
+        }
+        .CodeMirror {
+            height: 100% !important;
+            font-family: 'Fira Code', 'Courier New', Courier, monospace;
+            font-size: 13px;
+            background-color: #0f172a !important;
+        }
+        .CodeMirror-gutters {
+            background-color: #1e293b !important;
+            border-right: 1px solid #334155 !important;
+        }
+        .active-line-highlight {
+            background-color: rgba(59, 130, 246, 0.25) !important;
+            border-left: 4px solid #3b82f6;
+        }
+        /* Custom scrollbars */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+        /* Resizer handle */
+        .gutter-horizontal {
+            cursor: col-resize;
+            width: 6px;
+            background-color: #1e293b;
+            transition: background-color 0.2s;
+        }
+        .gutter-horizontal:hover {
+            background-color: #3b82f6;
+        }
+        /* Mermaid styling inside canvas */
+        .node rect, .node circle, .node polygon {
+            stroke-width: 2px !important;
+            transition: all 0.3s ease;
+        }
+        .node.active-node rect, .node.active-node circle, .node.active-node polygon {
+            fill: #2563eb !important;
+            stroke: #60a5fa !important;
+            stroke-width: 3px !important;
+            filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.6));
+        }
+    </style>
+</head>
+<body class="bg-darkbg text-slate-100 h-screen flex flex-col">
+
+    <!-- Top Navigation Bar -->
+    <header class="h-14 bg-darkcard border-b border-darkaccent px-4 flex items-center justify-between flex-shrink-0">
+        <div class="flex items-center space-x-3">
+            <i class="fa-solid font-bold text-brand text-xl fa-diagram-project"></i>
+            <h1 class="font-bold text-lg tracking-wide bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
+                Algoritmizace & Vývojové Diagramy
+            </h1>
+            <span class="text-xs bg-darkaccent px-2 py-0.5 rounded-full text-slate-300 font-mono">Pyodide WASM</span>
+        </div>
+
+        <!-- Controls: Select Template, Run Debugger, Step Controls -->
+        <div class="flex items-center space-x-3">
+            <div class="flex items-center space-x-2">
+                <label class="text-xs text-slate-400 font-medium">Algoritmus:</label>
+                <select id="templateSelect" onchange="loadTemplate(this.value)" class="bg-darkbg border border-darkaccent text-xs rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-brand text-slate-200">
+                    <option value="bubbleSort">Bubble Sort (Řazení)</option>
+                    <option value="factorial">Faktoriál (Rekurze/Cykly)</option>
+                    <option value="findMax">Najdi Maximum v poli</option>
+                    <option value="gcd">Eukleidův algoritmus (GCD)</option>
+                </select>
+            </div>
+
+            <div class="h-5 w-px bg-darkaccent"></div>
+
+            <!-- Execution Controls -->
+            <div class="flex items-center space-x-1 bg-darkbg p-1 rounded-lg border border-darkaccent">
+                <button id="btnInit" onclick="initExecution()" class="flex items-center space-x-1 bg-slate-700 hover:bg-slate-600 text-xs text-white px-2.5 py-1 rounded transition" title="Připravit ke krokování">
+                    <i class="fa-solid fa-rotate-left"></i>
+                    <span>Start</span>
+                </button>
+                <button id="btnPlay" onclick="togglePlay()" disabled class="flex items-center space-x-1 bg-green-600 hover:bg-green-500 disabled:opacity-40 disabled:hover:bg-green-600 text-xs text-white px-2.5 py-1 rounded transition">
+                    <i id="playIcon" class="fa-solid fa-play"></i>
+                    <span id="playText">Spustit</span>
+                </button>
+                <button id="btnStepNext" onclick="stepForward()" disabled class="flex items-center space-x-1 bg-brand hover:bg-brandhover disabled:opacity-40 text-xs text-white px-2.5 py-1 rounded transition">
+                    <i class="fa-solid fa-step-forward"></i>
+                    <span>Krok</span>
+                </button>
+                <button id="btnStepPrev" onclick="stepBackward()" disabled class="flex items-center space-x-1 bg-slate-700 hover:bg-slate-600 disabled:opacity-40 text-xs text-white px-2.5 py-1 rounded transition">
+                    <i class="fa-solid fa-step-backward"></i>
+                </button>
+            </div>
+
+            <!-- Speed Slider -->
+            <div class="flex items-center space-x-2 bg-darkbg px-2 py-1 rounded-lg border border-darkaccent text-xs">
+                <i class="fa-solid fa-gauge-high text-slate-400"></i>
+                <input type="range" id="speedSlider" min="100" max="1500" value="600" step="50" class="w-20 accent-brand cursor-pointer">
+                <span id="speedVal" class="text-slate-400 font-mono w-10">600ms</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container: 3 Panes Layout -->
+    <main id="container" class="flex-1 flex overflow-hidden">
+        
+        <!-- PANE 1: Pseudokód & Edice (1/3) -->
+        <section id="pane1" class="w-1/3 flex flex-col border-r border-darkaccent min-w-[280px]">
+            <div class="h-9 bg-darkcard px-3 flex items-center justify-between border-b border-darkaccent text-xs font-semibold text-slate-300">
+                <span class="flex items-center space-x-2">
+                    <i class="fa-solid fa-file-code text-indigo-400"></i>
+                    <span>1. Pseudokód / Struktura</span>
+                </span>
+                <span class="text-[10px] text-slate-500 uppercase tracking-wider">Algoritmus</span>
+            </div>
+            <div class="flex-1 relative">
+                <textarea id="pseudocodeEditor"></textarea>
+            </div>
+            <!-- Sync Button -->
+            <div class="p-2 bg-darkcard border-t border-darkaccent flex justify-between items-center">
+                <button onclick="updateDiagramFromPseudocode()" class="w-full bg-slate-800 hover:bg-slate-700 text-xs text-slate-200 py-1.5 px-3 rounded border border-darkaccent flex items-center justify-center space-x-2 transition">
+                    <i class="fa-solid fa-arrows-rotate text-brand"></i>
+                    <span>Aktualizovat Diagram z Pseudokódu</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Divider 1 -->
+        <div id="gutter1" class="gutter-horizontal"></div>
+
+        <!-- PANE 2: Vývojový diagram (1/3) -->
+        <section id="pane2" class="w-1/3 flex flex-col border-r border-darkaccent min-w-[280px]">
+            <div class="h-9 bg-darkcard px-3 flex items-center justify-between border-b border-darkaccent text-xs font-semibold text-slate-300">
+                <span class="flex items-center space-x-2">
+                    <i class="fa-solid fa-project-diagram text-emerald-400"></i>
+                    <span>2. Vývojový Diagram</span>
+                </span>
+                <div class="flex items-center space-x-2">
+                    <span id="mermaidStatus" class="text-[10px] text-slate-400">Generováno</span>
+                </div>
+            </div>
+            <!-- Dynamic Flowchart Viewport -->
+            <div class="flex-1 bg-darkbg p-4 overflow-auto flex items-center justify-center relative" id="diagramContainer">
+                <div id="mermaidTarget" class="mermaid flex justify-center items-center w-full min-h-full">
+                    %% Diagram se vygeneruje zde %%
+                </div>
+            </div>
+        </div>
+
+        <!-- Divider 2 -->
+        <div id="gutter2" class="gutter-horizontal"></div>
+
+        <!-- PANE 3: Python Kód + Debugger / Proměnné (1/3 Pravý sloupec) -->
+        <section id="pane3" class="w-1/3 flex flex-col min-w-[280px]">
+            <div class="h-9 bg-darkcard px-3 flex items-center justify-between border-b border-darkaccent text-xs font-semibold text-slate-300 flex-shrink-0">
+                <span class="flex items-center space-x-2">
+                    <i class="fa-brands fa-python text-yellow-400"></i>
+                    <span>3. Python Kód & Vizualizace</span>
+                </span>
+                <span id="pyodideStatus" class="text-[10px] text-amber-400 flex items-center space-x-1">
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+                    <span>Nahrávání Pyodide...</span>
+                </span>
+            </div>
+
+            <!-- Python Editor (Top 55%) -->
+            <div class="h-[55%] relative border-b border-darkaccent overflow-hidden">
+                <textarea id="pythonEditor"></textarea>
+            </div>
+
+            <!-- Variables & Callstack Inspector (Bottom 45%) -->
+            <div class="h-[45%] flex flex-col bg-darkcard">
+                <div class="h-8 bg-slate-900 px-3 flex items-center justify-between border-b border-darkaccent text-xs font-medium text-slate-400 flex-shrink-0">
+                    <span class="flex items-center space-x-2">
+                        <i class="fa-solid fa-cube text-sky-400"></i>
+                        <span>Inspektor Proměnných</span>
+                    </span>
+                    <span id="stepCounter" class="font-mono text-[11px] text-slate-400">Krok: 0 / 0</span>
+                </div>
+
+                <div class="flex-1 p-2 overflow-y-auto font-mono text-xs flex flex-col space-y-2">
+                    <!-- Local Variables Table -->
+                    <div class="flex-1 bg-darkbg rounded-lg border border-darkaccent p-2 overflow-y-auto min-h-[90px]">
+                        <div class="text-[11px] text-slate-400 font-sans font-semibold mb-1 flex justify-between border-b border-darkaccent pb-1">
+                            <span>Proměnná</span>
+                            <span>Hodnota</span>
+                        </div>
+                        <div id="varInspector" class="space-y-1">
+                            <span class="text-slate-500 italic font-sans text-[11px]">Spusťte krokování...</span>
+                        </div>
+                    </div>
+
+                    <!-- Output & Call Stack -->
+                    <div class="h-28 bg-darkbg rounded-lg border border-darkaccent p-2 overflow-y-auto flex-shrink-0">
+                        <div class="text-[11px] text-slate-400 font-sans font-semibold mb-1 flex justify-between border-b border-darkaccent pb-1">
+                            <span>Konzole (stdout)</span>
+                        </div>
+                        <pre id="consoleOutput" class="text-slate-300 text-[11px] whitespace-pre-wrap font-mono"></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Global Application Scripts -->
+    <script>
+        // --- 1. PRE-DEFINED ALGORITHM TEMPLATES ---
+        const templates = {
+            bubbleSort: {
+                pseudocode: `ALGORITMUS BubbleSort(pole):
+  N = délka(pole)
+  PRO i OD 0 DO N-1:
+    PRO j OD 0 DO N-i-2:
+      POKUD pole[j] > pole[j+1]:
+        VYMĚŇ pole[j] a pole[j+1]
+  VRÁTIS pole`,
+                python: `def bubble_sort(arr):
+    n = len(arr)
+    for i in range(n):
+        for j in range(0, n - i - 1):
+            if arr[j] > arr[j + 1]:
+                arr[j], arr[j + 1] = arr[j + 1], arr[j]
+    return arr
+
+pole = [64, 34, 25, 12, 22]
+bubble_sort(pole)`,
+                mermaid: `graph TD
+    Start([Start: Bubble Sort]) --> Init["N = LenArray"]
+    Init --> LoopI["Outer Loop: i"]
+    LoopI --> LoopJ["Inner Loop: j"]
+    LoopJ --> Cond{"arr[j] > arr[j+1]?"}
+    Cond -- Ano --> Swap["Swap elements"]
+    Cond -- Ne --> NextJ["Next j"]
+    Swap --> NextJ
+    NextJ --> EndLoopJ{"End of j?"}
+    EndLoopJ -- Ne --> LoopJ
+    EndLoopJ -- Ano --> NextI["Next i"]
+    NextI --> EndLoopI{"End of i?"}
+    EndLoopI -- Ne --> LoopI
+    EndLoopI -- Ano --> End([Konec / Vrátit pole])`
+            },
+
+            factorial: {
+                pseudocode: `ALGORITMUS Faktorial(n):
+  vysledek = 1
+  PRO i OD 1 DO n:
+    vysledek = vysledek * i
+  VRÁTI vysledek`,
+                python: `def factorial(n):
+    vysledek = 1
+    for i in range(1, n + 1):
+        vysledek = vysledek * i
+    return vysledek
+
+vysledek = factorial(5)
+print("Faktorial:", vysledek)`,
+                mermaid: `graph TD
+    Start([Start: Faktoriál]) --> Init["vysledek = 1"]
+    Init --> Loop["Loop i: 1 to n"]
+    Loop --> Mult["vysledek = vysledek * i"]
+    Mult --> Check{"i <= n?"}
+    Check -- Ano --> Loop
+    Check -- Ne --> End([Konec: Vrátit vysledek])`
+            },
+
+            findMax: {
+                pseudocode: `ALGORITMUS NajdiMax(pole):
+  max_val = pole[0]
+  PRO prvek V pole:
+    POKUD prvek > max_val:
+      max_val = prvek
+  VRÁTIS max_val`,
+                python: `def find_max(arr):
+    max_val = arr[0]
+    for prvek in arr:
+        if prvek > max_val:
+            max_val = prvek
+    return max_val
+
+cisla = [14, 45, 8, 99, 23]
+max_cislo = find_max(cisla)
+print("Max:", max_cislo)`,
+                mermaid: `graph TD
+    Start([Start: Najdi Max]) --> Init["max_val = arr[0]"]
+    Init --> Loop["For each prvek in arr"]
+    Loop --> Cond{"prvek > max_val?"}
+    Cond -- Ano --> Update["max_val = prvek"]
+    Cond -- Ne --> Next["Next element"]
+    Update --> Next
+    Next --> Check{"Done?"}
+    Check -- Ne --> Loop
+    Check -- Ano --> End([End: Return max_val])`
+            },
+
+            gcd: {
+                pseudocode: `ALGORITMUS Eukleid(a, b):
+  DOKUD b != 0:
+    temp = b
+    b = a MOD b
+    a = temp
+  VRÁTI a`,
+                python: `def gcd(a, b):
+    while b != 0:
+        temp = b
+        b = a % b
+        a = temp
+    return a
+
+vysledek = gcd(48, 18)
+print("GCD:", vysledek)`,
+                mermaid: `graph TD
+    Start([Start: GCD]) --> Cond{"b != 0?"}
+    Cond -- Ano --> Step["temp = b<br>b = a % b<br>a = temp"]
+    Step --> Cond
+    Cond -- Ne --> End([Return a])`
+            }
+        };
+
+        // --- 2. GLOBAL STATE ---
+        let pyEditor, pseudoEditor;
+        let pyodideInstance = null;
+        let executionTrace = [];
+        let currentStepIndex = -1;
+        let isPlaying = false;
+        let playInterval = null;
+
+        // Initialize CodeMirror Editors
+        window.addEventListener('DOMContentLoaded', () => {
+            // Pseudocode Editor
+            pseudoEditor = CodeMirror.fromTextArea(document.getElementById('pseudocodeEditor'), {
+                mode: 'text/plain',
+                theme: 'dracula',
+                lineNumbers: true,
+                lineWrapping: true
+            });
+
+            // Python Editor
+            pyEditor = CodeMirror.fromTextArea(document.getElementById('pythonEditor'), {
+                mode: 'python',
+                theme: 'dracula',
+                lineNumbers: true,
+                lineWrapping: true
+            });
+
+            // Load initial template
+            loadTemplate('bubbleSort');
+
+            // Init Mermaid
+            mermaid.initialize({
+                startOnLoad: false,
+                theme: 'dark',
+                securityLevel: 'loose',
+                flowchart: { curve: 'basis' }
+            });
+
+            // Initialize Pyodide WASM
+            initPyodide();
+
+            // Handle speed slider change
+            document.getElementById('speedSlider').addEventListener('input', (e) => {
+                const val = e.target.value;
+                document.getElementById('speedVal').innerText = `${val}ms`;
+                if (isPlaying) {
+                    stopPlay();
+                    startPlay();
+                }
+            });
+        });
+
+        // Load Algorithm Templates
+        function loadTemplate(key) {
+            const tmpl = templates[key];
+            if (!tmpl) return;
+
+            pseudoEditor.setValue(tmpl.pseudocode);
+            pyEditor.setValue(tmpl.python);
+            renderMermaid(tmpl.mermaid);
+
+            resetExecutionState();
+        }
+
+        // --- 3. MERMAID FLOWCHART RENDERER ---
+        async function renderMermaid(graphDefinition) {
+            const target = document.getElementById('mermaidTarget');
+            try {
+                target.removeAttribute('data-processed');
+                target.innerHTML = graphDefinition;
+                await mermaid.run({
+                    nodes: [target]
+                });
+                document.getElementById('mermaidStatus').innerText = 'Diagram OK';
+                document.getElementById('mermaidStatus').className = 'text-[10px] text-emerald-400';
+            } catch (err) {
+                console.error("Mermaid Render Error:", err);
+                document.getElementById('mermaidStatus').innerText = 'Chyba syntaxe diagramu';
+                document.getElementById('mermaidStatus').className = 'text-[10px] text-rose-400';
+            }
+        }
+
+        function updateDiagramFromPseudocode() {
+            // Basic automatic flowchart generator heuristic for pseudocode
+            const code = pseudoEditor.getValue();
+            const lines = code.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+            
+            let mermaidStr = "graph TD\n";
+            mermaidStr += "  Start([Start])\n";
+            let prevNode = "Start";
+
+            lines.forEach((line, index) => {
+                const nodeId = `N${index}`;
+                // Clean strings and sanitize characters that break Mermaid syntax
+                let cleanText = line.replace(/["']/g, '').replace(/[\(\)\[\]\{\}]/g, ' ');
+                
+                if (line.startsWith('POKUD') || line.startsWith('IF') || (line.endsWith(':') && line.includes('OD'))) {
+                    mermaidStr += `  ${nodeId}{{"${cleanText}"}}\n`;
+                } else if (line.startsWith('VRÁTI') || line.startsWith('RETURN')) {
+                    mermaidStr += `  ${nodeId}[/"${cleanText}"/]\n`;
+                } else {
+                    mermaidStr += `  ${nodeId}["${cleanText}"]\n`;
+                }
+
+                mermaidStr += `  ${prevNode} --> ${nodeId}\n`;
+                prevNode = nodeId;
+            });
+            mermaidStr += `  ${prevNode} --> End([Konec])\n`;
+
+            renderMermaid(mermaidStr);
+        }
+
+        // --- 4. PYODIDE & PYTHON EXECUTION TRACER ---
+        async function initPyodide() {
+            try {
+                pyodideInstance = await loadPyodide();
+                document.getElementById('pyodideStatus').innerHTML = '<i class="fa-solid fa-circle-check"></i> Python Pripraven';
+                document.getElementById('pyodideStatus').className = 'text-[10px] text-emerald-400 flex items-center space-x-1';
+            } catch (e) {
+                console.error("Pyodide Init Failed", e);
+                document.getElementById('pyodideStatus').innerText = 'Chyba při načítání Pythonu';
+                document.getElementById('pyodideStatus').className = 'text-[10px] text-rose-400';
+            }
+        }
+
+        // Python Tracing wrapper injected dynamically
+        const pythonTracerScript = `
+import sys
+import json
+
+_execution_trace = []
+_console_output = []
+
+class CustomStdout:
+    def write(self, text):
+        if text.strip():
+            _console_output.append(text)
+    def flush(self):
+        pass
+
+sys.stdout = CustomStdout()
+
+def _trace_func(frame, event, arg):
+    if event == 'line':
+        lineno = frame.f_lineno
+        # Filter local variables (exclude internal setup)
+        locals_val = {}
+        for k, v in frame.f_locals.items():
+            if not k.startswith('_'):
+                try:
+                    locals_val[k] = repr(v)
+                except:
+                    locals_val[k] = str(v)
+        
+        _execution_trace.append({
+            'line': lineno,
+            'locals': locals_val,
+            'stdout': list(_console_output)
+        })
+    return _trace_func
+
+sys.settrace(_trace_func)
+`;
+
+        async function initExecution() {
+            if (!pyodideInstance) {
+                alert("Pyodide se stále načítá. Počkejte prosím chvíli.");
+                return;
+            }
+
+            resetExecutionState();
+
+            const userCode = pyEditor.getValue();
+            // Wrap script with settrace hooks
+            const fullScript = `
+_execution_trace.clear()
+_console_output.clear()
+
+${pythonTracerScript}
+
+try:
+${userCode.split('\n').map(line => '    ' + line).join('\n')}
+finally:
+    sys.settrace(None)
+`;
+
+            try {
+                await pyodideInstance.runPythonAsync(fullScript);
+                
+                // Retrieve execution trace from Python context
+                const rawTrace = pyodideInstance.globals.get('_execution_trace').toJs();
+                executionTrace = rawTrace.map(item => ({
+                    line: item.get('line'),
+                    locals: Object.fromEntries(item.get('locals')),
+                    stdout: item.get('stdout').toJs()
+                }));
+
+                if (executionTrace.length > 0) {
+                    currentStepIndex = 0;
+                    updateStepUI();
+                    document.getElementById('btnPlay').disabled = false;
+                    document.getElementById('btnStepNext').disabled = false;
+                    document.getElementById('btnStepPrev').disabled = false;
+                } else {
+                    alert("Nebyl zaznamenán žádný krok vykonávání kódového bloku.");
+                }
+            } catch (err) {
+                console.error("Python Execution Error", err);
+                document.getElementById('consoleOutput').innerText = "Chyba běhu Pythonu:\n" + err.message;
+            }
+        }
+
+        // --- 5. STEPPING & UI VISUALIZATION ---
+        function updateStepUI() {
+            if (currentStepIndex < 0 || currentStepIndex >= executionTrace.length) return;
+
+            const step = executionTrace[currentStepIndex];
+
+            // 1. Highlight line in Python Editor
+            highlightPythonLine(step.line - 13); // Shift offset caused by trace wrapper code
+
+            // 2. Render variables in Inspector
+            renderVariables(step.locals);
+
+            // 3. Update Console
+            document.getElementById('consoleOutput').innerText = step.stdout.join('\n');
+
+            // 4. Highlight Flowchart Node (matching heuristically)
+            highlightFlowchartStep(step.line - 13);
+
+            // 5. Update Counter
+            document.getElementById('stepCounter').innerText = `Krok: ${currentStepIndex + 1} / ${executionTrace.length}`;
+
+            // Controls active states
+            document.getElementById('btnStepPrev').disabled = (currentStepIndex === 0);
+            document.getElementById('btnStepNext').disabled = (currentStepIndex === executionTrace.length - 1);
+        }
+
+        let lineClassHandle = null;
+        function highlightPythonLine(lineIdx) {
+            if (lineIdx < 0) return;
+            if (lineClassHandle !== null) {
+                pyEditor.removeLineClass(lineClassHandle, 'background', 'active-line-highlight');
+            }
+            lineClassHandle = pyEditor.addLineClass(lineIdx, 'background', 'active-line-highlight');
+            pyEditor.scrollIntoView({ line: lineIdx, ch: 0 }, 50);
+        }
+
+        function renderVariables(localsObj) {
+            const container = document.getElementById('varInspector');
+            container.innerHTML = '';
+
+            const keys = Object.keys(localsObj);
+            if (keys.length === 0) {
+                container.innerHTML = '<span class="text-slate-500 italic text-[11px]">Žádné lokální proměnné</span>';
+                return;
+            }
+
+            keys.forEach(key => {
+                const row = document.createElement('div');
+                row.className = 'flex justify-between items-center bg-slate-800/60 px-2 py-1 rounded text-[11px] font-mono border border-slate-700/50';
+                
+                const nameSpan = document.createElement('span');
+                nameSpan.className = 'text-sky-300 font-semibold';
+                nameSpan.innerText = key;
+
+                const valSpan = document.createElement('span');
+                valSpan.className = 'text-amber-300 truncate max-w-[120px]';
+                valSpan.innerText = localsObj[key];
+                valSpan.title = localsObj[key];
+
+                row.appendChild(nameSpan);
+                row.appendChild(valSpan);
+                container.appendChild(row);
+            });
+        }
+
+        function highlightFlowchartStep(lineNum) {
+            // Remove previous active SVG highlights
+            const svgNodes = document.querySelectorAll('#mermaidTarget .node');
+            svgNodes.forEach(node => node.classList.remove('active-node'));
+
+            if (svgNodes.length === 0) return;
+
+            // Map line index roughly to flowchart nodes
+            const nodeIndex = (lineNum % svgNodes.length);
+            if (svgNodes[nodeIndex]) {
+                svgNodes[nodeIndex].classList.add('active-node');
+            }
+        }
+
+        function stepForward() {
+            if (currentStepIndex < executionTrace.length - 1) {
+                currentStepIndex++;
+                updateStepUI();
+            } else {
+                stopPlay();
+            }
+        }
+
+        function stepBackward() {
+            if (currentStepIndex > 0) {
+                currentStepIndex--;
+                updateStepUI();
+            }
+        }
+
+        function togglePlay() {
+            if (isPlaying) {
+                stopPlay();
+            } else {
+                startPlay();
+            }
+        }
+
+        function startPlay() {
+            if (currentStepIndex >= executionTrace.length - 1) {
+                currentStepIndex = 0;
+            }
+            isPlaying = true;
+            document.getElementById('playIcon').className = 'fa-solid fa-pause';
+            document.getElementById('playText').innerText = 'Pauza';
+            
+            const speed = parseInt(document.getElementById('speedSlider').value);
+            playInterval = setInterval(() => {
+                if (currentStepIndex < executionTrace.length - 1) {
+                    stepForward();
+                } else {
+                    stopPlay();
+                }
+            }, speed);
+        }
+
+        function stopPlay() {
+            isPlaying = false;
+            if (playInterval) clearInterval(playInterval);
+            document.getElementById('playIcon').className = 'fa-solid fa-play';
+            document.getElementById('playText').innerText = 'Spustit';
+        }
+
+        function resetExecutionState() {
+            stopPlay();
+            executionTrace = [];
+            currentStepIndex = -1;
+            if (lineClassHandle !== null) {
+                pyEditor.removeLineClass(lineClassHandle, 'background', 'active-line-highlight');
+                lineClassHandle = null;
+            }
+            document.getElementById('varInspector').innerHTML = '<span class="text-slate-500 italic text-[11px]">Spusťte krokování...</span>';
+            document.getElementById('consoleOutput').innerText = '';
+            document.getElementById('stepCounter').innerText = 'Krok: 0 / 0';
+            document.getElementById('btnPlay').disabled = true;
+            document.getElementById('btnStepNext').disabled = true;
+            document.getElementById('btnStepPrev').disabled = true;
+
+            const svgNodes = document.querySelectorAll('#mermaidTarget .node');
+            svgNodes.forEach(node => node.classList.remove('active-node'));
+        }
+
+        // --- 6. RESIZABLE PANES DRAG LOGIC ---
+        const container = document.getElementById('container');
+        const pane1 = document.getElementById('pane1');
+        const pane2 = document.getElementById('pane2');
+        const pane3 = document.getElementById('pane3');
+        const gutter1 = document.getElementById('gutter1');
+        const gutter2 = document.getElementById('gutter2');
+
+        let activeGutter = null;
+
+        gutter1.addEventListener('mousedown', () => activeGutter = 1);
+        gutter2.addEventListener('mousedown', () => activeGutter = 2);
+
+        document.addEventListener('mousemove', (e) => {
+            if (!activeGutter) return;
+
+            const containerRect = container.getBoundingClientRect();
+            const totalWidth = containerRect.width;
+
+            if (activeGutter === 1) {
+                const newWidth1 = e.clientX - containerRect.left;
+                if (newWidth1 > 200 && newWidth1 < totalWidth - 400) {
+                    pane1.style.width = `${newWidth1}px`;
+                }
+            } else if (activeGutter === 2) {
+                const newWidth2 = e.clientX - pane2.getBoundingClientRect().left;
+                if (newWidth2 > 200 && (totalWidth - e.clientX) > 200) {
+                    pane2.style.width = `${newWidth2}px`;
+                }
+            }
+        });
+
+        document.addEventListener('mouseup', () => {
+            activeGutter = null;
+        });
+    </script>
+</body>
+</html>
