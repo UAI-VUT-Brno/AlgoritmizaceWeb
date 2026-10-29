@@ -99,6 +99,25 @@
             height: 224px;
             min-height: 96px;
         }
+        #pythonEditorPane {
+            flex: 0 0 55%;
+            min-height: 100px;
+        }
+        #pythonInspectorPane {
+            flex: 1 1 0;
+            min-height: 260px;
+        }
+        #inspectorContent {
+            gap: 8px;
+        }
+        #variablePane {
+            flex: 1 1 0%;
+            min-height: 90px;
+        }
+        #consolePane {
+            flex: 1 1 112px;
+            min-height: 70px;
+        }
         .language-button[aria-pressed="true"] {
             background-color: #2563eb;
             color: #fff;
@@ -295,12 +314,14 @@
             </div>
 
             <!-- Python Editor (Top 55%) -->
-            <div class="h-[55%] relative border-b border-darkaccent overflow-hidden">
+            <div id="pythonEditorPane" class="relative border-b border-darkaccent overflow-hidden">
                 <textarea id="pythonEditor"></textarea>
             </div>
 
+            <div id="pythonEditorResizer" class="gutter-vertical" role="separator" data-i18n-aria-label="resizePythonEditor" aria-label="Změnit výšku editoru Pythonu a inspektoru proměnných" aria-orientation="horizontal" aria-valuemin="100" tabindex="0"></div>
+
             <!-- Variables & Callstack Inspector (Bottom 45%) -->
-            <div class="h-[45%] flex flex-col bg-darkcard">
+            <div id="pythonInspectorPane" class="flex flex-col bg-darkcard">
                 <div class="h-8 bg-slate-900 px-3 flex items-center justify-between border-b border-darkaccent text-xs font-medium text-slate-400 flex-shrink-0">
                     <span class="flex items-center space-x-2">
                         <i class="fa-solid fa-cube text-sky-400"></i>
@@ -309,9 +330,9 @@
                     <span id="stepCounter" class="font-mono text-[11px] text-slate-400">Krok: 0 / 0</span>
                 </div>
 
-                <div class="flex-1 p-2 overflow-y-auto font-mono text-xs flex flex-col space-y-2">
+                <div id="inspectorContent" class="flex-1 p-2 overflow-y-auto font-mono text-xs flex flex-col">
                     <!-- Local Variables Table -->
-                    <div class="flex-1 bg-darkbg rounded-lg border border-darkaccent p-2 overflow-y-auto min-h-[90px]">
+                    <div id="variablePane" class="bg-darkbg rounded-lg border border-darkaccent p-2 overflow-y-auto">
                         <div class="text-[11px] text-slate-400 font-sans font-semibold mb-1 flex justify-between border-b border-darkaccent pb-1">
                             <span data-i18n="variable">Proměnná</span>
                             <span data-i18n="value">Hodnota</span>
@@ -321,8 +342,10 @@
                         </div>
                     </div>
 
+                    <div id="variableConsoleResizer" class="gutter-vertical" role="separator" data-i18n-aria-label="resizeVariableConsole" aria-label="Změnit výšku panelu proměnných a konzole" aria-orientation="horizontal" aria-valuemin="90" tabindex="0"></div>
+
                     <!-- Output & Call Stack -->
-                    <div class="h-28 bg-darkbg rounded-lg border border-darkaccent p-2 overflow-y-auto flex-shrink-0">
+                    <div id="consolePane" class="bg-darkbg rounded-lg border border-darkaccent p-2 overflow-y-auto">
                         <div class="text-[11px] text-slate-400 font-sans font-semibold mb-1 flex justify-between border-b border-darkaccent pb-1">
                             <span data-i18n="console">Konzole (stdout)</span>
                         </div>
@@ -354,7 +377,7 @@
                 array[j], array[j + 1] = array[j + 1], array[j]
     return array
 
-values = [64, 34, 25, 12, 22]
+values = [64, 34, 25, 12, 22, 8, -10, -5, 0, 3, 99]
 bubble_sort(values)`
             },
 
@@ -436,12 +459,7 @@ def triangle_area(a, b, c):
         print("Side lengths do not form a valid triangle")
         return None
     sp = (a + b + c) / 2
-    return math.sqrt(
-        sp
-        * (sp - a)
-        * (sp - b)
-        * (sp - c)
-    )
+    return math.sqrt(sp * (sp - a) * (sp - b) * (sp - c))
 
 area = triangle_area(3, 4, 5)
 print("Triangle area:", area)`
@@ -544,6 +562,8 @@ cross_road_complex(traffic_snapshots)`
                 termIndent: 'Bloky pište s dvojtečkou a odsazujte; ostatní řádky se zobrazí jako kroky.',
                 termWarning: 'Neznámá velká slova na začátku řádku jsou podtržena červeně; upozornění je pouze orientační.',
                 resizeHelp: 'Změnit výšku nápovědy',
+                resizePythonEditor: 'Změnit výšku editoru Pythonu a inspektoru proměnných',
+                resizeVariableConsole: 'Změnit výšku panelu proměnných a konzole',
                 diagramPane: '2. Vývojový Diagram',
                 diagramGenerated: 'Generováno',
                 diagramOk: 'Diagram OK',
@@ -611,6 +631,8 @@ cross_road_complex(traffic_snapshots)`
                 termIndent: 'End blocks with a colon and indent them; other lines appear as steps.',
                 termWarning: 'Unknown uppercase words at the start of a line are underlined in red; this is only a hint.',
                 resizeHelp: 'Resize help panel',
+                resizePythonEditor: 'Resize Python editor and variable inspector',
+                resizeVariableConsole: 'Resize variable panel and console',
                 diagramPane: '2. Flowchart',
                 diagramGenerated: 'Generated',
                 diagramOk: 'Diagram OK',
@@ -678,6 +700,8 @@ cross_road_complex(traffic_snapshots)`
                 termIndent: 'Finu blokojn per dupunkto kaj indentu ilin; aliaj linioj aperas kiel paŝoj.',
                 termWarning: 'Nekonataj majusklaj vortoj ĉe la komenco de linio estas substrekataj ruĝe; tio estas nur averto.',
                 resizeHelp: 'Ŝanĝi altecon de helpo',
+                resizePythonEditor: 'Ŝanĝi altecon de Python-redaktilo kaj variabla inspektilo',
+                resizeVariableConsole: 'Ŝanĝi altecon de variabla panelo kaj konzolo',
                 diagramPane: '2. Fluodiagramo',
                 diagramGenerated: 'Generita',
                 diagramOk: 'Diagramo preta',
@@ -745,6 +769,8 @@ cross_road_complex(traffic_snapshots)`
                 termIndent: 'Terminez les blocs par deux-points et indentez-les ; les autres lignes apparaissent comme des étapes.',
                 termWarning: 'Les mots inconnus en majuscules au début d’une ligne sont soulignés en rouge ; il s’agit seulement d’un avertissement.',
                 resizeHelp: 'Modifier la hauteur de l’aide',
+                resizePythonEditor: 'Modifier la hauteur de l’éditeur Python et de l’inspecteur de variables',
+                resizeVariableConsole: 'Modifier la hauteur du panneau des variables et de la console',
                 diagramPane: '2. Organigramme',
                 diagramGenerated: 'Généré',
                 diagramOk: 'Diagramme prêt',
@@ -812,6 +838,8 @@ cross_road_complex(traffic_snapshots)`
                 termIndent: 'Bloky ukončite dvojbodkou a odsadzujte; ostatné riadky sa zobrazia ako kroky.',
                 termWarning: 'Neznáme veľké slová na začiatku riadka sú podčiarknuté červenou; upozornenie je iba orientačné.',
                 resizeHelp: 'Zmeniť výšku pomocníka',
+                resizePythonEditor: 'Zmeniť výšku editora Pythonu a inšpektora premenných',
+                resizeVariableConsole: 'Zmeniť výšku panela premenných a konzoly',
                 diagramPane: '2. Vývojový diagram',
                 diagramGenerated: 'Vygenerované',
                 diagramOk: 'Diagram OK',
@@ -859,6 +887,7 @@ cross_road_complex(traffic_snapshots)`
         let diagramStatusKey = 'diagramGenerated';
         let pyodideStatusKey = 'pyodideLoading';
         let pyEditor, pseudoEditor;
+        let pythonCodeRevision = 0;
         let pyodideInstance = null;
         let executionTrace = [];
         let currentStepIndex = -1;
@@ -1004,6 +1033,10 @@ cross_road_complex(traffic_snapshots)`
                 theme: 'dracula',
                 lineNumbers: true,
                 lineWrapping: true
+            });
+            pyEditor.on('change', () => {
+                pythonCodeRevision++;
+                resetExecutionState();
             });
 
             // Init Mermaid
@@ -1562,6 +1595,7 @@ def _trace_func(frame, event, arg):
     return _trace_func
 
 sys.settrace(_trace_func)
+sys._getframe().f_trace = _trace_func
 `;
 
         async function initExecution() {
@@ -1573,30 +1607,30 @@ sys.settrace(_trace_func)
             resetExecutionState();
 
             const userCode = pyEditor.getValue();
-            // Wrap script with settrace hooks
-            const fullScript = `
-${pythonTracerScript}
-
-try:
-${userCode.split('\n').map(line => '    ' + line).join('\n')}
-finally:
-    sys.settrace(None)
-`;
+            const executionRevision = pythonCodeRevision;
+            const executionPrefix = `\n${pythonTracerScript}\ntry:\n`;
+            const wrappedUserCode = userCode.split('\n').map(line => '    ' + line).join('\n');
+            const userCodeStartLine = executionPrefix.split('\n').length;
+            const fullScript = `${executionPrefix}${wrappedUserCode}\nfinally:\n    sys.settrace(None)`;
+            const userCodeLineCount = userCode.split('\n').length;
 
             try {
                 await pyodideInstance.runPythonAsync(fullScript);
+                if (executionRevision !== pythonCodeRevision) return;
                 
                 // Retrieve execution trace from Python context
                 const rawTrace = pyodideInstance.globals.get('_execution_trace').toJs({
                     dict_converter: Object.fromEntries
                 });
                 executionTrace = rawTrace.map(item => ({
-                    line: item.line,
+                    line: item.line - userCodeStartLine,
                     locals: item.locals,
                     stdout: item.stdout
-                }));
+                })).filter(step => step.line >= 0 && step.line < userCodeLineCount);
 
                 if (executionTrace.length > 0) {
+                    executionTrace[executionTrace.length - 1].stdout =
+                        pyodideInstance.globals.get('_console_output').toJs();
                     currentStepIndex = 0;
                     updateStepUI();
                     document.getElementById('btnPlay').disabled = false;
@@ -1606,6 +1640,7 @@ finally:
                     alert(translate('noExecutionSteps'));
                 }
             } catch (err) {
+                if (executionRevision !== pythonCodeRevision) return;
                 console.error("Python Execution Error", err);
                 document.getElementById('consoleOutput').innerText = `${translate('pythonRuntimeError')}\n${err.message}`;
             }
@@ -1618,7 +1653,7 @@ finally:
             const step = executionTrace[currentStepIndex];
 
             // 1. Highlight line in Python Editor
-            highlightPythonLine(step.line - 13); // Shift offset caused by trace wrapper code
+            highlightPythonLine(step.line);
 
             // 2. Render variables in Inspector
             renderVariables(step.locals);
@@ -1627,7 +1662,7 @@ finally:
             document.getElementById('consoleOutput').innerText = step.stdout.join('\n');
 
             // 4. Highlight Flowchart Node (matching heuristically)
-            highlightFlowchartStep(step.line - 13);
+            highlightFlowchartStep(step.line);
 
             // 5. Update Counter
             document.getElementById('stepCounter').innerText = translate('stepCounter', {
@@ -1642,7 +1677,7 @@ finally:
 
         let lineClassHandle = null;
         function highlightPythonLine(lineIdx) {
-            if (lineIdx < 0) return;
+            if (!Number.isInteger(lineIdx) || lineIdx < 0 || lineIdx >= pyEditor.lineCount()) return;
             if (lineClassHandle !== null) {
                 pyEditor.removeLineClass(lineClassHandle, 'background', 'active-line-highlight');
             }
@@ -1662,14 +1697,14 @@ finally:
 
             keys.forEach(key => {
                 const row = document.createElement('div');
-                row.className = 'flex justify-between items-center bg-slate-800/60 px-2 py-1 rounded text-[11px] font-mono border border-slate-700/50';
+                row.className = 'flex items-start gap-2 bg-slate-800/60 px-2 py-1 rounded text-[11px] font-mono border border-slate-700/50';
                 
                 const nameSpan = document.createElement('span');
-                nameSpan.className = 'text-sky-300 font-semibold';
+                nameSpan.className = 'flex-[0_0_30%] min-w-0 break-words text-sky-300 font-semibold';
                 nameSpan.innerText = key;
 
                 const valSpan = document.createElement('span');
-                valSpan.className = 'text-amber-300 truncate max-w-[120px]';
+                valSpan.className = 'min-w-0 flex-1 whitespace-normal break-words text-right text-amber-300';
                 valSpan.innerText = localsObj[key];
                 valSpan.title = localsObj[key];
 
@@ -1773,10 +1808,21 @@ finally:
         const gutter2 = document.getElementById('gutter2');
         const pseudocodeHelp = document.getElementById('pseudocodeHelp');
         const pseudocodeHelpResizer = document.getElementById('pseudocodeHelpResizer');
+        const pythonEditorPane = document.getElementById('pythonEditorPane');
+        const pythonEditorResizer = document.getElementById('pythonEditorResizer');
+        const inspectorContent = document.getElementById('inspectorContent');
+        const variablePane = document.getElementById('variablePane');
+        const variableConsoleResizer = document.getElementById('variableConsoleResizer');
         const minimumHelpHeight = 96;
+        const minimumPythonEditorHeight = 100;
+        const minimumPythonInspectorHeight = 260;
+        const minimumVariablePaneHeight = 90;
+        const minimumConsolePaneHeight = 70;
 
         let activeGutter = null;
         let helpResizeStart = null;
+        let pythonResizeStart = null;
+        let variableConsoleResizeStart = null;
 
         function setPseudocodeHelpHeight(height) {
             const paneRect = pane1.getBoundingClientRect();
@@ -1821,6 +1867,111 @@ finally:
             setPseudocodeHelpHeight(pseudocodeHelp.getBoundingClientRect().height);
         });
         setPseudocodeHelpHeight(pseudocodeHelp.getBoundingClientRect().height);
+
+        function setPythonEditorHeight(height) {
+            const paneRect = pane3.getBoundingClientRect();
+            const headerHeight = pane3.querySelector(':scope > div:first-child').offsetHeight;
+            const availableHeight = paneRect.height - headerHeight - pythonEditorResizer.offsetHeight;
+            const maximumHeight = Math.max(
+                minimumPythonEditorHeight,
+                availableHeight - minimumPythonInspectorHeight
+            );
+            const boundedHeight = Math.min(
+                maximumHeight,
+                Math.max(minimumPythonEditorHeight, height)
+            );
+            pythonEditorPane.style.flexBasis = `${boundedHeight}px`;
+            pythonEditorResizer.setAttribute('aria-valuemax', String(Math.round(maximumHeight)));
+            pythonEditorResizer.setAttribute('aria-valuenow', String(Math.round(boundedHeight)));
+            if (pyEditor) pyEditor.refresh();
+        }
+
+        pythonEditorResizer.addEventListener('pointerdown', event => {
+            pythonResizeStart = {
+                pointerId: event.pointerId,
+                clientY: event.clientY,
+                height: pythonEditorPane.getBoundingClientRect().height
+            };
+            pythonEditorResizer.setPointerCapture(event.pointerId);
+            event.preventDefault();
+        });
+
+        pythonEditorResizer.addEventListener('pointermove', event => {
+            if (!pythonResizeStart || event.pointerId !== pythonResizeStart.pointerId) return;
+            setPythonEditorHeight(pythonResizeStart.height + event.clientY - pythonResizeStart.clientY);
+        });
+
+        pythonEditorResizer.addEventListener('pointerup', () => {
+            pythonResizeStart = null;
+        });
+        pythonEditorResizer.addEventListener('lostpointercapture', () => {
+            pythonResizeStart = null;
+        });
+        pythonEditorResizer.addEventListener('keydown', event => {
+            if (event.key !== 'ArrowUp' && event.key !== 'ArrowDown') return;
+            event.preventDefault();
+            const adjustment = event.key === 'ArrowUp' ? -16 : 16;
+            setPythonEditorHeight(pythonEditorPane.getBoundingClientRect().height + adjustment);
+        });
+        window.addEventListener('resize', () => {
+            setPythonEditorHeight(pythonEditorPane.getBoundingClientRect().height);
+        });
+        setPythonEditorHeight(pythonEditorPane.getBoundingClientRect().height);
+
+        function setVariablePaneHeight(height) {
+            const contentStyle = getComputedStyle(inspectorContent);
+            const verticalPadding = parseFloat(contentStyle.paddingTop) + parseFloat(contentStyle.paddingBottom);
+            const gaps = parseFloat(contentStyle.rowGap) * 2;
+            const availableHeight = inspectorContent.clientHeight
+                - verticalPadding
+                - gaps
+                - variableConsoleResizer.offsetHeight;
+            const maximumHeight = Math.max(
+                minimumVariablePaneHeight,
+                availableHeight - minimumConsolePaneHeight
+            );
+            const boundedHeight = Math.min(
+                maximumHeight,
+                Math.max(minimumVariablePaneHeight, height)
+            );
+            variablePane.style.flex = `0 0 ${boundedHeight}px`;
+            variableConsoleResizer.setAttribute('aria-valuemax', String(Math.round(maximumHeight)));
+            variableConsoleResizer.setAttribute('aria-valuenow', String(Math.round(boundedHeight)));
+        }
+
+        variableConsoleResizer.addEventListener('pointerdown', event => {
+            variableConsoleResizeStart = {
+                pointerId: event.pointerId,
+                clientY: event.clientY,
+                height: variablePane.getBoundingClientRect().height
+            };
+            variableConsoleResizer.setPointerCapture(event.pointerId);
+            event.preventDefault();
+        });
+
+        variableConsoleResizer.addEventListener('pointermove', event => {
+            if (!variableConsoleResizeStart || event.pointerId !== variableConsoleResizeStart.pointerId) return;
+            setVariablePaneHeight(
+                variableConsoleResizeStart.height + event.clientY - variableConsoleResizeStart.clientY
+            );
+        });
+
+        variableConsoleResizer.addEventListener('pointerup', () => {
+            variableConsoleResizeStart = null;
+        });
+        variableConsoleResizer.addEventListener('lostpointercapture', () => {
+            variableConsoleResizeStart = null;
+        });
+        variableConsoleResizer.addEventListener('keydown', event => {
+            if (event.key !== 'ArrowUp' && event.key !== 'ArrowDown') return;
+            event.preventDefault();
+            const adjustment = event.key === 'ArrowUp' ? -16 : 16;
+            setVariablePaneHeight(variablePane.getBoundingClientRect().height + adjustment);
+        });
+        window.addEventListener('resize', () => {
+            setVariablePaneHeight(variablePane.getBoundingClientRect().height);
+        });
+        setVariablePaneHeight(variablePane.getBoundingClientRect().height);
 
         gutter1.addEventListener('mousedown', () => activeGutter = 1);
         gutter2.addEventListener('mousedown', () => activeGutter = 2);

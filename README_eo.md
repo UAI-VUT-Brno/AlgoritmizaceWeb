@@ -25,7 +25,7 @@ La diagramoj de ekzemplaj algoritmoj estas generataj el ilia pseŭdokodo; aparta
 
 La ekzemploj pri strattransiro modelas transiron sen trafiklumoj. La baza ekzemplo atendas ĝis la vojo estas libera; en ĝia Python-enigo `True` signifas, ke veturilo alproksimiĝas. La kompleksa ekzemplo kontrolas ĉiun vojstrion antaŭ transiri; ĉiu Python-a trafika stato estas listo, kie `True` signifas, ke tiu vojstrio estas danĝera por transiri.
 
-La help-panelo kun subtenataj terminoj havas defaŭltan altecon de **224 px**. Ŝanĝu ĝin trenante la dividilon inter la helpo kaj redaktilo, aŭ fokusante la dividilon kaj uzante la sagoklavojn Supren/Malsupren.
+La help-panelo kun subtenataj terminoj havas defaŭltan altecon de **224 px**. Ŝanĝu ĝin trenante la dividilon inter la helpo kaj redaktilo, aŭ fokusante la dividilon kaj uzante la sagoklavojn Supren/Malsupren. Vi ankaŭ povas ŝanĝi la altecon inter la Python-redaktilo kaj variabla inspektilo, kaj inter la variabla inspektilo kaj konzolo, trenante iliajn dividilojn aŭ fokusante ilin kaj uzante la sagoklavojn Supren/Malsupren.
 
 Subtenataj kontrolstrukturoj:
 

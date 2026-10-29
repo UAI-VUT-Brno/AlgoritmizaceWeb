@@ -25,7 +25,7 @@ Les diagrammes des algorithmes d’exemple sont générés à partir de leur pse
 
 Les exemples de traversée modélisent un passage sans feux de circulation. L’exemple de base attend que la voie soit libre ; dans son entrée Python, `True` signifie qu’un véhicule approche. L’exemple complexe vérifie chaque voie avant de traverser ; chaque situation de circulation Python est une liste où `True` signifie que la voie concernée est dangereuse à traverser.
 
-Le panneau d’aide des termes pris en charge a une hauteur initiale de **224 px**. Vous pouvez la modifier en faisant glisser le séparateur entre l’aide et l’éditeur, ou en sélectionnant ce séparateur et en utilisant les flèches Haut/Bas.
+Le panneau d’aide des termes pris en charge a une hauteur initiale de **224 px**. Vous pouvez la modifier en faisant glisser le séparateur entre l’aide et l’éditeur, ou en sélectionnant ce séparateur et en utilisant les flèches Haut/Bas. Vous pouvez également redimensionner l’éditeur Python et l’inspecteur de variables, ainsi que l’inspecteur et la console, en faisant glisser leurs séparateurs ou en les sélectionnant et en utilisant les flèches Haut/Bas.
 
 Structures de contrôle prises en charge :
 

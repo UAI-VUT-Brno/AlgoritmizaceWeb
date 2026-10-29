@@ -25,7 +25,7 @@ Diagramy ukážkových algoritmov sa generujú z ich pseudokódu; samostatné pr
 
 Príklady prechádzania cez cestu opisujú priechod bez semafora. Základný príklad čaká, kým bude cesta voľná; v jeho ukážke Pythonu znamená `True`, že sa približuje vozidlo. Zložitejší príklad pred prechodom kontroluje každý jazdný pruh; každá dopravná situácia v jeho ukážke Pythonu je zoznam, kde `True` znamená, že je daný pruh nebezpečné prechádzať.
 
-Panel pomocníka s podporovanými termínmi má predvolenú výšku **224 px**. Výšku možno zmeniť ťahaním oddeľovača medzi pomocníkom a editorom alebo zameraním oddeľovača a použitím šípok nahor/nadol.
+Panel pomocníka s podporovanými termínmi má predvolenú výšku **224 px**. Výšku možno zmeniť ťahaním oddeľovača medzi pomocníkom a editorom alebo zameraním oddeľovača a použitím šípok nahor/nadol. Rovnakým spôsobom možno meniť výšku editora Pythonu a inšpektora premenných, ako aj panela premenných a konzoly, ťahaním ich oddeľovačov alebo ich zameraním a použitím šípok nahor/nadol.
 
 Podporované riadiace štruktúry:
 

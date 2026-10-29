@@ -25,7 +25,7 @@ Diagramy předpřipravených algoritmů se generují z jejich pseudokódu; samos
 
 Příklady přecházení silnice popisují přechod bez semaforu. Základní varianta čeká, dokud není vozovka volná; v jejím příkladu Pythonu znamená `True`, že se blíží vozidlo. Složitější varianta před přechodem kontroluje každý jízdní pruh; každá dopravní situace v jejím příkladu Pythonu je seznam, kde `True` znamená, že je daný pruh nebezpečné přecházet.
 
-Nápověda s podporovanými termíny pseudokódu má výchozí výšku **224 px**. Její výšku lze měnit tažením dělicího pruhu mezi nápovědou a editorem nebo klávesami šipka nahoru/dolů při zaměření pruhu.
+Nápověda s podporovanými termíny pseudokódu má výchozí výšku **224 px**. Její výšku lze měnit tažením dělicího pruhu mezi nápovědou a editorem nebo klávesami šipka nahoru/dolů při zaměření pruhu. Stejným způsobem lze měnit výšku editoru Pythonu a inspektoru proměnných i panelu proměnných a konzole tažením jejich dělicích pruhů nebo klávesami šipka nahoru/dolů při jejich zaměření.
 
 Podporované řídicí struktury:
 
@@ -108,4 +108,4 @@ Poté otevřete v prohlížeči adresu `http://localhost:8000`.
 
 ## Použití
 
-Vyberte algoritmus z rozbalovací nabídky a upravte jeho pseudokód nebo Python kód. Diagram aktualizujte příslušným tlačítkem v panelu pseudokódu. Pro krokování Pythonu stiskněte **Start**, poté použijte **Spustit** nebo tlačítka pro pohyb po jednotlivých krocích.
+Vyberte algoritmus z rozbalovací nabídky a upravte jeho pseudokód nebo Python kód. Diagram aktualizujte příslušným tlačítkem v panelu pseudokódu. Pro krokování Pythonu stiskněte **Start**, poté použijte **Spustit** nebo tlačítka pro pohyb po jednotlivých krocích. Po úpravě Python kódu se zaznamenaný běh zruší; stiskněte znovu **Start**, aby se připravil upravený kód.

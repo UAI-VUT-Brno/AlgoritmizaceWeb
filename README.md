@@ -25,7 +25,7 @@ Example diagrams are generated from their pseudocode; separate predefined diagra
 
 The pedestrian-crossing examples model crossings without traffic signals. The basic example waits for traffic to clear; its Python input uses `True` when traffic is approaching. The complex example checks every lane in each observation before crossing; each Python snapshot is a list where `True` means that lane is unsafe to cross.
 
-The supported-terms help panel has a default height of **224 px**. Resize it by dragging the divider between the help and editor, or focus the divider and use the Up/Down arrow keys.
+The supported-terms help panel has a default height of **224 px**. Resize it by dragging the divider between the help and editor, or focus the divider and use the Up/Down arrow keys. You can also resize the Python editor and variable inspector, and the variable inspector and console, by dragging their dividers or focusing them and using the Up/Down arrow keys.
 
 Supported control structures:
 
@@ -108,4 +108,4 @@ Then open `http://localhost:8000`.
 
 ## Usage
 
-Select an algorithm from the drop-down menu and edit its pseudocode or Python code. Update the diagram with the button in the pseudocode pane. To step through Python execution, click **Start**, then use **Run** or the step controls.
+Select an algorithm from the drop-down menu and edit its pseudocode or Python code. Update the diagram with the button in the pseudocode pane. To step through Python execution, click **Start**, then use **Run** or the step controls. Editing the Python code clears the recorded execution; click **Start** again to prepare the updated code.
