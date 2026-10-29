@@ -113,7 +113,13 @@
                     <option value="factorial">Faktoriál (Rekurze/Cykly)</option>
                     <option value="findMax">Najdi Maximum v poli</option>
                     <option value="gcd">Eukleidův algoritmus (GCD)</option>
+                    <option value="triangleArea">Obsah trojúhelníku ze tří stran</option>
                 </select>
+                <input id="saveFileName" type="text" placeholder="Název souboru" aria-label="Název uloženého JSON souboru" title="Název uloženého JSON souboru" class="w-32 bg-darkbg border border-darkaccent text-xs rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-brand text-slate-200 placeholder:text-slate-500">
+                <button onclick="saveSelectedTemplate()" class="flex items-center space-x-1 bg-slate-700 hover:bg-slate-600 text-xs text-white px-2.5 py-1.5 rounded transition" title="Uložit zvolený algoritmus do JSON" aria-label="Uložit zvolený algoritmus do JSON">
+                    <i class="fa-solid fa-download"></i>
+                    <span>JSON</span>
+                </button>
             </div>
 
             <div class="h-5 w-px bg-darkaccent"></div>
@@ -358,6 +364,33 @@ print("GCD:", vysledek)`,
     Cond -- Ano --> Step["temp = b<br>b = a % b<br>a = temp"]
     Step --> Cond
     Cond -- Ne --> End([Return a])`
+            },
+
+            triangleArea: {
+                pseudocode: `ALGORITMUS ObsahTrojuhelniku(a, b, c):
+  POKUD a <= 0 NEBO b <= 0 NEBO c <= 0 NEBO a + b <= c NEBO a + c <= b NEBO b + c <= a:
+    VYPIŠ "Neplatné strany trojúhelníku"
+  JINAK:
+    s = (a + b + c) / 2
+    obsah = ODMOCNINA(s * (s - a) * (s - b) * (s - c))
+    VRÁTI obsah`,
+                python: `import math
+
+def obsah_trojuhelniku(a, b, c):
+    if a <= 0 or b <= 0 or c <= 0 or a + b <= c or a + c <= b or b + c <= a:
+        raise ValueError("Strany netvoří platný trojúhelník")
+    s = (a + b + c) / 2
+    return math.sqrt(s * (s - a) * (s - b) * (s - c))
+
+obsah = obsah_trojuhelniku(3, 4, 5)
+print("Obsah trojúhelníku:", obsah)`,
+                mermaid: `graph TD
+    Start([Start: Obsah trojúhelníku]) --> Valid{"a, b, c > 0 a platí trojúhelníková nerovnost?"}
+    Valid -- Ne --> Error["Neplatné strany"]
+    Error --> End([Konec])
+    Valid -- Ano --> Semi["s = (a + b + c) / 2"]
+    Semi --> Area["obsah = sqrt(s * (s - a) * (s - b) * (s - c))"]
+    Area --> Result([Vrátit obsah])`
             }
         };
 
@@ -424,6 +457,40 @@ print("GCD:", vysledek)`,
             resetExecutionState();
         }
 
+        function saveSelectedTemplate() {
+            const select = document.getElementById('templateSelect');
+            const selectedOption = select.options[select.selectedIndex];
+            const pseudocode = pseudoEditor.getValue();
+            const python = pyEditor.getValue();
+            if (!selectedOption) {
+                alert("Zvolený algoritmus se nepodařilo uložit.");
+                return;
+            }
+
+            const requestedFileName = document.getElementById('saveFileName').value.trim()
+                || selectedOption.textContent.trim();
+            const fileName = requestedFileName
+                .replace(/\.json$/i, '')
+                .replace(/[<>:"/\\|?*\u0000-\u001F]/g, '_')
+                .replace(/[. ]+$/g, '')
+                .trim();
+            const json = JSON.stringify({
+                name: selectedOption.textContent.trim(),
+                pseudocode,
+                python,
+                mermaid: generateMermaidFromPseudocode(pseudocode)
+            }, null, 2);
+            const blob = new Blob([json], { type: 'application/json;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `${fileName || 'algoritmus'}.json`;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
+        }
+
         // --- 3. MERMAID FLOWCHART RENDERER ---
         async function renderMermaid(graphDefinition) {
             const target = document.getElementById('mermaidTarget');
@@ -442,34 +509,152 @@ print("GCD:", vysledek)`,
             }
         }
 
-        function updateDiagramFromPseudocode() {
-            // Basic automatic flowchart generator heuristic for pseudocode
-            const code = pseudoEditor.getValue();
-            const lines = code.split('\n').map(l => l.trim()).filter(l => l.length > 0);
-            
-            let mermaidStr = "graph TD\n";
-            mermaidStr += "  Start([Start])\n";
-            let prevNode = "Start";
+        function generateMermaidFromPseudocode(code) {
+            const lines = code.split('\n')
+                .map(line => ({
+                    indent: line.match(/^\s*/)[0].replace(/\t/g, '    ').length,
+                    text: line.trim()
+                }))
+                .filter(line => line.text.length > 0);
+            let lineIndex = 0;
+            let nodeIndex = 0;
 
-            lines.forEach((line, index) => {
-                const nodeId = `N${index}`;
-                // Clean strings and sanitize characters that break Mermaid syntax
-                let cleanText = line.replace(/["']/g, '').replace(/[\(\)\[\]\{\}]/g, ' ');
-                
-                if (line.startsWith('POKUD') || line.startsWith('IF') || (line.endsWith(':') && line.includes('OD'))) {
-                    mermaidStr += `  ${nodeId}{{"${cleanText}"}}\n`;
-                } else if (line.startsWith('VRÁTI') || line.startsWith('RETURN')) {
-                    mermaidStr += `  ${nodeId}[/"${cleanText}"/]\n`;
-                } else {
-                    mermaidStr += `  ${nodeId}["${cleanText}"]\n`;
+            function isIf(line) {
+                return /^(POKUD|IF)\b/i.test(line);
+            }
+
+            function isElse(line) {
+                return /^(JINAK|ELSE)\b/i.test(line);
+            }
+
+            function parseBlock(indent) {
+                const statements = [];
+                while (lineIndex < lines.length) {
+                    const current = lines[lineIndex];
+                    if (current.indent < indent || (current.indent === indent && isElse(current.text))) break;
+                    if (current.indent > indent) {
+                        if (isElse(current.text)) {
+                            lineIndex++;
+                            statements.push({ type: 'step', text: current.text });
+                            continue;
+                        }
+                        const previousLineIndex = lineIndex;
+                        statements.push(...parseBlock(current.indent));
+                        if (lineIndex === previousLineIndex) {
+                            throw new Error(`Pseudokód nelze zpracovat u řádku: ${current.text}`);
+                        }
+                        continue;
+                    }
+
+                    lineIndex++;
+                    if (!isIf(current.text)) {
+                        statements.push({ type: 'step', text: current.text });
+                        continue;
+                    }
+
+                    let conditionText = current.text;
+                    while (!conditionText.trimEnd().endsWith(':')
+                        && lineIndex < lines.length
+                        && lines[lineIndex].indent > current.indent
+                        && !isElse(lines[lineIndex].text)) {
+                        conditionText += ` ${lines[lineIndex].text}`;
+                        lineIndex++;
+                    }
+                    const statement = {
+                        type: 'decision',
+                        text: conditionText.replace(/^(POKUD|IF)\s*/i, '').replace(/:\s*$/, ''),
+                        thenBranch: [],
+                        elseBranch: []
+                    };
+                    let thenIndent = null;
+                    if (lineIndex < lines.length && lines[lineIndex].indent > current.indent && !isElse(lines[lineIndex].text)) {
+                        thenIndent = lines[lineIndex].indent;
+                        statement.thenBranch = parseBlock(thenIndent);
+                    }
+                    if (lineIndex < lines.length
+                        && isElse(lines[lineIndex].text)
+                        && (lines[lineIndex].indent === current.indent || lines[lineIndex].indent === thenIndent)) {
+                        const elseIndent = lines[lineIndex].indent;
+                        lineIndex++;
+                        if (lineIndex < lines.length && lines[lineIndex].indent > elseIndent) {
+                            statement.elseBranch = parseBlock(lines[lineIndex].indent);
+                        }
+                    }
+                    statements.push(statement);
                 }
+                return statements;
+            }
 
-                mermaidStr += `  ${prevNode} --> ${nodeId}\n`;
-                prevNode = nodeId;
+            const statements = lines.length > 0 ? parseBlock(lines[0].indent) : [];
+            const nodes = [];
+            function makeNode(type, text) {
+                const node = { id: `N${nodeIndex++}`, type, text };
+                nodes.push(node);
+                return node;
+            }
+
+            const start = makeNode('start', 'Start');
+            const end = makeNode('end', 'Konec');
+            const edges = [];
+
+            function emitBlock(block, incoming) {
+                let exits = incoming;
+                for (const statement of block) {
+                    if (statement.type === 'decision') {
+                        const decision = makeNode('decision', statement.text || 'Podmínka');
+                        exits.forEach(edge => edges.push({ from: edge.from, to: decision.id, label: edge.label }));
+                        const thenExits = emitBlock(statement.thenBranch, [{ from: decision.id, label: 'Ano' }]);
+                        const elseExits = statement.elseBranch.length > 0
+                            ? emitBlock(statement.elseBranch, [{ from: decision.id, label: 'Ne' }])
+                            : [{ from: decision.id, label: 'Ne' }];
+                        exits = [...thenExits, ...elseExits];
+                    } else {
+                        const isReturn = /^(VRÁTI|VRÁTÍ|RETURN)\b/i.test(statement.text);
+                        const node = makeNode(isReturn ? 'return' : 'step', statement.text);
+                        exits.forEach(edge => edges.push({ from: edge.from, to: node.id, label: edge.label }));
+                        if (isReturn) {
+                            edges.push({ from: node.id, to: end.id, label: '' });
+                            exits = [];
+                        } else {
+                            exits = [{ from: node.id, label: '' }];
+                        }
+                    }
+                }
+                return exits;
+            }
+
+            const exits = emitBlock(statements, [{ from: start.id, label: '' }]);
+            exits.forEach(edge => edges.push({ from: edge.from, to: end.id, label: edge.label }));
+
+            function escapeLabel(text) {
+                return text.replace(/&/g, '#amp;').replace(/"/g, '#quot;').replace(/[{}\[\]]/g, ' ');
+            }
+
+            let mermaidStr = 'graph TD\n';
+            nodes.forEach(node => {
+                const label = escapeLabel(node.text);
+                if (node.type === 'decision') {
+                    mermaidStr += `  ${node.id}{"${label}"}\n`;
+                } else if (node.type === 'return') {
+                    mermaidStr += `  ${node.id}[/"${label}"/]\n`;
+                } else if (node.type === 'start') {
+                    mermaidStr += `  ${node.id}(["${label}"])\n`;
+                } else if (node.type === 'end') {
+                    mermaidStr += `  ${node.id}(["${label}"])\n`;
+                } else {
+                    mermaidStr += `  ${node.id}["${label}"]\n`;
+                }
             });
-            mermaidStr += `  ${prevNode} --> End([Konec])\n`;
+            edges.forEach(edge => {
+                const label = edge.label ? ` -- ${edge.label} --> ` : ' --> ';
+                mermaidStr += `  ${edge.from}${label}${edge.to}\n`;
+            });
 
-            renderMermaid(mermaidStr);
+            return mermaidStr;
+        }
+
+        function updateDiagramFromPseudocode() {
+            renderMermaid(generateMermaidFromPseudocode(pseudoEditor.getValue()));
         }
 
         // --- 4. PYODIDE & PYTHON EXECUTION TRACER ---
