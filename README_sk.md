@@ -1,0 +1,106 @@
+# Algoritmizácia a vývojové diagramy
+
+Jednoduchý výučbový webový nástroj na vizualizáciu základných algoritmov a ich vykonávania v Pythone. Aplikácia spája pseudokód, vývojový diagram a krokované spúšťanie kódu, vďaka čomu sa hodí na výučbu algoritmizácie, triedenia a programátorskej logiky.
+
+## Funkcie
+
+- obsahuje ukážkové algoritmy: Bubble Sort, Factorial (Recursion/Loops), Find Maximum in an Array, Euclidean Algorithm (GCD) a Triangle Area from Three Sides
+- zobrazuje pseudokód a príslušný vývojový diagram
+- prevádza odsadený pseudokód na diagramy Mermaid vrátane vetvenia a cyklov
+- umožňuje krokovať Python kód a sledovať hodnoty premenných
+- zobrazuje výstup programu a zvýrazňuje aktuálny riadok zdrojového kódu
+- exportuje aktuálny pseudokód do JSON; každý riadok je samostatná položka s údajom o odsadení
+- automaticky prispôsobuje diagram dostupnej ploche a ponúka ovládanie priblíženia
+- spúšťa Python v prehliadači pomocou Pyodide bez potreby lokálnej inštalácie Pythonu
+- ponúka rozhranie v češtine, angličtine, slovenčine, esperante a francúzštine
+
+Jazyk rozhrania zmeníte tlačidlami s vlajkami a skratkami **CS**, **EN**, **SK**, **EO** a **FR** v pravom hornom rohu. Esperanto používa zelenú vlajku so zelenou hviezdou na bielom poli. Predvoleným jazykom je čeština. Popisy rozhrania sa prekladajú, ale ľudsky čitateľné názvy ukážkových algoritmov zostávajú v angličtine. Termíny pseudokódu ani obsah práve upravovaného algoritmu sa neprekladajú.
+
+## Diagramy a podporovaný pseudokód
+
+Vývojový diagram sa aktualizuje krátko po úprave pseudokódu. Tlačidlom **Aktualizovať diagram z pseudokódu** ho možno prekresliť okamžite. Po výbere ukážkového algoritmu sa diagram vykreslí ihneď. Generátor prevádza každý neprázdny riadok na krok diagramu a prázdne riadky ignoruje. Odsadenie určuje príslušnosť k bloku, preto používajte konzistentné odsadenie (odporúčané sú dva medzery na úroveň). Ak je riadiaca štruktúra nesprávne zapísaná alebo sa diagram nepodarí vykresliť, chyba sa zobrazí v paneli diagramu.
+
+Diagramy ukážkových algoritmov sa generujú z ich pseudokódu; samostatné preddefinované diagramy sa nepoužívajú.
+
+Panel pomocníka s podporovanými termínmi má predvolenú výšku **224 px**. Výšku možno zmeniť ťahaním oddeľovača medzi pomocníkom a editorom alebo zameraním oddeľovača a použitím šípok nahor/nadol.
+
+Podporované riadiace štruktúry:
+
+- Hlavička algoritmu: `ALGORITMUS názov(parametre):`.
+- Podmienka: `POKUD podmienka:` alebo `IF podmienka:`.
+- Dlhé popisy rozhodovacích uzlov sa zalamujú na hraniciach slov, aby sa zmenšila výška kosoštvorca.
+- Voliteľná alternatívna vetva: `JINAK:` alebo `ELSE:`. Riadok `JINAK`/`ELSE` zarovnajte buď s príslušným `POKUD`/`IF`, alebo s príkazmi prvej vetvy.
+- Podmienený cyklus: `DOKUD podmienka:` alebo `WHILE podmienka:`.
+- Prechod kolekciou: `PRO prvok V kolekcia:` alebo `FOR prvok IN collection:`. Diagram znázorňuje rozhodnutie, či je dostupný ďalší prvok, jeho priradenie a návratovú hranu cyklu.
+- Počítaný cyklus: `PRO i OD začiatok DO koniec:` alebo `FOR i FROM start TO end:`. Hlavička cyklu sa zobrazí ako šesťuholník s návratovou hranou; kroky a hranice iterácií sa nevyhodnocujú.
+- Nasledujúci blok vetvy `Ne` sa v diagrame umiestni pod všetky bloky vetvy `Ano`, a to aj pri vnorených cykloch.
+- Všetky uvedené štruktúry možno vnárať. Ich telá musia byť odsadené voči hlavičke.
+
+Príkaz `VYPIS hodnota` alebo `WRITE value` zobrazí výpis hodnoty ako bežný krok diagramu. Editor pseudokódu červenou farbou podčiarkuje neznáme slová napísané veľkými písmenami na začiatku riadka a zobrazuje ich počet. Je to iba upozornenie, nie kontrola pseudokódu: bežné priradenia ani slová uprostred riadka nekontroluje a neznáme príkazy sa stále zobrazia ako bežné kroky.
+
+Príkazy, ktoré nie sú rozpoznané ako riadiace štruktúry, sa zobrazia ako bežné kroky. Výsledok funkcie možno odovzdať pomocou `VRAT` alebo `RETURN`; zobrazí sa ako výstupný rovnobežník prepojený s koncom diagramu. Generátor vytvára prehľadový diagram; neinterpretuje výrazy, nekontroluje ich syntax a nespúšťa pseudokód. Počítané cykly a podmienky sa zobrazia, ale nevyhodnocujú.
+
+Príklad:
+
+```text
+ALGORITMUS IterateMatrix(matrix):
+  PRO row V matrix:
+    PRO value V row:
+      POKUD value > 0:
+        positive_count = positive_count + 1
+      JINAK:
+        nonpositive_count = nonpositive_count + 1
+  VRAT positive_count
+```
+
+### Uloženie algoritmu
+
+Kliknite na tlačidlo **JSON**. Súbor sa stiahne s ľudsky čitateľným názvom vybraného algoritmu a príponou `.json`. Neplatné znaky v názve súboru sa nahradia podčiarkovníkom. Ak prehliadač zobrazí dialóg na uloženie, názov možno zmeniť.
+
+Export obsahuje názov algoritmu a pseudokód ako pole riadkov. Každý riadok obsahuje `text` bez úvodného odsadenia a `indent` s počtom odsadzovacích medzier; tabulátor sa počíta ako štyri medzery. Prázdne riadky sa zachovajú.
+
+```json
+{
+  "name": "Bubble Sort",
+  "pseudocode": [
+    { "text": "ALGORITMUS Example:", "indent": 0 },
+    { "text": "VYPIS value", "indent": 2 }
+  ]
+}
+```
+
+### Priblíženie diagramu
+
+Diagram sa automaticky zmenší tak, aby sa zmestil do plochy, ak má panel aspoň **250 px na šírku a 400 px na výšku**. Prispôsobenie sa aktualizuje aj pri zmene veľkosti panela. Tlačidlami v pravom hornom rohu diagramu možno priblížiť, oddialiť alebo obnoviť prispôsobenú mierku. Pri ručnom priblížení možno diagram posúvať pomocou posuvníkov.
+
+## Spustenie aplikácie
+
+1. Otvorte súbor `algoritmizace_vyukovy_nastroj.html` v prehliadači alebo
+2. spustite jednoduchý lokálny server, napríklad:
+
+```bash
+python -m http.server 8000
+```
+
+Potom otvorte adresu `http://localhost:8000`.
+
+## Použité technológie
+
+- HTML, CSS a JavaScript
+- Tailwind CSS
+- CodeMirror
+- Mermaid.js
+- Pyodide
+
+## Súbory projektu
+
+- `algoritmizace_vyukovy_nastroj.html` — hlavná aplikácia
+- `README.md` — anglická dokumentácia
+- `README_cz.md` — česká dokumentácia
+- `README_sk.md` — slovenská dokumentácia
+- `README_eo.md` — esperantská dokumentácia
+- `README_fr.md` — francúzska dokumentácia
+
+## Použitie
+
+Vyberte algoritmus z rozbaľovacej ponuky a upravte jeho pseudokód alebo Python kód. Diagram aktualizujte tlačidlom v paneli pseudokódu. Krokovanie Pythonu spustíte tlačidlom **Start**; potom použite **Spustiť** alebo ovládacie prvky krokovania.

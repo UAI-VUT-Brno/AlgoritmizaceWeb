@@ -99,6 +99,24 @@
             height: 224px;
             min-height: 96px;
         }
+        .language-button[aria-pressed="true"] {
+            background-color: #2563eb;
+            color: #fff;
+            box-shadow: inset 0 0 0 1px #60a5fa;
+        }
+        .language-flag {
+            display: inline-block;
+            width: 22px;
+            height: 15px;
+            vertical-align: -3px;
+            border-radius: 2px;
+            box-shadow: 0 0 0 1px rgb(148 163 184 / 0.4);
+        }
+        @media (max-width: 1499px) {
+            .top-controls {
+                width: 100%;
+            }
+        }
         /* Mermaid styling inside canvas */
         .node rect, .node circle, .node polygon {
             stroke-width: 2px !important;
@@ -119,22 +137,22 @@
 <body class="bg-darkbg text-slate-100 h-screen flex flex-col">
 
     <!-- Top Navigation Bar -->
-    <header class="h-14 bg-darkcard border-b border-darkaccent px-4 flex items-center justify-between flex-shrink-0">
+    <header class="min-h-14 h-auto bg-darkcard border-b border-darkaccent px-4 py-2 flex flex-wrap items-center justify-between gap-y-2 flex-shrink-0">
         <div class="flex items-center space-x-3">
             <i class="fa-solid font-bold text-brand text-xl fa-diagram-project"></i>
-            <h1 class="font-bold text-lg tracking-wide bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
+            <h1 data-i18n="appTitle" class="font-bold text-lg tracking-wide bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
                 Algoritmizace & Vývojové Diagramy
             </h1>
             <span class="text-xs bg-darkaccent px-2 py-0.5 rounded-full text-slate-300 font-mono">Pyodide WASM</span>
         </div>
 
         <!-- Controls: Select Template, Run Debugger, Step Controls -->
-        <div class="flex items-center space-x-3">
+        <div class="top-controls flex flex-wrap items-center justify-end gap-3 max-w-full">
             <div class="flex items-center space-x-2">
-                <label class="text-xs text-slate-400 font-medium">Algoritmus:</label>
+                <label data-i18n="algorithmLabel" class="text-xs text-slate-400 font-medium">Algoritmus:</label>
                 <select id="templateSelect" onchange="loadTemplate(this.value)" class="bg-darkbg border border-darkaccent text-xs rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-brand text-slate-200">
                 </select>
-                <button onclick="saveSelectedTemplate()" class="flex items-center space-x-1 bg-slate-700 hover:bg-slate-600 text-xs text-white px-2.5 py-1.5 rounded transition" title="Uložit pseudokód jako JSON" aria-label="Uložit pseudokód jako JSON">
+                <button onclick="saveSelectedTemplate()" data-i18n-title="saveJson" data-i18n-aria-label="saveJson" class="flex items-center space-x-1 bg-slate-700 hover:bg-slate-600 text-xs text-white px-2.5 py-1.5 rounded transition" title="Uložit pseudokód jako JSON" aria-label="Uložit pseudokód jako JSON">
                     <i class="fa-solid fa-download"></i>
                     <span>JSON</span>
                 </button>
@@ -144,19 +162,19 @@
 
             <!-- Execution Controls -->
             <div class="flex items-center space-x-1 bg-darkbg p-1 rounded-lg border border-darkaccent">
-                <button id="btnInit" onclick="initExecution()" class="flex items-center space-x-1 bg-slate-700 hover:bg-slate-600 text-xs text-white px-2.5 py-1 rounded transition" title="Připravit ke krokování">
+                <button id="btnInit" onclick="initExecution()" data-i18n-title="prepareExecution" class="flex items-center space-x-1 bg-slate-700 hover:bg-slate-600 text-xs text-white px-2.5 py-1 rounded transition" title="Připravit ke krokování">
                     <i class="fa-solid fa-rotate-left"></i>
-                    <span>Start</span>
+                    <span data-i18n="start">Start</span>
                 </button>
                 <button id="btnPlay" onclick="togglePlay()" disabled class="flex items-center space-x-1 bg-green-600 hover:bg-green-500 disabled:opacity-40 disabled:hover:bg-green-600 text-xs text-white px-2.5 py-1 rounded transition">
                     <i id="playIcon" class="fa-solid fa-play"></i>
-                    <span id="playText">Spustit</span>
+                    <span id="playText" data-i18n="play">Spustit</span>
                 </button>
                 <button id="btnStepNext" onclick="stepForward()" disabled class="flex items-center space-x-1 bg-brand hover:bg-brandhover disabled:opacity-40 text-xs text-white px-2.5 py-1 rounded transition">
                     <i class="fa-solid fa-step-forward"></i>
-                    <span>Krok</span>
+                    <span data-i18n="step">Krok</span>
                 </button>
-                <button id="btnStepPrev" onclick="stepBackward()" disabled class="flex items-center space-x-1 bg-slate-700 hover:bg-slate-600 disabled:opacity-40 text-xs text-white px-2.5 py-1 rounded transition">
+                <button id="btnStepPrev" onclick="stepBackward()" data-i18n-title="previousStep" data-i18n-aria-label="previousStep" disabled class="flex items-center space-x-1 bg-slate-700 hover:bg-slate-600 disabled:opacity-40 text-xs text-white px-2.5 py-1 rounded transition">
                     <i class="fa-solid fa-step-backward"></i>
                 </button>
             </div>
@@ -166,6 +184,23 @@
                 <i class="fa-solid fa-gauge-high text-slate-400"></i>
                 <input type="range" id="speedSlider" min="100" max="1500" value="600" step="50" class="w-20 accent-brand cursor-pointer">
                 <span id="speedVal" class="text-slate-400 font-mono w-10">600ms</span>
+            </div>
+            <div class="flex items-center gap-1 rounded-lg border border-darkaccent bg-darkbg p-1" role="group" data-i18n-aria-label="languageSelector">
+                <button type="button" class="language-button rounded px-1.5 py-1 text-[11px] transition hover:bg-darkaccent" data-language="cs" aria-pressed="true" aria-label="Čeština">
+                    <svg class="language-flag" viewBox="0 0 30 20" aria-hidden="true"><rect width="30" height="10" fill="#fff"/><rect y="10" width="30" height="10" fill="#d7141a"/><path d="M0 0v20l13-10z" fill="#11457e"/></svg> CS
+                </button>
+                <button type="button" class="language-button rounded px-1.5 py-1 text-[11px] transition hover:bg-darkaccent" data-language="en" aria-pressed="false" aria-label="English">
+                    <svg class="language-flag" viewBox="0 0 30 20" aria-hidden="true"><rect width="30" height="20" fill="#012169"/><path d="M0 0l30 20M30 0L0 20" stroke="#fff" stroke-width="4"/><path d="M0 0l30 20M30 0L0 20" stroke="#c8102e" stroke-width="1.5"/><path d="M15 0v20M0 10h30" stroke="#fff" stroke-width="7"/><path d="M15 0v20M0 10h30" stroke="#c8102e" stroke-width="3"/></svg> EN
+                </button>
+                <button type="button" class="language-button rounded px-1.5 py-1 text-[11px] transition hover:bg-darkaccent" data-language="sk" aria-pressed="false" aria-label="Slovenčina">
+                    <svg class="language-flag" viewBox="0 0 30 20" aria-hidden="true"><rect width="30" height="7" fill="#fff"/><rect y="7" width="30" height="6" fill="#0b4ea2"/><rect y="13" width="30" height="7" fill="#ee1c25"/></svg> SK
+                </button>
+                <button type="button" class="language-button rounded px-1.5 py-1 text-[11px] transition hover:bg-darkaccent" data-language="eo" aria-pressed="false" aria-label="Esperanto">
+                    <svg class="language-flag" viewBox="0 0 30 20" aria-hidden="true"><rect width="30" height="20" fill="#009b3a"/><path d="M0 0h12v10H0z" fill="#fff"/><path d="m6 1.4 1.3 2.7 3 .4-2.2 2.1.5 3-2.6-1.4-2.6 1.4.5-3-2.2-2.1 3-.4z" fill="#009b3a"/></svg> EO
+                </button>
+                <button type="button" class="language-button rounded px-1.5 py-1 text-[11px] transition hover:bg-darkaccent" data-language="fr" aria-pressed="false" aria-label="Français">
+                    <svg class="language-flag" viewBox="0 0 30 20" aria-hidden="true"><rect width="10" height="20" fill="#000091"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#e1000f"/></svg> FR
+                </button>
             </div>
         </div>
     </header>
@@ -178,38 +213,38 @@
             <div class="h-9 bg-darkcard px-3 flex items-center justify-between border-b border-darkaccent text-xs font-semibold text-slate-300">
                 <span class="flex items-center space-x-2">
                     <i class="fa-solid fa-file-code text-indigo-400"></i>
-                    <span>1. Pseudokód / Struktura</span>
+                    <span data-i18n="pseudocodePane">1. Pseudokód / Struktura</span>
                 </span>
-                <span class="text-[10px] text-slate-500 uppercase tracking-wider">Algoritmus</span>
+                <span data-i18n="algorithm" class="text-[10px] text-slate-500 uppercase tracking-wider">Algoritmus</span>
             </div>
             <div class="flex-1 relative">
                 <textarea id="pseudocodeEditor"></textarea>
-                <div id="pseudocodeWarning" class="hidden absolute top-2 right-3 z-10 rounded border border-red-500/50 bg-slate-900/95 px-2 py-1 text-[10px] text-red-300 shadow" role="status" aria-live="polite" title="Kontrola označuje neznámá slova psaná velkými písmeny na začátku řádku; běžné přiřazení ignoruje.">
+                <div id="pseudocodeWarning" data-i18n-title="pseudocodeWarningTitle" class="hidden absolute top-2 right-3 z-10 rounded border border-red-500/50 bg-slate-900/95 px-2 py-1 text-[10px] text-red-300 shadow" role="status" aria-live="polite" title="Kontrola označuje neznámá slova psaná velkými písmeny na začátku řádku; běžné přiřazení ignoruje.">
                 </div>
             </div>
             <!-- Sync Button -->
             <div class="p-2 bg-darkcard border-t border-darkaccent flex justify-between items-center">
                 <button onclick="updateDiagramFromPseudocode()" class="w-full bg-slate-800 hover:bg-slate-700 text-xs text-slate-200 py-1.5 px-3 rounded border border-darkaccent flex items-center justify-center space-x-2 transition">
                     <i class="fa-solid fa-arrows-rotate text-brand"></i>
-                    <span>Aktualizovat Diagram z Pseudokódu</span>
+                    <span data-i18n="updateDiagram">Aktualizovat Diagram z Pseudokódu</span>
                 </button>
             </div>
             <div class="h-56 flex-shrink-0 overflow-y-auto border-t border-darkaccent bg-slate-900/70 px-3 py-2 text-[10px] leading-4 text-slate-400" id="pseudocodeHelp">
-                <h2 class="mb-1 text-[11px] font-semibold text-slate-200">Podporované termíny pseudokódu</h2>
+                <h2 data-i18n="supportedTerms" class="mb-1 text-[11px] font-semibold text-slate-200">Podporované termíny pseudokódu</h2>
                 <ul class="space-y-0.5">
-                    <li><code class="text-indigo-300">ALGORITMUS název(...):</code> — hlavička algoritmu</li>
-                    <li><code class="text-indigo-300">POKUD</code> / <code class="text-indigo-300">IF</code> — podmínka</li>
-                    <li><code class="text-indigo-300">JINAK</code> / <code class="text-indigo-300">ELSE</code> — alternativní větev</li>
-                    <li><code class="text-indigo-300">DOKUD</code> / <code class="text-indigo-300">WHILE</code> — podmíněný cyklus</li>
-                    <li><code class="text-indigo-300">PRO prvek V kolekce</code> / <code class="text-indigo-300">FOR prvek IN collection</code> — průchod kolekcí</li>
-                    <li><code class="text-indigo-300">PRO i OD začátek DO konec</code> / <code class="text-indigo-300">FOR i FROM start TO end</code> — počítaný cyklus (šestiúhelník)</li>
-                    <li><code class="text-indigo-300">VRAT hodnota</code> / <code class="text-indigo-300">RETURN value</code> — předání výsledku funkce (rovnoběžník)</li>
-                    <li><code class="text-indigo-300">VYPIS hodnota</code> / <code class="text-indigo-300">WRITE value</code> — tisk hodnoty</li>
-                    <li>Bloky pište s dvojtečkou a odsazujte; ostatní řádky se zobrazí jako kroky.</li>
-                    <li>Neznámá velká slova na začátku řádku jsou podtržena červeně; upozornění je pouze orientační.</li>
+                    <li data-i18n="termAlgorithm" data-i18n-html="true"><code class="text-indigo-300">ALGORITMUS název(...):</code> — hlavička algoritmu</li>
+                    <li data-i18n="termIf" data-i18n-html="true"><code class="text-indigo-300">POKUD</code> / <code class="text-indigo-300">IF</code> — podmínka</li>
+                    <li data-i18n="termElse" data-i18n-html="true"><code class="text-indigo-300">JINAK</code> / <code class="text-indigo-300">ELSE</code> — alternativní větev</li>
+                    <li data-i18n="termWhile" data-i18n-html="true"><code class="text-indigo-300">DOKUD</code> / <code class="text-indigo-300">WHILE</code> — podmíněný cyklus</li>
+                    <li data-i18n="termForEach" data-i18n-html="true"><code class="text-indigo-300">PRO prvek V kolekce</code> / <code class="text-indigo-300">FOR prvek IN collection</code> — průchod kolekcí</li>
+                    <li data-i18n="termForCount" data-i18n-html="true"><code class="text-indigo-300">PRO i OD začátek DO konec</code> / <code class="text-indigo-300">FOR i FROM start TO end</code> — počítaný cyklus (šestiúhelník)</li>
+                    <li data-i18n="termReturn" data-i18n-html="true"><code class="text-indigo-300">VRAT hodnota</code> / <code class="text-indigo-300">RETURN value</code> — předání výsledku funkce (rovnoběžník)</li>
+                    <li data-i18n="termWrite" data-i18n-html="true"><code class="text-indigo-300">VYPIS hodnota</code> / <code class="text-indigo-300">WRITE value</code> — tisk hodnoty</li>
+                    <li data-i18n="termIndent" data-i18n-html="true">Bloky pište s dvojtečkou a odsazujte; ostatní řádky se zobrazí jako kroky.</li>
+                    <li data-i18n="termWarning" data-i18n-html="true">Neznámá velká slova na začátku řádku jsou podtržena červeně; upozornění je pouze orientační.</li>
                 </ul>
             </div>
-            <div id="pseudocodeHelpResizer" class="gutter-vertical" role="separator" aria-label="Změnit výšku nápovědy" aria-orientation="horizontal" aria-valuemin="96" tabindex="0"></div>
+            <div id="pseudocodeHelpResizer" class="gutter-vertical" role="separator" data-i18n-aria-label="resizeHelp" aria-label="Změnit výšku nápovědy" aria-orientation="horizontal" aria-valuemin="96" tabindex="0"></div>
         </section>
 
         <!-- Divider 1 -->
@@ -220,7 +255,7 @@
             <div class="h-9 bg-darkcard px-3 flex items-center justify-between border-b border-darkaccent text-xs font-semibold text-slate-300">
                 <span class="flex items-center space-x-2">
                     <i class="fa-solid fa-project-diagram text-emerald-400"></i>
-                    <span>2. Vývojový Diagram</span>
+                    <span data-i18n="diagramPane">2. Vývojový Diagram</span>
                 </span>
                 <div class="flex items-center space-x-2">
                     <span id="mermaidStatus" class="text-[10px] text-slate-400">Generováno</span>
@@ -229,13 +264,13 @@
             <!-- Dynamic Flowchart Viewport -->
             <div class="flex-1 bg-darkbg p-4 overflow-auto flex items-center justify-center relative" id="diagramContainer">
                 <div class="absolute top-2 right-2 z-10 flex items-center gap-1 rounded-lg border border-darkaccent bg-darkcard/95 p-1 shadow">
-                    <button onclick="zoomDiagram(-1)" class="h-7 w-7 rounded text-slate-200 hover:bg-darkaccent" title="Oddálit diagram" aria-label="Oddálit diagram">
+                    <button onclick="zoomDiagram(-1)" data-i18n-title="zoomOut" data-i18n-aria-label="zoomOut" class="h-7 w-7 rounded text-slate-200 hover:bg-darkaccent" title="Oddálit diagram" aria-label="Oddálit diagram">
                         <i class="fa-solid fa-magnifying-glass-minus"></i>
                     </button>
-                    <button onclick="zoomDiagram(1)" class="h-7 w-7 rounded text-slate-200 hover:bg-darkaccent" title="Přiblížit diagram" aria-label="Přiblížit diagram">
+                    <button onclick="zoomDiagram(1)" data-i18n-title="zoomIn" data-i18n-aria-label="zoomIn" class="h-7 w-7 rounded text-slate-200 hover:bg-darkaccent" title="Přiblížit diagram" aria-label="Přiblížit diagram">
                         <i class="fa-solid fa-magnifying-glass-plus"></i>
                     </button>
-                    <button onclick="resetDiagramZoom()" class="h-7 w-7 rounded text-slate-200 hover:bg-darkaccent" title="Přizpůsobit diagram ploše" aria-label="Přizpůsobit diagram ploše">
+                    <button onclick="resetDiagramZoom()" data-i18n-title="fitDiagram" data-i18n-aria-label="fitDiagram" class="h-7 w-7 rounded text-slate-200 hover:bg-darkaccent" title="Přizpůsobit diagram ploše" aria-label="Přizpůsobit diagram ploše">
                         <i class="fa-solid fa-house"></i>
                     </button>
                 </div>
@@ -253,7 +288,7 @@
             <div class="h-9 bg-darkcard px-3 flex items-center justify-between border-b border-darkaccent text-xs font-semibold text-slate-300 flex-shrink-0">
                 <span class="flex items-center space-x-2">
                     <i class="fa-brands fa-python text-yellow-400"></i>
-                    <span>3. Python Kód & Vizualizace</span>
+                    <span data-i18n="pythonPane">3. Python Kód & Vizualizace</span>
                 </span>
                 <span id="pyodideStatus" class="text-[10px] text-amber-400 flex items-center space-x-1">
                     <i class="fa-solid fa-spinner fa-spin"></i>
@@ -271,7 +306,7 @@
                 <div class="h-8 bg-slate-900 px-3 flex items-center justify-between border-b border-darkaccent text-xs font-medium text-slate-400 flex-shrink-0">
                     <span class="flex items-center space-x-2">
                         <i class="fa-solid fa-cube text-sky-400"></i>
-                        <span>Inspektor Proměnných</span>
+                        <span data-i18n="variables">Inspektor Proměnných</span>
                     </span>
                     <span id="stepCounter" class="font-mono text-[11px] text-slate-400">Krok: 0 / 0</span>
                 </div>
@@ -280,18 +315,18 @@
                     <!-- Local Variables Table -->
                     <div class="flex-1 bg-darkbg rounded-lg border border-darkaccent p-2 overflow-y-auto min-h-[90px]">
                         <div class="text-[11px] text-slate-400 font-sans font-semibold mb-1 flex justify-between border-b border-darkaccent pb-1">
-                            <span>Proměnná</span>
-                            <span>Hodnota</span>
+                            <span data-i18n="variable">Proměnná</span>
+                            <span data-i18n="value">Hodnota</span>
                         </div>
                         <div id="varInspector" class="space-y-1">
-                            <span class="text-slate-500 italic font-sans text-[11px]">Spusťte krokování...</span>
+                            <span data-i18n="startStepping" class="text-slate-500 italic font-sans text-[11px]">Spusťte krokování...</span>
                         </div>
                     </div>
 
                     <!-- Output & Call Stack -->
                     <div class="h-28 bg-darkbg rounded-lg border border-darkaccent p-2 overflow-y-auto flex-shrink-0">
                         <div class="text-[11px] text-slate-400 font-sans font-semibold mb-1 flex justify-between border-b border-darkaccent pb-1">
-                            <span>Konzole (stdout)</span>
+                            <span data-i18n="console">Konzole (stdout)</span>
                         </div>
                         <pre id="consoleOutput" class="text-slate-300 text-[11px] whitespace-pre-wrap font-mono"></pre>
                     </div>
@@ -305,105 +340,466 @@
         // --- 1. PRE-DEFINED ALGORITHM TEMPLATES ---
         const templates = {
             bubbleSort: {
-                name: 'Bubble Sort (Řazení)',
-                pseudocode: `ALGORITMUS BubbleSort(pole):
-  n = délka(pole)
+                names: {
+                    cs: 'Bubble Sort',
+                    en: 'Bubble Sort',
+                    sk: 'Bubble Sort',
+                    eo: 'Bubble Sort',
+                    fr: 'Bubble Sort'
+                },
+                pseudocode: `ALGORITMUS BubbleSort(array):
+  n = length(array)
   PRO i OD 0 DO n-1:
     PRO j OD 0 DO n-i-2:
-      POKUD pole[j] > pole[j+1]:
-        vyměň(pole[j], pole[j+1])
-  VRAT pole`,
-                python: `def bubble_sort(arr):
-    n = len(arr)
+      POKUD array[j] > array[j+1]:
+        swap(array[j], array[j+1])
+  VRAT array`,
+                python: `def bubble_sort(array):
+    n = len(array)
     for i in range(n):
         for j in range(0, n - i - 1):
-            if arr[j] > arr[j + 1]:
-                arr[j], arr[j + 1] = arr[j + 1], arr[j]
-    return arr
+            if array[j] > array[j + 1]:
+                array[j], array[j + 1] = array[j + 1], array[j]
+    return array
 
-pole = [64, 34, 25, 12, 22]
-bubble_sort(pole)`
+values = [64, 34, 25, 12, 22]
+bubble_sort(values)`
             },
 
             factorial: {
-                name: 'Faktoriál (Rekurze/Cykly)',
-                pseudocode: `ALGORITMUS Faktorial(n):
-  vysledek = 1
+                names: {
+                    cs: 'Factorial (Recursion/Loops)',
+                    en: 'Factorial (Recursion/Loops)',
+                    sk: 'Factorial (Recursion/Loops)',
+                    eo: 'Factorial (Recursion/Loops)',
+                    fr: 'Factorial (Recursion/Loops)'
+                },
+                pseudocode: `ALGORITMUS Factorial(n):
+  result = 1
   PRO i OD 1 DO n:
-    vysledek = vysledek * i
-  VRAT vysledek`,
+    result = result * i
+  VRAT result`,
                 python: `def factorial(n):
-    vysledek = 1
+    result = 1
     for i in range(1, n + 1):
-        vysledek = vysledek * i
-    return vysledek
+        result = result * i
+    return result
 
-vysledek = factorial(5)
-print("Faktorial:", vysledek)`
+result = factorial(5)
+print("Factorial:", result)`
             },
 
             findMax: {
-                name: 'Najdi Maximum v poli',
-                pseudocode: `ALGORITMUS NajdiMax(pole):
-  max_val = pole[0]
-  PRO prvek V pole:
-    POKUD prvek > max_val:
-      max_val = prvek
-  VRAT max_val`,
-                python: `def find_max(arr):
-    max_val = arr[0]
-    for prvek in arr:
-        if prvek > max_val:
-            max_val = prvek
-    return max_val
+                names: {
+                    cs: 'Find Maximum in an Array',
+                    en: 'Find Maximum in an Array',
+                    sk: 'Find Maximum in an Array',
+                    eo: 'Find Maximum in an Array',
+                    fr: 'Find Maximum in an Array'
+                },
+                pseudocode: `ALGORITMUS FindMaximum(array):
+  max_value = array[0]
+  PRO item V array:
+    POKUD item > max_value:
+      max_value = item
+  VRAT max_value`,
+                python: `def find_max(array):
+    max_value = array[0]
+    for item in array:
+        if item > max_value:
+            max_value = item
+    return max_value
 
-cisla = [14, 45, 8, 99, 23]
-max_cislo = find_max(cisla)
-print("Max:", max_cislo)`
+numbers = [14, 45, 8, 99, 23]
+maximum = find_max(numbers)
+print("Maximum:", maximum)`
             },
 
             gcd: {
-                name: 'Eukleidův algoritmus (GCD)',
-                pseudocode: `ALGORITMUS Eukleid(a, b):
+                names: {
+                    cs: 'Euclidean Algorithm (GCD)',
+                    en: 'Euclidean Algorithm (GCD)',
+                    sk: 'Euclidean Algorithm (GCD)',
+                    eo: 'Euclidean Algorithm (GCD)',
+                    fr: 'Euclidean Algorithm (GCD)'
+                },
+                pseudocode: `ALGORITMUS EuclideanGCD(a, b):
   DOKUD b != 0:
     temp = b
     b = a MOD b
     a = temp
   VRAT a`,
-                python: `def gcd(a, b):
+                python: `def euclidean_gcd(a, b):
     while b != 0:
         temp = b
         b = a % b
         a = temp
     return a
 
-vysledek = gcd(48, 18)
-print("GCD:", vysledek)`
+result = euclidean_gcd(48, 18)
+print("GCD:", result)`
             },
 
             triangleArea: {
-                name: 'Obsah trojúhelníku ze tří stran',
-                pseudocode: `ALGORITMUS ObsahTrojuhelniku(a, b, c):
+                names: {
+                    cs: 'Triangle Area from Three Sides',
+                    en: 'Triangle Area from Three Sides',
+                    sk: 'Triangle Area from Three Sides',
+                    eo: 'Triangle Area from Three Sides',
+                    fr: 'Triangle Area from Three Sides'
+                },
+                pseudocode: `ALGORITMUS TriangleArea(a, b, c):
   POKUD a <= 0 NEBO b <= 0 NEBO c <= 0 NEBO a + b <= c NEBO a + c <= b NEBO b + c <= a:
-    VYPIS "Neplatné strany trojúhelníku"
+    VYPIS "Invalid triangle sides"
   JINAK:
-    s = (a + b + c) / 2
-    obsah = ODMOCNINA(s * (s - a) * (s - b) * (s - c))
-    VRAT obsah`,
+    semiperimeter = (a + b + c) / 2
+    area = sqrt(semiperimeter * (semiperimeter - a) * (semiperimeter - b) * (semiperimeter - c))
+    VRAT area`,
                 python: `import math
 
-def obsah_trojuhelniku(a, b, c):
+def triangle_area(a, b, c):
     if a <= 0 or b <= 0 or c <= 0 or a + b <= c or a + c <= b or b + c <= a:
-        raise ValueError("Strany netvoří platný trojúhelník")
-    s = (a + b + c) / 2
-    return math.sqrt(s * (s - a) * (s - b) * (s - c))
+        raise ValueError("The sides do not form a valid triangle")
+    semiperimeter = (a + b + c) / 2
+    return math.sqrt(
+        semiperimeter
+        * (semiperimeter - a)
+        * (semiperimeter - b)
+        * (semiperimeter - c)
+    )
 
-obsah = obsah_trojuhelniku(3, 4, 5)
-print("Obsah trojúhelníku:", obsah)`
+area = triangle_area(3, 4, 5)
+print("Triangle area:", area)`
+            }
+        };
+
+        const translations = {
+            cs: {
+                documentTitle: 'Algoritmizace & Vývojové diagramy | Výukový nástroj',
+                appTitle: 'Algoritmizace & Vývojové Diagramy',
+                languageSelector: 'Výběr jazyka',
+                algorithmLabel: 'Algoritmus:',
+                saveJson: 'Uložit pseudokód jako JSON',
+                prepareExecution: 'Připravit ke krokování',
+                start: 'Start',
+                play: 'Spustit',
+                pause: 'Pauza',
+                step: 'Krok',
+                previousStep: 'Předchozí krok',
+                pseudocodePane: '1. Pseudokód / Struktura',
+                algorithm: 'Algoritmus',
+                pseudocodeWarningTitle: 'Kontrola označuje neznámá slova psaná velkými písmeny na začátku řádku; běžné přiřazení ignoruje.',
+                updateDiagram: 'Aktualizovat Diagram z Pseudokódu',
+                supportedTerms: 'Podporované termíny pseudokódu',
+                termAlgorithm: '<code class="text-indigo-300">ALGORITMUS název(...):</code> — hlavička algoritmu',
+                termIf: '<code class="text-indigo-300">POKUD</code> / <code class="text-indigo-300">IF</code> — podmínka',
+                termElse: '<code class="text-indigo-300">JINAK</code> / <code class="text-indigo-300">ELSE</code> — alternativní větev',
+                termWhile: '<code class="text-indigo-300">DOKUD</code> / <code class="text-indigo-300">WHILE</code> — podmíněný cyklus',
+                termForEach: '<code class="text-indigo-300">PRO prvek V kolekce</code> / <code class="text-indigo-300">FOR prvek IN collection</code> — průchod kolekcí',
+                termForCount: '<code class="text-indigo-300">PRO i OD začátek DO konec</code> / <code class="text-indigo-300">FOR i FROM start TO end</code> — počítaný cyklus (šestiúhelník)',
+                termReturn: '<code class="text-indigo-300">VRAT hodnota</code> / <code class="text-indigo-300">RETURN value</code> — předání výsledku funkce (rovnoběžník)',
+                termWrite: '<code class="text-indigo-300">VYPIS hodnota</code> / <code class="text-indigo-300">WRITE value</code> — tisk hodnoty',
+                termIndent: 'Bloky pište s dvojtečkou a odsazujte; ostatní řádky se zobrazí jako kroky.',
+                termWarning: 'Neznámá velká slova na začátku řádku jsou podtržena červeně; upozornění je pouze orientační.',
+                resizeHelp: 'Změnit výšku nápovědy',
+                diagramPane: '2. Vývojový Diagram',
+                diagramGenerated: 'Generováno',
+                diagramOk: 'Diagram OK',
+                diagramError: 'Chyba pseudokódu',
+                diagramCreateError: 'Diagram se nepodařilo vytvořit. Opravte pseudokód.',
+                diagramRenderError: 'Diagram se nepodařilo vykreslit. Zkontrolujte syntaxi pseudokódu.',
+                zoomOut: 'Oddálit diagram',
+                zoomIn: 'Přiblížit diagram',
+                fitDiagram: 'Přizpůsobit diagram ploše',
+                pythonPane: '3. Python Kód & Vizualizace',
+                pyodideLoading: 'Nahrávání Pyodide...',
+                pyodideReady: 'Python připraven',
+                pyodideError: 'Chyba při načítání Pythonu',
+                variables: 'Inspektor Proměnných',
+                stepCounter: 'Krok: {current} / {total}',
+                variable: 'Proměnná',
+                value: 'Hodnota',
+                startStepping: 'Spusťte krokování...',
+                noVariables: 'Žádné lokální proměnné',
+                console: 'Konzole (stdout)',
+                saveError: 'Zvolený algoritmus se nepodařilo uložit.',
+                pyodideNotReady: 'Pyodide se stále načítá. Počkejte prosím chvíli.',
+                noExecutionSteps: 'Nebyl zaznamenán žádný krok vykonávání kódového bloku.',
+                pythonRuntimeError: 'Chyba běhu Pythonu:',
+                unknownTerms: 'Neznámé řídicí výrazy: {count}',
+                malformedElse: 'Alternativní větev "{line}" musí být zapsána jako JINAK: nebo ELSE:.',
+                malformedBlock: 'Pseudokód nelze zpracovat u řádku: {line}',
+                missingColon: 'Hlavička "{line}" musí končit dvojtečkou.',
+                iteratorQuestion: 'Další prvek v {iterable}?',
+                nextIterator: 'další prvek z {iterable}',
+                condition: 'Podmínka',
+                yes: 'Ano',
+                no: 'Ne',
+                startNode: 'Start',
+                endNode: 'Konec'
+            },
+            en: {
+                documentTitle: 'Algorithms & Flowcharts | Learning Tool',
+                appTitle: 'Algorithms & Flowcharts',
+                languageSelector: 'Language selector',
+                algorithmLabel: 'Algorithm:',
+                saveJson: 'Save pseudocode as JSON',
+                prepareExecution: 'Prepare for stepping',
+                start: 'Start',
+                play: 'Run',
+                pause: 'Pause',
+                step: 'Step',
+                previousStep: 'Previous step',
+                pseudocodePane: '1. Pseudocode / Structure',
+                algorithm: 'Algorithm',
+                pseudocodeWarningTitle: 'Highlights unknown uppercase words at the beginning of a line; ordinary assignments are ignored.',
+                updateDiagram: 'Update Diagram from Pseudocode',
+                supportedTerms: 'Supported pseudocode terms',
+                termAlgorithm: '<code class="text-indigo-300">ALGORITMUS název(...):</code> — algorithm header',
+                termIf: '<code class="text-indigo-300">POKUD</code> / <code class="text-indigo-300">IF</code> — condition',
+                termElse: '<code class="text-indigo-300">JINAK</code> / <code class="text-indigo-300">ELSE</code> — alternative branch',
+                termWhile: '<code class="text-indigo-300">DOKUD</code> / <code class="text-indigo-300">WHILE</code> — conditional loop',
+                termForEach: '<code class="text-indigo-300">PRO prvek V kolekce</code> / <code class="text-indigo-300">FOR prvek IN collection</code> — iterate over a collection',
+                termForCount: '<code class="text-indigo-300">PRO i OD začátek DO konec</code> / <code class="text-indigo-300">FOR i FROM start TO end</code> — counted loop (hexagon)',
+                termReturn: '<code class="text-indigo-300">VRAT hodnota</code> / <code class="text-indigo-300">RETURN value</code> — return a function result (parallelogram)',
+                termWrite: '<code class="text-indigo-300">VYPIS hodnota</code> / <code class="text-indigo-300">WRITE value</code> — print a value',
+                termIndent: 'End blocks with a colon and indent them; other lines appear as steps.',
+                termWarning: 'Unknown uppercase words at the start of a line are underlined in red; this is only a hint.',
+                resizeHelp: 'Resize help panel',
+                diagramPane: '2. Flowchart',
+                diagramGenerated: 'Generated',
+                diagramOk: 'Diagram OK',
+                diagramError: 'Pseudocode error',
+                diagramCreateError: 'Could not create the diagram. Please fix the pseudocode.',
+                diagramRenderError: 'Could not render the diagram. Check the pseudocode syntax.',
+                zoomOut: 'Zoom out',
+                zoomIn: 'Zoom in',
+                fitDiagram: 'Fit diagram to pane',
+                pythonPane: '3. Python Code & Visualization',
+                pyodideLoading: 'Loading Pyodide...',
+                pyodideReady: 'Python ready',
+                pyodideError: 'Error loading Python',
+                variables: 'Variable Inspector',
+                stepCounter: 'Step: {current} / {total}',
+                variable: 'Variable',
+                value: 'Value',
+                startStepping: 'Start stepping...',
+                noVariables: 'No local variables',
+                console: 'Console (stdout)',
+                saveError: 'Could not save the selected algorithm.',
+                pyodideNotReady: 'Pyodide is still loading. Please wait.',
+                noExecutionSteps: 'No execution steps were recorded for this code block.',
+                pythonRuntimeError: 'Python runtime error:',
+                unknownTerms: 'Unknown control terms: {count}',
+                malformedElse: 'The alternative branch "{line}" must be written as JINAK: or ELSE:.',
+                malformedBlock: 'Could not parse pseudocode at line: {line}',
+                missingColon: 'Header "{line}" must end with a colon.',
+                iteratorQuestion: 'Next item in {iterable}?',
+                nextIterator: 'next item from {iterable}',
+                condition: 'Condition',
+                yes: 'Yes',
+                no: 'No',
+                startNode: 'Start',
+                endNode: 'End'
+            },
+            eo: {
+                documentTitle: 'Algoritmoj kaj fluodiagramoj | Lernilo',
+                appTitle: 'Algoritmoj kaj fluodiagramoj',
+                languageSelector: 'Lingvoelektilo',
+                algorithmLabel: 'Algoritmo:',
+                saveJson: 'Konservi pseŭdokodon kiel JSON',
+                prepareExecution: 'Prepari por paŝa rulado',
+                start: 'Starti',
+                play: 'Ruli',
+                pause: 'Paŭzi',
+                step: 'Paŝo',
+                previousStep: 'Antaŭa paŝo',
+                pseudocodePane: '1. Pseŭdokodo / Strukturo',
+                algorithm: 'Algoritmo',
+                pseudocodeWarningTitle: 'Markas nekonatajn vortojn per majuskloj ĉe la komenco de linio; ordinaraj atribuoj estas ignorataj.',
+                updateDiagram: 'Ĝisdatigi diagramon el pseŭdokodo',
+                supportedTerms: 'Subtenataj pseŭdokodaj terminoj',
+                termAlgorithm: '<code class="text-indigo-300">ALGORITMUS název(...):</code> — algoritmo-kapo',
+                termIf: '<code class="text-indigo-300">POKUD</code> / <code class="text-indigo-300">IF</code> — kondiĉo',
+                termElse: '<code class="text-indigo-300">JINAK</code> / <code class="text-indigo-300">ELSE</code> — alternativa branĉo',
+                termWhile: '<code class="text-indigo-300">DOKUD</code> / <code class="text-indigo-300">WHILE</code> — kondiĉa iteracio',
+                termForEach: '<code class="text-indigo-300">PRO prvek V kolekce</code> / <code class="text-indigo-300">FOR prvek IN collection</code> — trairi kolekton',
+                termForCount: '<code class="text-indigo-300">PRO i OD začátek DO konec</code> / <code class="text-indigo-300">FOR i FROM start TO end</code> — nombrila iteracio (seslatero)',
+                termReturn: '<code class="text-indigo-300">VRAT hodnota</code> / <code class="text-indigo-300">RETURN value</code> — redoni funkcir rezulton (paralelogramo)',
+                termWrite: '<code class="text-indigo-300">VYPIS hodnota</code> / <code class="text-indigo-300">WRITE value</code> — presi valoron',
+                termIndent: 'Finu blokojn per dupunkto kaj indentu ilin; aliaj linioj aperas kiel paŝoj.',
+                termWarning: 'Nekonataj majusklaj vortoj ĉe la komenco de linio estas substrekataj ruĝe; tio estas nur averto.',
+                resizeHelp: 'Ŝanĝi altecon de helpo',
+                diagramPane: '2. Fluodiagramo',
+                diagramGenerated: 'Generita',
+                diagramOk: 'Diagramo preta',
+                diagramError: 'Pseŭdokoda eraro',
+                diagramCreateError: 'Ne eblis krei diagramon. Korektu la pseŭdokodon.',
+                diagramRenderError: 'Ne eblis bildigi la diagramon. Kontrolu la pseŭdokodan sintakson.',
+                zoomOut: 'Malzomi diagramon',
+                zoomIn: 'Zomi diagramon',
+                fitDiagram: 'Adapti diagramon al la panelo',
+                pythonPane: '3. Python-kodo kaj bildigo',
+                pyodideLoading: 'Ŝargante Pyodide...',
+                pyodideReady: 'Python preta',
+                pyodideError: 'Eraro dum ŝargado de Python',
+                variables: 'Variabla inspektilo',
+                stepCounter: 'Paŝo: {current} / {total}',
+                variable: 'Variablo',
+                value: 'Valoro',
+                startStepping: 'Komencu paŝan ruladon...',
+                noVariables: 'Neniuj lokaj variabloj',
+                console: 'Konzolo (stdout)',
+                saveError: 'Ne eblis konservi la elektitan algoritmon.',
+                pyodideNotReady: 'Pyodide ankoraŭ ŝargiĝas. Bonvolu atendi.',
+                noExecutionSteps: 'Neniu rula paŝo estis registrita por ĉi tiu kodbloko.',
+                pythonRuntimeError: 'Python-rultempa eraro:',
+                unknownTerms: 'Nekonataj stiraj terminoj: {count}',
+                malformedElse: 'La alternativa branĉo "{line}" devas esti skribita kiel JINAK: aŭ ELSE:.',
+                malformedBlock: 'Ne eblis analizi pseŭdokodon ĉe linio: {line}',
+                missingColon: 'La kaplinio "{line}" devas finiĝi per dupunkto.',
+                iteratorQuestion: 'Ĉu estas plia elemento en {iterable}?',
+                nextIterator: 'plia elemento el {iterable}',
+                condition: 'Kondiĉo',
+                yes: 'Jes',
+                no: 'Ne',
+                startNode: 'Starto',
+                endNode: 'Fino'
+            },
+            fr: {
+                documentTitle: 'Algorithmes et organigrammes | Outil pédagogique',
+                appTitle: 'Algorithmes et organigrammes',
+                languageSelector: 'Sélecteur de langue',
+                algorithmLabel: 'Algorithme :',
+                saveJson: 'Enregistrer le pseudocode au format JSON',
+                prepareExecution: 'Préparer le pas à pas',
+                start: 'Démarrer',
+                play: 'Exécuter',
+                pause: 'Pause',
+                step: 'Étape',
+                previousStep: 'Étape précédente',
+                pseudocodePane: '1. Pseudocode / Structure',
+                algorithm: 'Algorithme',
+                pseudocodeWarningTitle: 'Signale les mots inconnus en majuscules au début d’une ligne ; les affectations ordinaires sont ignorées.',
+                updateDiagram: 'Actualiser le diagramme depuis le pseudocode',
+                supportedTerms: 'Termes de pseudocode pris en charge',
+                termAlgorithm: '<code class="text-indigo-300">ALGORITMUS název(...):</code> — en-tête d’algorithme',
+                termIf: '<code class="text-indigo-300">POKUD</code> / <code class="text-indigo-300">IF</code> — condition',
+                termElse: '<code class="text-indigo-300">JINAK</code> / <code class="text-indigo-300">ELSE</code> — branche alternative',
+                termWhile: '<code class="text-indigo-300">DOKUD</code> / <code class="text-indigo-300">WHILE</code> — boucle conditionnelle',
+                termForEach: '<code class="text-indigo-300">PRO prvek V kolekce</code> / <code class="text-indigo-300">FOR prvek IN collection</code> — parcourir une collection',
+                termForCount: '<code class="text-indigo-300">PRO i OD začátek DO konec</code> / <code class="text-indigo-300">FOR i FROM start TO end</code> — boucle compteur (hexagone)',
+                termReturn: '<code class="text-indigo-300">VRAT hodnota</code> / <code class="text-indigo-300">RETURN value</code> — renvoyer le résultat d’une fonction (parallélogramme)',
+                termWrite: '<code class="text-indigo-300">VYPIS hodnota</code> / <code class="text-indigo-300">WRITE value</code> — afficher une valeur',
+                termIndent: 'Terminez les blocs par deux-points et indentez-les ; les autres lignes apparaissent comme des étapes.',
+                termWarning: 'Les mots inconnus en majuscules au début d’une ligne sont soulignés en rouge ; il s’agit seulement d’un avertissement.',
+                resizeHelp: 'Modifier la hauteur de l’aide',
+                diagramPane: '2. Organigramme',
+                diagramGenerated: 'Généré',
+                diagramOk: 'Diagramme prêt',
+                diagramError: 'Erreur de pseudocode',
+                diagramCreateError: 'Impossible de créer le diagramme. Corrigez le pseudocode.',
+                diagramRenderError: 'Impossible d’afficher le diagramme. Vérifiez la syntaxe du pseudocode.',
+                zoomOut: 'Dézoomer le diagramme',
+                zoomIn: 'Zoomer le diagramme',
+                fitDiagram: 'Adapter le diagramme au panneau',
+                pythonPane: '3. Code Python et visualisation',
+                pyodideLoading: 'Chargement de Pyodide...',
+                pyodideReady: 'Python prêt',
+                pyodideError: 'Erreur lors du chargement de Python',
+                variables: 'Inspecteur de variables',
+                stepCounter: 'Étape : {current} / {total}',
+                variable: 'Variable',
+                value: 'Valeur',
+                startStepping: 'Lancez le pas à pas...',
+                noVariables: 'Aucune variable locale',
+                console: 'Console (stdout)',
+                saveError: 'Impossible d’enregistrer l’algorithme sélectionné.',
+                pyodideNotReady: 'Pyodide est en cours de chargement. Veuillez patienter.',
+                noExecutionSteps: 'Aucune étape d’exécution n’a été enregistrée pour ce bloc de code.',
+                pythonRuntimeError: 'Erreur d’exécution Python :',
+                unknownTerms: 'Termes de contrôle inconnus : {count}',
+                malformedElse: 'La branche alternative « {line} » doit être écrite JINAK: ou ELSE:.',
+                malformedBlock: 'Impossible d’analyser le pseudocode à la ligne : {line}',
+                missingColon: 'L’en-tête « {line} » doit se terminer par deux-points.',
+                iteratorQuestion: 'Y a-t-il un autre élément dans {iterable} ?',
+                nextIterator: 'élément suivant de {iterable}',
+                condition: 'Condition',
+                yes: 'Oui',
+                no: 'Non',
+                startNode: 'Début',
+                endNode: 'Fin'
+            },
+            sk: {
+                documentTitle: 'Algoritmy a vývojové diagramy | Výučbový nástroj',
+                appTitle: 'Algoritmy a vývojové diagramy',
+                languageSelector: 'Výber jazyka',
+                algorithmLabel: 'Algoritmus:',
+                saveJson: 'Uložiť pseudokód ako JSON',
+                prepareExecution: 'Pripraviť na krokovanie',
+                start: 'Štart',
+                play: 'Spustiť',
+                pause: 'Pauza',
+                step: 'Krok',
+                previousStep: 'Predchádzajúci krok',
+                pseudocodePane: '1. Pseudokód / Štruktúra',
+                algorithm: 'Algoritmus',
+                pseudocodeWarningTitle: 'Označuje neznáme slová písané veľkými písmenami na začiatku riadka; bežné priradenia ignoruje.',
+                updateDiagram: 'Aktualizovať diagram z pseudokódu',
+                supportedTerms: 'Podporované termíny pseudokódu',
+                termAlgorithm: '<code class="text-indigo-300">ALGORITMUS název(...):</code> — hlavička algoritmu',
+                termIf: '<code class="text-indigo-300">POKUD</code> / <code class="text-indigo-300">IF</code> — podmienka',
+                termElse: '<code class="text-indigo-300">JINAK</code> / <code class="text-indigo-300">ELSE</code> — alternatívna vetva',
+                termWhile: '<code class="text-indigo-300">DOKUD</code> / <code class="text-indigo-300">WHILE</code> — podmienený cyklus',
+                termForEach: '<code class="text-indigo-300">PRO prvek V kolekce</code> / <code class="text-indigo-300">FOR prvek IN collection</code> — prechod kolekciou',
+                termForCount: '<code class="text-indigo-300">PRO i OD začátek DO konec</code> / <code class="text-indigo-300">FOR i FROM start TO end</code> — počítaný cyklus (šesťuholník)',
+                termReturn: '<code class="text-indigo-300">VRAT hodnota</code> / <code class="text-indigo-300">RETURN value</code> — odovzdanie výsledku funkcie (rovnobežník)',
+                termWrite: '<code class="text-indigo-300">VYPIS hodnota</code> / <code class="text-indigo-300">WRITE value</code> — výpis hodnoty',
+                termIndent: 'Bloky ukončite dvojbodkou a odsadzujte; ostatné riadky sa zobrazia ako kroky.',
+                termWarning: 'Neznáme veľké slová na začiatku riadka sú podčiarknuté červenou; upozornenie je iba orientačné.',
+                resizeHelp: 'Zmeniť výšku pomocníka',
+                diagramPane: '2. Vývojový diagram',
+                diagramGenerated: 'Vygenerované',
+                diagramOk: 'Diagram OK',
+                diagramError: 'Chyba pseudokódu',
+                diagramCreateError: 'Diagram sa nepodarilo vytvoriť. Opravte pseudokód.',
+                diagramRenderError: 'Diagram sa nepodarilo vykresliť. Skontrolujte syntax pseudokódu.',
+                zoomOut: 'Oddialiť diagram',
+                zoomIn: 'Priblížiť diagram',
+                fitDiagram: 'Prispôsobiť diagram ploche',
+                pythonPane: '3. Python kód a vizualizácia',
+                pyodideLoading: 'Načítava sa Pyodide...',
+                pyodideReady: 'Python je pripravený',
+                pyodideError: 'Chyba pri načítaní Pythonu',
+                variables: 'Inšpektor premenných',
+                stepCounter: 'Krok: {current} / {total}',
+                variable: 'Premenná',
+                value: 'Hodnota',
+                startStepping: 'Spustite krokovanie...',
+                noVariables: 'Žiadne lokálne premenné',
+                console: 'Konzola (stdout)',
+                saveError: 'Vybraný algoritmus sa nepodarilo uložiť.',
+                pyodideNotReady: 'Pyodide sa ešte načítava. Počkajte, prosím.',
+                noExecutionSteps: 'Pre tento blok kódu nebol zaznamenaný žiadny krok vykonávania.',
+                pythonRuntimeError: 'Chyba pri vykonávaní Pythonu:',
+                unknownTerms: 'Neznáme riadiace výrazy: {count}',
+                malformedElse: 'Alternatívna vetva "{line}" musí byť zapísaná ako JINAK: alebo ELSE:.',
+                malformedBlock: 'Pseudokód sa nepodarilo spracovať na riadku: {line}',
+                missingColon: 'Hlavička "{line}" musí končiť dvojbodkou.',
+                iteratorQuestion: 'Je ďalší prvok v {iterable}?',
+                nextIterator: 'ďalší prvok z {iterable}',
+                condition: 'Podmienka',
+                yes: 'Áno',
+                no: 'Nie',
+                startNode: 'Štart',
+                endNode: 'Koniec'
             }
         };
 
         // --- 2. GLOBAL STATE ---
+        let currentLanguage = 'cs';
+        let diagramStatusKey = 'diagramGenerated';
+        let pyodideStatusKey = 'pyodideLoading';
         let pyEditor, pseudoEditor;
         let pyodideInstance = null;
         let executionTrace = [];
@@ -419,6 +815,84 @@ print("Obsah trojúhelníku:", obsah)`
             'ALGORITMUS', 'POKUD', 'IF', 'JINAK', 'ELSE', 'DOKUD', 'WHILE',
             'PRO', 'FOR', 'VRAT', 'RETURN', 'VYPIS', 'WRITE'
         ]);
+
+        function translate(key, values = {}) {
+            let text = translations[currentLanguage][key];
+            for (const [name, value] of Object.entries(values)) {
+                text = text.replaceAll(`{${name}}`, value);
+            }
+            return text;
+        }
+
+        function getTemplateName(template, language = currentLanguage) {
+            return template.names[language];
+        }
+
+        function setDiagramStatus(key) {
+            diagramStatusKey = key;
+            const status = document.getElementById('mermaidStatus');
+            status.innerText = translate(key);
+            status.className = key === 'diagramOk'
+                ? 'text-[10px] text-emerald-400'
+                : key === 'diagramGenerated'
+                    ? 'text-[10px] text-slate-400'
+                    : 'text-[10px] text-rose-400';
+        }
+
+        function renderPyodideStatus() {
+            const status = document.getElementById('pyodideStatus');
+            const icon = pyodideStatusKey === 'pyodideLoading'
+                ? '<i class="fa-solid fa-spinner fa-spin"></i>'
+                : pyodideStatusKey === 'pyodideReady'
+                    ? '<i class="fa-solid fa-circle-check"></i>'
+                    : '';
+            status.innerHTML = `${icon}<span>${translate(pyodideStatusKey)}</span>`;
+            status.className = pyodideStatusKey === 'pyodideReady'
+                ? 'text-[10px] text-emerald-400 flex items-center space-x-1'
+                : pyodideStatusKey === 'pyodideError'
+                    ? 'text-[10px] text-rose-400 flex items-center space-x-1'
+                    : 'text-[10px] text-amber-400 flex items-center space-x-1';
+        }
+
+        function applyLanguage(language, refreshDiagram = true) {
+            if (!Object.hasOwn(translations, language)) return;
+            currentLanguage = language;
+            document.documentElement.lang = language;
+            document.title = translate('documentTitle');
+
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const text = translate(element.dataset.i18n);
+                if (element.dataset.i18nHtml === 'true') {
+                    element.innerHTML = text;
+                } else {
+                    element.textContent = text;
+                }
+            });
+            document.querySelectorAll('[data-i18n-title]').forEach(element => {
+                element.title = translate(element.dataset.i18nTitle);
+            });
+            document.querySelectorAll('[data-i18n-aria-label]').forEach(element => {
+                element.setAttribute('aria-label', translate(element.dataset.i18nAriaLabel));
+            });
+            document.querySelectorAll('.language-button').forEach(button => {
+                button.setAttribute('aria-pressed', String(button.dataset.language === language));
+            });
+
+            populateTemplateSelect();
+            document.getElementById('playText').textContent = translate(isPlaying ? 'pause' : 'play');
+            setDiagramStatus(diagramStatusKey);
+            renderPyodideStatus();
+            document.getElementById('stepCounter').textContent = translate('stepCounter', {
+                current: currentStepIndex < 0 ? 0 : currentStepIndex + 1,
+                total: executionTrace.length
+            });
+            updatePseudocodeWarning();
+            if (executionTrace.length === 0) {
+                document.getElementById('varInspector').innerHTML =
+                    `<span class="text-slate-500 italic text-[11px]">${translate('startStepping')}</span>`;
+            }
+            if (refreshDiagram && pseudoEditor) updateDiagramFromPseudocode();
+        }
 
         function getUnknownPseudocodeControlWord(line) {
             const match = line.match(/^[\t ]*([\p{L}_][\p{L}\p{N}_]*)/u);
@@ -485,7 +959,10 @@ print("Obsah trojúhelníku:", obsah)`
                 securityLevel: 'loose',
                 flowchart: { curve: 'basis' }
             });
-            populateTemplateSelect();
+            document.querySelectorAll('.language-button').forEach(button => {
+                button.addEventListener('click', () => applyLanguage(button.dataset.language));
+            });
+            applyLanguage('cs', false);
             loadTemplate(document.getElementById('templateSelect').value);
             diagramResizeObserver = new ResizeObserver(() => applyDiagramZoom());
             diagramResizeObserver.observe(document.getElementById('diagramContainer'));
@@ -510,7 +987,7 @@ print("Obsah trojúhelníku:", obsah)`
                 .filter(line => getUnknownPseudocodeControlWord(line));
             const warning = document.getElementById('pseudocodeWarning');
             warning.textContent = unknownTerms.length
-                ? `Neznámé řídicí výrazy: ${unknownTerms.length}`
+                ? translate('unknownTerms', { count: unknownTerms.length })
                 : '';
             warning.classList.toggle('hidden', unknownTerms.length === 0);
         }
@@ -525,12 +1002,14 @@ print("Obsah trojúhelníku:", obsah)`
 
         function populateTemplateSelect() {
             const select = document.getElementById('templateSelect');
+            const selectedKey = select.value;
             select.replaceChildren(...Object.entries(templates).map(([key, template]) => {
                 const option = document.createElement('option');
                 option.value = key;
-                option.textContent = template.name;
+                option.textContent = getTemplateName(template);
                 return option;
             }));
+            if (templates[selectedKey]) select.value = selectedKey;
         }
 
         // Load Algorithm Templates
@@ -552,11 +1031,11 @@ print("Obsah trojúhelníku:", obsah)`
             const selectedTemplate = templates[select.value];
             const pseudocode = pseudoEditor.getValue();
             if (!selectedTemplate) {
-                alert("Zvolený algoritmus se nepodařilo uložit.");
+                alert(translate('saveError'));
                 return;
             }
 
-            const fileName = selectedTemplate.name
+            const fileName = getTemplateName(selectedTemplate)
                 .replace(/[<>:"/\\|?*\u0000-\u001F]/g, '_')
                 .replace(/[. ]+$/g, '')
                 .trim();
@@ -568,7 +1047,7 @@ print("Obsah trojúhelníku:", obsah)`
                 };
             });
             const json = JSON.stringify({
-                name: selectedTemplate.name,
+                name: getTemplateName(selectedTemplate),
                 pseudocode: pseudocodeLines
             }, null, 2);
             const blob = new Blob([json], { type: 'application/json;charset=utf-8' });
@@ -595,12 +1074,11 @@ print("Obsah trojúhelníku:", obsah)`
                 if (renderVersion !== diagramRenderVersion) return;
                 diagramZoom = 1;
                 applyDiagramZoom(true);
-                document.getElementById('mermaidStatus').innerText = 'Diagram OK';
-                document.getElementById('mermaidStatus').className = 'text-[10px] text-emerald-400';
+                setDiagramStatus('diagramOk');
             } catch (err) {
                 if (renderVersion !== diagramRenderVersion) return;
                 console.error("Mermaid Render Error:", err);
-                showDiagramError('Diagram se nepodařilo vykreslit. Zkontrolujte syntaxi pseudokódu.', err);
+                showDiagramError(translate('diagramRenderError'), err);
             }
         }
 
@@ -616,8 +1094,7 @@ print("Obsah trojúhelníku:", obsah)`
             target.replaceChildren(errorMessage);
             target.style.removeProperty('width');
             target.style.removeProperty('height');
-            document.getElementById('mermaidStatus').innerText = 'Chyba pseudokódu';
-            document.getElementById('mermaidStatus').className = 'text-[10px] text-rose-400';
+            setDiagramStatus('diagramError');
         }
 
         function applyDiagramZoom(resetScroll = false) {
@@ -686,7 +1163,7 @@ print("Obsah trojúhelníku:", obsah)`
                 isElse(line.text) && !/^(?:JINAK|ELSE):$/i.test(line.text)
             );
             if (malformedElse) {
-                throw new Error(`Alternativní větev "${malformedElse.text}" musí být zapsána jako JINAK: nebo ELSE:.`);
+                throw new Error(translate('malformedElse', { line: malformedElse.text }));
             }
             let lineIndex = 0;
             let nodeIndex = 0;
@@ -721,7 +1198,7 @@ print("Obsah trojúhelníku:", obsah)`
                         const previousLineIndex = lineIndex;
                         statements.push(...parseBlock(current.indent));
                         if (lineIndex === previousLineIndex) {
-                            throw new Error(`Pseudokód nelze zpracovat u řádku: ${current.text}`);
+                            throw new Error(translate('malformedBlock', { line: current.text }));
                         }
                         continue;
                     }
@@ -742,7 +1219,7 @@ print("Obsah trojúhelníku:", obsah)`
                         lineIndex++;
                     }
                     if (!conditionText.trimEnd().endsWith(':')) {
-                        throw new Error(`Hlavička "${current.text}" musí končit dvojtečkou.`);
+                        throw new Error(translate('missingColon', { line: current.text }));
                     }
                     const statement = {
                         type: isLoop ? 'loop' : 'decision',
@@ -755,7 +1232,7 @@ print("Obsah trojúhelníku:", obsah)`
                         statement.type = 'forEach';
                         statement.iterator = iterableHeader[1].trim();
                         statement.iterable = iterableHeader[2].trim().replace(/:\s*$/, '');
-                        statement.text = `Další prvek v ${statement.iterable}?`;
+                        statement.text = translate('iteratorQuestion', { iterable: statement.iterable });
                     } else if (isLoop && /^(?:PRO|FOR)\s+.+?\s+(?:OD\s+.+?\s+DO|FROM\s+.+?\s+TO)\s+.+?:?$/i.test(conditionText)) {
                         statement.type = 'countedLoop';
                     }
@@ -786,8 +1263,8 @@ print("Obsah trojúhelníku:", obsah)`
                 return node;
             }
 
-            const start = makeNode('start', 'Start');
-            const end = makeNode('end', 'Konec');
+            const start = makeNode('start', translate('startNode'));
+            const end = makeNode('end', translate('endNode'));
             const edges = [];
             const layoutEdges = [];
 
@@ -798,12 +1275,12 @@ print("Obsah trojúhelníku:", obsah)`
                     const deferredLayoutSources = pendingLoopLayoutSources.splice(0);
                     const statementStartIndex = nodes.length;
                     if (statement.type === 'decision' || statement.type === 'loop' || statement.type === 'forEach' || statement.type === 'countedLoop') {
-                        const decision = makeNode(statement.type === 'countedLoop' ? 'countedLoop' : 'decision', statement.text || 'Podmínka');
+                        const decision = makeNode(statement.type === 'countedLoop' ? 'countedLoop' : 'decision', statement.text || translate('condition'));
                         exits.forEach(edge => edges.push({ from: edge.from, to: decision.id, label: edge.label }));
                         const loopBodyStartIndex = nodes.length;
-                        let loopBodyIncoming = [{ from: decision.id, label: 'Ano' }];
+                        let loopBodyIncoming = [{ from: decision.id, label: translate('yes') }];
                         if (statement.type === 'forEach') {
-                            const iteratorStep = makeNode('step', `${statement.iterator} = další prvek z ${statement.iterable}`);
+                            const iteratorStep = makeNode('step', `${statement.iterator} = ${translate('nextIterator', { iterable: statement.iterable })}`);
                             loopBodyIncoming.forEach(edge => edges.push({ from: edge.from, to: iteratorStep.id, label: edge.label }));
                             loopBodyIncoming = [{ from: iteratorStep.id, label: '' }];
                         }
@@ -811,14 +1288,14 @@ print("Obsah trojúhelníku:", obsah)`
                         const thenBranchNodes = nodes.slice(loopBodyStartIndex);
                         if (statement.type === 'loop' || statement.type === 'forEach' || statement.type === 'countedLoop') {
                             thenExits.forEach(edge => edges.push({ from: edge.from, to: decision.id, label: edge.label }));
-                            exits = [{ from: decision.id, label: 'Ne' }];
+                            exits = [{ from: decision.id, label: translate('no') }];
                             if (thenBranchNodes.length > 0) {
                                 pendingLoopLayoutSources.push(...thenBranchNodes.map(node => node.id));
                             }
                         } else {
-                            let elseExits = [{ from: decision.id, label: 'Ne' }];
+                            let elseExits = [{ from: decision.id, label: translate('no') }];
                             if (statement.elseBranch.length > 0) {
-                                elseExits = emitBlock(statement.elseBranch, [{ from: decision.id, label: 'Ne' }]);
+                                elseExits = emitBlock(statement.elseBranch, [{ from: decision.id, label: translate('no') }]);
                             }
                             exits = [...thenExits, ...elseExits];
                         }
@@ -903,7 +1380,7 @@ print("Obsah trojúhelníku:", obsah)`
                 renderMermaid(generateMermaidFromPseudocode(pseudoEditor.getValue()));
             } catch (error) {
                 console.error("Pseudocode Parse Error:", error);
-                showDiagramError('Diagram se nepodařilo vytvořit. Opravte pseudokód.', error);
+                showDiagramError(translate('diagramCreateError'), error);
             }
         }
 
@@ -911,12 +1388,12 @@ print("Obsah trojúhelníku:", obsah)`
         async function initPyodide() {
             try {
                 pyodideInstance = await loadPyodide();
-                document.getElementById('pyodideStatus').innerHTML = '<i class="fa-solid fa-circle-check"></i> Python Pripraven';
-                document.getElementById('pyodideStatus').className = 'text-[10px] text-emerald-400 flex items-center space-x-1';
+                pyodideStatusKey = 'pyodideReady';
+                renderPyodideStatus();
             } catch (e) {
                 console.error("Pyodide Init Failed", e);
-                document.getElementById('pyodideStatus').innerText = 'Chyba při načítání Pythonu';
-                document.getElementById('pyodideStatus').className = 'text-[10px] text-rose-400';
+                pyodideStatusKey = 'pyodideError';
+                renderPyodideStatus();
             }
         }
 
@@ -961,7 +1438,7 @@ sys.settrace(_trace_func)
 
         async function initExecution() {
             if (!pyodideInstance) {
-                alert("Pyodide se stále načítá. Počkejte prosím chvíli.");
+                alert(translate('pyodideNotReady'));
                 return;
             }
 
@@ -998,11 +1475,11 @@ finally:
                     document.getElementById('btnStepNext').disabled = false;
                     document.getElementById('btnStepPrev').disabled = false;
                 } else {
-                    alert("Nebyl zaznamenán žádný krok vykonávání kódového bloku.");
+                    alert(translate('noExecutionSteps'));
                 }
             } catch (err) {
                 console.error("Python Execution Error", err);
-                document.getElementById('consoleOutput').innerText = "Chyba běhu Pythonu:\n" + err.message;
+                document.getElementById('consoleOutput').innerText = `${translate('pythonRuntimeError')}\n${err.message}`;
             }
         }
 
@@ -1025,7 +1502,10 @@ finally:
             highlightFlowchartStep(step.line - 13);
 
             // 5. Update Counter
-            document.getElementById('stepCounter').innerText = `Krok: ${currentStepIndex + 1} / ${executionTrace.length}`;
+            document.getElementById('stepCounter').innerText = translate('stepCounter', {
+                current: currentStepIndex + 1,
+                total: executionTrace.length
+            });
 
             // Controls active states
             document.getElementById('btnStepPrev').disabled = (currentStepIndex === 0);
@@ -1048,7 +1528,7 @@ finally:
 
             const keys = Object.keys(localsObj);
             if (keys.length === 0) {
-                container.innerHTML = '<span class="text-slate-500 italic text-[11px]">Žádné lokální proměnné</span>';
+                container.innerHTML = `<span class="text-slate-500 italic text-[11px]">${translate('noVariables')}</span>`;
                 return;
             }
 
@@ -1115,7 +1595,7 @@ finally:
             }
             isPlaying = true;
             document.getElementById('playIcon').className = 'fa-solid fa-pause';
-            document.getElementById('playText').innerText = 'Pauza';
+            document.getElementById('playText').innerText = translate('pause');
             
             const speed = parseInt(document.getElementById('speedSlider').value);
             playInterval = setInterval(() => {
@@ -1131,7 +1611,7 @@ finally:
             isPlaying = false;
             if (playInterval) clearInterval(playInterval);
             document.getElementById('playIcon').className = 'fa-solid fa-play';
-            document.getElementById('playText').innerText = 'Spustit';
+            document.getElementById('playText').innerText = translate('play');
         }
 
         function resetExecutionState() {
@@ -1142,9 +1622,12 @@ finally:
                 pyEditor.removeLineClass(lineClassHandle, 'background', 'active-line-highlight');
                 lineClassHandle = null;
             }
-            document.getElementById('varInspector').innerHTML = '<span class="text-slate-500 italic text-[11px]">Spusťte krokování...</span>';
+            document.getElementById('varInspector').innerHTML = `<span class="text-slate-500 italic text-[11px]">${translate('startStepping')}</span>`;
             document.getElementById('consoleOutput').innerText = '';
-            document.getElementById('stepCounter').innerText = 'Krok: 0 / 0';
+            document.getElementById('stepCounter').innerText = translate('stepCounter', {
+                current: 0,
+                total: 0
+            });
             document.getElementById('btnPlay').disabled = true;
             document.getElementById('btnStepNext').disabled = true;
             document.getElementById('btnStepPrev').disabled = true;

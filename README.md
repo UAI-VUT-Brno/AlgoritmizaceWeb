@@ -1,99 +1,106 @@
-# Algoritmizace & Vývojové Diagramy
+# Algorithms & Flowcharts
 
-Jednoduchý webový výukový nástroj pro vizualizaci základních algoritmů a jejich běhu v Pythonu. Aplikace kombinuje pseudokód, vývojový diagram a krokované spuštění kódu, takže je vhodná pro výuku algoritmizace, řazení a logiky programování.
+A simple educational web tool for visualizing basic algorithms and their execution in Python. The application combines pseudocode, flowcharts, and step-by-step code execution, making it suitable for teaching algorithms, sorting, and programming logic.
 
-## Co umí
+## Features
 
-- zobrazuje předpřipravené algoritmy (Bubble Sort, faktoriál, maximum v poli, GCD a obsah trojúhelníku)
-- ukazuje pseudokód a odpovídající vývojový diagram
-- převádí odsazený pseudokód na Mermaid diagram včetně větvení a cyklů
-- umožňuje krokovat Python kód a sledovat proměnné v čase
-- zobrazuje výstup programu a zvýrazňuje aktuální řádek ve zdrojovém kódu
-- umožňuje uložit aktuální pseudokód do JSON souboru pojmenovaného podle algoritmu, s odsazením jednotlivých řádků
-- automaticky přizpůsobuje měřítko diagramu a nabízí jeho přiblížení, oddálení a návrat na přizpůsobené měřítko
-- používá Pyodide (Python v prohlížeči) bez nutnosti lokální instalace Pythonu
+- includes example algorithms: Bubble Sort, Factorial (Recursion/Loops), Find Maximum in an Array, Euclidean Algorithm (GCD), and Triangle Area from Three Sides
+- displays pseudocode and the corresponding flowchart
+- converts indented pseudocode into Mermaid diagrams with branches and loops
+- supports stepping through Python code and inspecting variables over time
+- displays program output and highlights the current source-code line
+- exports the current pseudocode to JSON, with one entry per line and indentation metadata
+- automatically fits diagrams to the available space and provides zoom controls
+- runs Python in the browser with Pyodide; no local Python installation is required
+- offers Czech, English, Slovak, Esperanto, and French interface languages
 
-## Použití diagramu a podporovaný pseudokód
+Use the flag buttons and language codes **CS**, **EN**, **SK**, **EO**, and **FR** in the upper-right corner to change the interface language. Esperanto uses its green flag with a green star on a white canton. Czech is the default language. Interface labels are translated, while the human-readable example-algorithm names remain in English. Pseudocode terms and the contents of the algorithm being edited are not translated.
 
-Diagram se automaticky aktualizuje po krátké prodlevě od poslední změny pseudokódu. Tlačítkem **Aktualizovat Diagram z Pseudokódu** jej lze překreslit ihned. Po výběru předpřipraveného algoritmu se diagram vykreslí okamžitě. Generátor převádí jednotlivé neprázdné řádky na kroky diagramu; prázdné řádky ignoruje. Odsazení určuje příslušnost řádků k bloku, proto používejte konzistentní odsazení (doporučené jsou dva mezery na úroveň). Pokud je syntaxe řídicí struktury chybná nebo diagram nelze vykreslit, zobrazí se chyba přímo v panelu diagramu.
+## Flowcharts and supported pseudocode
 
-Diagramy předpřipravených algoritmů se generují z jejich pseudokódu; samostatné předdefinované diagramy se nepoužívají.
+The flowchart updates shortly after the pseudocode is edited. Use **Update Diagram from Pseudocode** to refresh it immediately. Selecting an example algorithm renders its diagram right away. The generator converts each non-empty line into a diagram step and ignores blank lines. Indentation determines block membership, so use consistent indentation (two spaces per level are recommended). If a control structure is malformed or the diagram cannot be rendered, the error is displayed in the diagram pane.
 
-Nápověda s podporovanými termíny pseudokódu má zvětšenou výchozí výšku. Její výšku lze měnit tažením dělicího pruhu mezi nápovědou a editorem nebo klávesami šipka nahoru/dolů při zaměření pruhu.
+Example diagrams are generated from their pseudocode; separate predefined diagrams are not used.
 
-Podporované řídicí struktury:
+The supported-terms help panel has a default height of **224 px**. Resize it by dragging the divider between the help and editor, or focus the divider and use the Up/Down arrow keys.
 
-- Hlavička algoritmu: `ALGORITMUS název(parametry):`.
-- Podmínka: `POKUD podmínka:` nebo `IF podmínka:`.
-- Dlouhé popisky rozhodovacích uzlů se zalamují po slovech, aby se zmenšila výška diagramového kosočtverce.
-- Volitelná alternativní větev: `JINAK:` nebo `ELSE:`. Řádek `JINAK`/`ELSE` zarovnejte buď s odpovídajícím `POKUD`/`IF`, nebo s příkazy první větve.
-- Cyklus s podmínkou: `DOKUD podmínka:` nebo `WHILE podmínka:`.
-- Cyklus přes prvky kolekce: `PRO prvek V kolekce:` nebo `FOR prvek IN kolekce:`. Diagram zobrazuje rozhodnutí, zda je k dispozici další prvek, přiřazení prvku a návratovou hranu cyklu.
-- Počítaný cyklus: `PRO i OD začátek DO konec:` nebo `FOR i FROM start TO end:`. Hlavička cyklu je zobrazena jako šestiúhelník s návratovou hranou; kroky a hranice iterací se nevyhodnocují.
-- Následující blok větve `Ne` je v diagramu umístěn pod všemi bloky větve `Ano`, a to i u vnořených cyklů.
-- Všechny uvedené struktury lze vnořovat. Jejich těla musí být odsazena vůči hlavičce.
+Supported control structures:
 
-Příkaz `VYPIS hodnota` nebo `WRITE value` zobrazí tisk hodnoty jako běžný krok diagramu. Editor pseudokódu průběžně červeně podtrhává neznámá slova psaná velkými písmeny na začátku řádku a zobrazuje počet nálezů. Jde o orientační upozornění, nikoli o validaci pseudokódu: běžná přiřazení a slova uvnitř řádku nekontroluje a neznámé příkazy se stále zobrazí jako běžné kroky.
+- Algorithm header: `ALGORITMUS name(parameters):`.
+- Condition: `POKUD condition:` or `IF condition:`.
+- Long decision labels wrap at word boundaries to reduce the height of the flowchart diamond.
+- Optional alternative branch: `JINAK:` or `ELSE:`. Align `JINAK`/`ELSE` either with its matching `POKUD`/`IF` or with the statements in the first branch.
+- Conditional loop: `DOKUD condition:` or `WHILE condition:`.
+- Iterate over a collection: `PRO item V collection:` or `FOR item IN collection:`. The diagram shows a decision for whether another item is available, assigns the item, and includes the loop-back edge.
+- Counted loop: `PRO i OD start DO end:` or `FOR i FROM start TO end:`. The loop header is shown as a hexagon with a loop-back edge; iteration steps and bounds are not evaluated.
+- The following `Ne` branch is placed below all blocks in the `Ano` branch, including in nested loops.
+- All listed structures can be nested. Their bodies must be indented relative to the header.
 
-Příkazy, které nejsou rozpoznány jako řídicí struktury, se zobrazí jako běžné kroky. Předání výsledku funkce se rozpozná pomocí `VRAT` nebo `RETURN` a zobrazí se jako výstupní rovnoběžník propojený s koncem diagramu. Generátor vytváří přehledový diagram; neinterpretuje výrazy, neověřuje jejich syntaxi ani nespouští pseudokód. Počítané cykly a podmínky jsou tedy znázorněné, ale jejich průběh se nepočítá.
+`VYPIS value` or `WRITE value` displays output as a regular flowchart step. The pseudocode editor underlines unknown uppercase words at the beginning of a line in red and shows their count. This is only a hint, not pseudocode validation: ordinary assignments and words inside a line are not checked, and unknown commands are still rendered as regular steps.
 
-Příklad:
+Commands that are not recognized as control structures are displayed as regular steps. Function results can be returned with `VRAT` or `RETURN`, shown as an output parallelogram connected to the diagram end. The generator creates an overview diagram; it does not interpret expressions, validate their syntax, or execute pseudocode. Counted loops and conditions are shown but not evaluated.
+
+Example:
 
 ```text
-ALGORITMUS ProjdiMatici(matice):
-  PRO radek V matice:
-    PRO hodnota V radek:
-      POKUD hodnota > 0:
-        kladnych = kladnych + 1
+ALGORITMUS IterateMatrix(matrix):
+  PRO row V matrix:
+    PRO value V row:
+      POKUD value > 0:
+        positive_count = positive_count + 1
       JINAK:
-        zapornych = zapornych + 1
-  VRAT kladnych
+        nonpositive_count = nonpositive_count + 1
+  VRAT positive_count
 ```
 
-### Uložení algoritmu
+### Saving an algorithm
 
-Stiskněte tlačítko **JSON**. Soubor se stáhne s lidsky čitelným názvem vybraného algoritmu a příponou `.json`; název lze změnit v dialogu pro ukládání prohlížeče, pokud jej prohlížeč zobrazí. Neplatné znaky pro název souboru se nahradí podtržítkem.
+Click **JSON**. The file is downloaded using the selected algorithm's human-readable name and the `.json` extension. Invalid filename characters are replaced with underscores. A browser save dialog may allow you to change the filename.
 
-Export obsahuje lidský název algoritmu a pseudokód jako pole řádků. Každý řádek má `text` s obsahem bez počátečního odsazení a `indent` s počtem odsazovacích mezer; tabulátor se počítá jako čtyři mezery. Prázdné řádky se zachovávají.
+The export contains the algorithm name and pseudocode as an array of lines. Each line has `text`, containing the content without leading indentation, and `indent`, containing the indentation in spaces; tabs count as four spaces. Blank lines are preserved.
 
 ```json
 {
-  "name": "Název algoritmu",
+  "name": "Bubble Sort",
   "pseudocode": [
-    { "text": "ALGORITMUS Ukazka:", "indent": 0 },
-    { "text": "VYPIS hodnota", "indent": 2 }
+    { "text": "ALGORITMUS Example:", "indent": 0 },
+    { "text": "VYPIS value", "indent": 2 }
   ]
 }
 ```
 
-### Ovládání měřítka diagramu
+### Diagram zoom
 
-Diagram se automaticky zmenší tak, aby se vešel do plochy, pokud má plocha alespoň **250 px na šířku a 400 px na výšku**. Přizpůsobení se aktualizuje také při změně velikosti panelu. Pomocí tlačítek v pravém horním rohu diagramu lze přiblížit, oddálit nebo obnovit přizpůsobené měřítko. Při ručním zoomu lze diagram posouvat pomocí posuvníků plochy.
+The diagram is automatically scaled down to fit when the pane is at least **250 px wide and 400 px high**. The fit is recalculated when the pane is resized. Use the buttons in the diagram's upper-right corner to zoom in, zoom out, or restore the fit scale. At a manually selected zoom level, use the pane's scrollbars to move around the diagram.
 
-## Jak spustit
+## Running the application
 
-1. otevřete soubor `algoritmizace_vyukovy_nastroj.html` v prohlížeči
-2. nebo jej spusťte přes jednoduchý lokální server, například:
+1. Open `algoritmizace_vyukovy_nastroj.html` in a browser, or
+2. run a simple local server, for example:
 
 ```bash
 python -m http.server 8000
 ```
 
-Poté otevřete v prohlížeči adresu `http://localhost:8000`.
+Then open `http://localhost:8000`.
 
-## Technologie
+## Technologies
 
-- HTML + CSS + JavaScript
+- HTML, CSS, and JavaScript
 - Tailwind CSS
 - CodeMirror
 - Mermaid.js
 - Pyodide
 
-## Struktura projektu
+## Project files
 
-- `algoritmizace_vyukovy_nastroj.html` — hlavní aplikace
-- `README.md` — dokumentace projektu
+- `algoritmizace_vyukovy_nastroj.html` — main application
+- `README.md` — English documentation
+- `README_cz.md` — Czech documentation
+- `README_sk.md` — Slovak documentation
+- `README_eo.md` — Esperanto documentation
+- `README_fr.md` — French documentation
 
-## Použití
+## Usage
 
-Vyberte algoritmus z rozbalovací nabídky a upravte jeho pseudokód nebo Python kód. Diagram aktualizujte příslušným tlačítkem v panelu pseudokódu. Pro krokování Pythonu stiskněte **Start**, poté použijte **Spustit** nebo tlačítka pro pohyb po jednotlivých krocích.
+Select an algorithm from the drop-down menu and edit its pseudocode or Python code. Update the diagram with the button in the pseudocode pane. To step through Python execution, click **Start**, then use **Run** or the step controls.
