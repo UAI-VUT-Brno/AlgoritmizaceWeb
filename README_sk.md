@@ -10,6 +10,7 @@ Jednoduchý výučbový webový nástroj na vizualizáciu základných algoritmo
 - umožňuje krokovať Python kód a sledovať hodnoty premenných
 - zobrazuje výstup programu a zvýrazňuje aktuálny riadok zdrojového kódu
 - exportuje aktuálny pseudokód do JSON; každý riadok je samostatná položka s údajom o odsadení
+- načíta pseudokód zo súboru JSON v rovnakom formáte
 - automaticky prispôsobuje diagram dostupnej ploche a ponúka ovládanie priblíženia
 - spúšťa Python v prehliadači pomocou Pyodide bez potreby lokálnej inštalácie Pythonu
 - ponúka rozhranie v češtine, angličtine, slovenčine, esperante a francúzštine
@@ -18,7 +19,7 @@ Jazyk rozhrania zmeníte tlačidlami s vlajkami a skratkami **CS**, **EN**, **SK
 
 ## Diagramy a podporovaný pseudokód
 
-Vývojový diagram sa aktualizuje krátko po úprave pseudokódu. Tlačidlom **Aktualizovať diagram z pseudokódu** ho možno prekresliť okamžite. Po výbere ukážkového algoritmu sa diagram vykreslí ihneď. Generátor prevádza každý neprázdny riadok na krok diagramu a prázdne riadky ignoruje. Odsadenie určuje príslušnosť k bloku, preto používajte konzistentné odsadenie (odporúčané sú dva medzery na úroveň). Ak je riadiaca štruktúra nesprávne zapísaná alebo sa diagram nepodarí vykresliť, chyba sa zobrazí v paneli diagramu.
+Vývojový diagram sa aktualizuje automaticky krátko po úprave pseudokódu. Po výbere ukážkového algoritmu sa diagram vykreslí ihneď. Generátor prevádza každý neprázdny riadok na krok diagramu a prázdne riadky ignoruje. Odsadenie určuje príslušnosť k bloku, preto používajte konzistentné odsadenie (odporúčané sú dva medzery na úroveň). Ak je riadiaca štruktúra nesprávne zapísaná alebo sa diagram nepodarí vykresliť, chyba sa zobrazí v paneli diagramu.
 
 Diagramy ukážkových algoritmov sa generujú z ich pseudokódu; samostatné preddefinované diagramy sa nepoužívajú.
 
@@ -57,7 +58,9 @@ ALGORITMUS IterateMatrix(matrix):
 
 ### Uloženie algoritmu
 
-Kliknite na tlačidlo **JSON**. Súbor sa stiahne s ľudsky čitateľným názvom vybraného algoritmu a príponou `.json`. Neplatné znaky v názve súboru sa nahradia podčiarkovníkom. Ak prehliadač zobrazí dialóg na uloženie, názov možno zmeniť.
+Kliknite na tlačidlo **Uložiť JSON**. Súbor sa stiahne s ľudsky čitateľným názvom vybraného algoritmu a príponou `.json`. Neplatné znaky v názve súboru sa nahradia podčiarkovníkom. Ak prehliadač zobrazí dialóg na uloženie, názov možno zmeniť.
+
+Tlačidlom **Načítať JSON** možno načítať súbor v rovnakom formáte. Názov importovaného algoritmu sa zobrazí vo výbere a jeho pseudokód nahradí aktuálny pseudokód. JSON neobsahuje Python kód, preto editor Pythonu zostane nezmenený.
 
 Export obsahuje názov algoritmu a pseudokód ako pole riadkov. Každý riadok obsahuje `text` bez úvodného odsadenia a `indent` s počtom odsadzovacích medzier; tabulátor sa počíta ako štyri medzery. Prázdne riadky sa zachovajú.
 

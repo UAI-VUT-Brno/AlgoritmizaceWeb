@@ -152,9 +152,14 @@
                 <label data-i18n="algorithmLabel" class="text-xs text-slate-400 font-medium">Algoritmus:</label>
                 <select id="templateSelect" onchange="loadTemplate(this.value)" class="bg-darkbg border border-darkaccent text-xs rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-brand text-slate-200">
                 </select>
+                <input id="jsonFileInput" type="file" accept=".json,application/json" class="hidden">
+                <button id="loadJsonButton" type="button" onclick="document.getElementById('jsonFileInput').click()" data-i18n-title="loadJson" data-i18n-aria-label="loadJson" class="flex items-center space-x-1 bg-slate-700 hover:bg-slate-600 text-xs text-white px-2.5 py-1.5 rounded transition" title="Načíst pseudokód z JSON">
+                    <i class="fa-solid fa-upload"></i>
+                    <span data-i18n="loadJson">Načíst JSON</span>
+                </button>
                 <button onclick="saveSelectedTemplate()" data-i18n-title="saveJson" data-i18n-aria-label="saveJson" class="flex items-center space-x-1 bg-slate-700 hover:bg-slate-600 text-xs text-white px-2.5 py-1.5 rounded transition" title="Uložit pseudokód jako JSON" aria-label="Uložit pseudokód jako JSON">
                     <i class="fa-solid fa-download"></i>
-                    <span>JSON</span>
+                    <span data-i18n="saveJsonButton">Uložit JSON</span>
                 </button>
             </div>
 
@@ -221,13 +226,6 @@
                 <textarea id="pseudocodeEditor"></textarea>
                 <div id="pseudocodeWarning" data-i18n-title="pseudocodeWarningTitle" class="hidden absolute top-2 right-3 z-10 rounded border border-red-500/50 bg-slate-900/95 px-2 py-1 text-[10px] text-red-300 shadow" role="status" aria-live="polite" title="Kontrola označuje neznámá slova psaná velkými písmeny na začátku řádku; běžné přiřazení ignoruje.">
                 </div>
-            </div>
-            <!-- Sync Button -->
-            <div class="p-2 bg-darkcard border-t border-darkaccent flex justify-between items-center">
-                <button onclick="updateDiagramFromPseudocode()" class="w-full bg-slate-800 hover:bg-slate-700 text-xs text-slate-200 py-1.5 px-3 rounded border border-darkaccent flex items-center justify-center space-x-2 transition">
-                    <i class="fa-solid fa-arrows-rotate text-brand"></i>
-                    <span data-i18n="updateDiagram">Aktualizovat Diagram z Pseudokódu</span>
-                </button>
             </div>
             <div class="h-56 flex-shrink-0 overflow-y-auto border-t border-darkaccent bg-slate-900/70 px-3 py-2 text-[10px] leading-4 text-slate-400" id="pseudocodeHelp">
                 <h2 data-i18n="supportedTerms" class="mb-1 text-[11px] font-semibold text-slate-200">Podporované termíny pseudokódu</h2>
@@ -522,6 +520,8 @@ cross_road_complex(traffic_snapshots)`
                 appTitle: 'Algoritmizace & Vývojové Diagramy',
                 languageSelector: 'Výběr jazyka',
                 algorithmLabel: 'Algoritmus:',
+                loadJson: 'Načíst JSON',
+                saveJsonButton: 'Uložit JSON',
                 saveJson: 'Uložit pseudokód jako JSON',
                 prepareExecution: 'Připravit ke krokování',
                 start: 'Start',
@@ -532,7 +532,6 @@ cross_road_complex(traffic_snapshots)`
                 pseudocodePane: '1. Pseudokód / Struktura',
                 algorithm: 'Algoritmus',
                 pseudocodeWarningTitle: 'Kontrola označuje neznámá slova psaná velkými písmeny na začátku řádku; běžné přiřazení ignoruje.',
-                updateDiagram: 'Aktualizovat Diagram z Pseudokódu',
                 supportedTerms: 'Podporované termíny pseudokódu',
                 termAlgorithm: '<code class="text-indigo-300">ALGORITMUS název(...):</code> — hlavička algoritmu',
                 termIf: '<code class="text-indigo-300">POKUD</code> / <code class="text-indigo-300">IF</code> — podmínka',
@@ -566,6 +565,8 @@ cross_road_complex(traffic_snapshots)`
                 noVariables: 'Žádné lokální proměnné',
                 console: 'Konzole (stdout)',
                 saveError: 'Zvolený algoritmus se nepodařilo uložit.',
+                invalidJson: 'Soubor JSON má neplatný formát. Očekává se název a pole řádků pseudokódu s textem a odsazením.',
+                jsonReadError: 'Soubor JSON se nepodařilo načíst.',
                 pyodideNotReady: 'Pyodide se stále načítá. Počkejte prosím chvíli.',
                 noExecutionSteps: 'Nebyl zaznamenán žádný krok vykonávání kódového bloku.',
                 pythonRuntimeError: 'Chyba běhu Pythonu:',
@@ -586,6 +587,8 @@ cross_road_complex(traffic_snapshots)`
                 appTitle: 'Algorithms & Flowcharts',
                 languageSelector: 'Language selector',
                 algorithmLabel: 'Algorithm:',
+                loadJson: 'Load JSON',
+                saveJsonButton: 'Save JSON',
                 saveJson: 'Save pseudocode as JSON',
                 prepareExecution: 'Prepare for stepping',
                 start: 'Start',
@@ -596,7 +599,6 @@ cross_road_complex(traffic_snapshots)`
                 pseudocodePane: '1. Pseudocode / Structure',
                 algorithm: 'Algorithm',
                 pseudocodeWarningTitle: 'Highlights unknown uppercase words at the beginning of a line; ordinary assignments are ignored.',
-                updateDiagram: 'Update Diagram from Pseudocode',
                 supportedTerms: 'Supported pseudocode terms',
                 termAlgorithm: '<code class="text-indigo-300">ALGORITMUS název(...):</code> — algorithm header',
                 termIf: '<code class="text-indigo-300">POKUD</code> / <code class="text-indigo-300">IF</code> — condition',
@@ -630,6 +632,8 @@ cross_road_complex(traffic_snapshots)`
                 noVariables: 'No local variables',
                 console: 'Console (stdout)',
                 saveError: 'Could not save the selected algorithm.',
+                invalidJson: 'The JSON file has an invalid format. Expected a name and a pseudocode array with line text and indentation.',
+                jsonReadError: 'Could not read the JSON file.',
                 pyodideNotReady: 'Pyodide is still loading. Please wait.',
                 noExecutionSteps: 'No execution steps were recorded for this code block.',
                 pythonRuntimeError: 'Python runtime error:',
@@ -650,6 +654,8 @@ cross_road_complex(traffic_snapshots)`
                 appTitle: 'Algoritmoj kaj fluodiagramoj',
                 languageSelector: 'Lingvoelektilo',
                 algorithmLabel: 'Algoritmo:',
+                loadJson: 'Ŝargi JSON',
+                saveJsonButton: 'Konservi JSON',
                 saveJson: 'Konservi pseŭdokodon kiel JSON',
                 prepareExecution: 'Prepari por paŝa rulado',
                 start: 'Starti',
@@ -660,7 +666,6 @@ cross_road_complex(traffic_snapshots)`
                 pseudocodePane: '1. Pseŭdokodo / Strukturo',
                 algorithm: 'Algoritmo',
                 pseudocodeWarningTitle: 'Markas nekonatajn vortojn per majuskloj ĉe la komenco de linio; ordinaraj atribuoj estas ignorataj.',
-                updateDiagram: 'Ĝisdatigi diagramon el pseŭdokodo',
                 supportedTerms: 'Subtenataj pseŭdokodaj terminoj',
                 termAlgorithm: '<code class="text-indigo-300">ALGORITMUS název(...):</code> — algoritmo-kapo',
                 termIf: '<code class="text-indigo-300">POKUD</code> / <code class="text-indigo-300">IF</code> — kondiĉo',
@@ -694,6 +699,8 @@ cross_road_complex(traffic_snapshots)`
                 noVariables: 'Neniuj lokaj variabloj',
                 console: 'Konzolo (stdout)',
                 saveError: 'Ne eblis konservi la elektitan algoritmon.',
+                invalidJson: 'La JSON-dosiero havas nevalidan formaton. Atendata estas nomo kaj pseŭdokoda tabelo kun linia teksto kaj indento.',
+                jsonReadError: 'Ne eblis legi la JSON-dosieron.',
                 pyodideNotReady: 'Pyodide ankoraŭ ŝargiĝas. Bonvolu atendi.',
                 noExecutionSteps: 'Neniu rula paŝo estis registrita por ĉi tiu kodbloko.',
                 pythonRuntimeError: 'Python-rultempa eraro:',
@@ -714,6 +721,8 @@ cross_road_complex(traffic_snapshots)`
                 appTitle: 'Algorithmes et organigrammes',
                 languageSelector: 'Sélecteur de langue',
                 algorithmLabel: 'Algorithme :',
+                loadJson: 'Charger JSON',
+                saveJsonButton: 'Enregistrer JSON',
                 saveJson: 'Enregistrer le pseudocode au format JSON',
                 prepareExecution: 'Préparer le pas à pas',
                 start: 'Démarrer',
@@ -724,7 +733,6 @@ cross_road_complex(traffic_snapshots)`
                 pseudocodePane: '1. Pseudocode / Structure',
                 algorithm: 'Algorithme',
                 pseudocodeWarningTitle: 'Signale les mots inconnus en majuscules au début d’une ligne ; les affectations ordinaires sont ignorées.',
-                updateDiagram: 'Actualiser le diagramme depuis le pseudocode',
                 supportedTerms: 'Termes de pseudocode pris en charge',
                 termAlgorithm: '<code class="text-indigo-300">ALGORITMUS název(...):</code> — en-tête d’algorithme',
                 termIf: '<code class="text-indigo-300">POKUD</code> / <code class="text-indigo-300">IF</code> — condition',
@@ -758,6 +766,8 @@ cross_road_complex(traffic_snapshots)`
                 noVariables: 'Aucune variable locale',
                 console: 'Console (stdout)',
                 saveError: 'Impossible d’enregistrer l’algorithme sélectionné.',
+                invalidJson: 'Le fichier JSON a un format invalide. Un nom et un tableau de pseudocode avec le texte et l’indentation de chaque ligne sont requis.',
+                jsonReadError: 'Impossible de lire le fichier JSON.',
                 pyodideNotReady: 'Pyodide est en cours de chargement. Veuillez patienter.',
                 noExecutionSteps: 'Aucune étape d’exécution n’a été enregistrée pour ce bloc de code.',
                 pythonRuntimeError: 'Erreur d’exécution Python :',
@@ -778,6 +788,8 @@ cross_road_complex(traffic_snapshots)`
                 appTitle: 'Algoritmy a vývojové diagramy',
                 languageSelector: 'Výber jazyka',
                 algorithmLabel: 'Algoritmus:',
+                loadJson: 'Načítať JSON',
+                saveJsonButton: 'Uložiť JSON',
                 saveJson: 'Uložiť pseudokód ako JSON',
                 prepareExecution: 'Pripraviť na krokovanie',
                 start: 'Štart',
@@ -788,7 +800,6 @@ cross_road_complex(traffic_snapshots)`
                 pseudocodePane: '1. Pseudokód / Štruktúra',
                 algorithm: 'Algoritmus',
                 pseudocodeWarningTitle: 'Označuje neznáme slová písané veľkými písmenami na začiatku riadka; bežné priradenia ignoruje.',
-                updateDiagram: 'Aktualizovať diagram z pseudokódu',
                 supportedTerms: 'Podporované termíny pseudokódu',
                 termAlgorithm: '<code class="text-indigo-300">ALGORITMUS název(...):</code> — hlavička algoritmu',
                 termIf: '<code class="text-indigo-300">POKUD</code> / <code class="text-indigo-300">IF</code> — podmienka',
@@ -822,6 +833,8 @@ cross_road_complex(traffic_snapshots)`
                 noVariables: 'Žiadne lokálne premenné',
                 console: 'Konzola (stdout)',
                 saveError: 'Vybraný algoritmus sa nepodarilo uložiť.',
+                invalidJson: 'Súbor JSON má neplatný formát. Očakáva sa názov a pole riadkov pseudokódu s textom a odsadením.',
+                jsonReadError: 'Súbor JSON sa nepodarilo načítať.',
                 pyodideNotReady: 'Pyodide sa ešte načítava. Počkajte, prosím.',
                 noExecutionSteps: 'Pre tento blok kódu nebol zaznamenaný žiadny krok vykonávania.',
                 pythonRuntimeError: 'Chyba pri vykonávaní Pythonu:',
@@ -840,7 +853,9 @@ cross_road_complex(traffic_snapshots)`
         };
 
         // --- 2. GLOBAL STATE ---
+        const importedTemplateKey = '__imported__';
         let currentLanguage = 'cs';
+        let importedTemplate = null;
         let diagramStatusKey = 'diagramGenerated';
         let pyodideStatusKey = 'pyodideLoading';
         let pyEditor, pseudoEditor;
@@ -1003,6 +1018,11 @@ cross_road_complex(traffic_snapshots)`
             });
             applyLanguage('cs', false);
             loadTemplate(document.getElementById('templateSelect').value);
+            document.getElementById('jsonFileInput').addEventListener('change', event => {
+                const [file] = event.target.files;
+                if (file) importAlgorithmJson(file);
+                event.target.value = '';
+            });
             diagramResizeObserver = new ResizeObserver(() => applyDiagramZoom());
             diagramResizeObserver.observe(document.getElementById('diagramContainer'));
 
@@ -1042,17 +1062,35 @@ cross_road_complex(traffic_snapshots)`
         function populateTemplateSelect() {
             const select = document.getElementById('templateSelect');
             const selectedKey = select.value;
-            select.replaceChildren(...Object.entries(templates).map(([key, template]) => {
+            const options = Object.entries(templates).map(([key, template]) => {
                 const option = document.createElement('option');
                 option.value = key;
                 option.textContent = template.name;
                 return option;
-            }));
-            if (templates[selectedKey]) select.value = selectedKey;
+            });
+            if (importedTemplate) {
+                const option = document.createElement('option');
+                option.value = importedTemplateKey;
+                option.textContent = importedTemplate.name;
+                options.push(option);
+            }
+            select.replaceChildren(...options);
+            if (templates[selectedKey] || (selectedKey === importedTemplateKey && importedTemplate)) {
+                select.value = selectedKey;
+            }
         }
 
         // Load Algorithm Templates
         function loadTemplate(key) {
+            if (key === importedTemplateKey && importedTemplate) {
+                clearTimeout(pseudocodeDiagramUpdateTimer);
+                pseudoEditor.setValue(importedTemplate.pseudocode);
+                clearTimeout(pseudocodeDiagramUpdateTimer);
+                updateDiagramFromPseudocode();
+                resetExecutionState();
+                return;
+            }
+
             const tmpl = templates[key];
             if (!tmpl) return;
 
@@ -1065,9 +1103,60 @@ cross_road_complex(traffic_snapshots)`
             resetExecutionState();
         }
 
+        async function importAlgorithmJson(file) {
+            let contents;
+            try {
+                contents = await file.text();
+            } catch (error) {
+                console.error('JSON Import Read Error:', error);
+                alert(translate('jsonReadError'));
+                return;
+            }
+
+            let data;
+            try {
+                data = JSON.parse(contents);
+            } catch {
+                alert(translate('invalidJson'));
+                return;
+            }
+
+            const isValid = data !== null
+                && typeof data === 'object'
+                && typeof data.name === 'string'
+                && data.name.trim().length > 0
+                && Array.isArray(data.pseudocode)
+                && data.pseudocode.every(line =>
+                    line !== null
+                    && typeof line === 'object'
+                    && typeof line.text === 'string'
+                    && !/[\r\n]/.test(line.text)
+                    && Number.isSafeInteger(line.indent)
+                    && line.indent >= 0
+                    && line.indent <= 10000
+                );
+            if (!isValid) {
+                alert(translate('invalidJson'));
+                return;
+            }
+
+            importedTemplate = {
+                name: data.name,
+                pseudocode: data.pseudocode
+                    .map(line => `${' '.repeat(line.indent)}${line.text}`)
+                    .join('\n')
+            };
+            populateTemplateSelect();
+            const select = document.getElementById('templateSelect');
+            select.value = importedTemplateKey;
+            loadTemplate(importedTemplateKey);
+        }
+
         function saveSelectedTemplate() {
             const select = document.getElementById('templateSelect');
-            const selectedTemplate = templates[select.value];
+            const selectedTemplate = select.value === importedTemplateKey
+                ? importedTemplate
+                : templates[select.value];
             const pseudocode = pseudoEditor.getValue();
             if (!selectedTemplate) {
                 alert(translate('saveError'));

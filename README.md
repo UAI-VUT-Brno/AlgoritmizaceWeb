@@ -10,6 +10,7 @@ A simple educational web tool for visualizing basic algorithms and their executi
 - supports stepping through Python code and inspecting variables over time
 - displays program output and highlights the current source-code line
 - exports the current pseudocode to JSON, with one entry per line and indentation metadata
+- imports pseudocode from a JSON file in the same format
 - automatically fits diagrams to the available space and provides zoom controls
 - runs Python in the browser with Pyodide; no local Python installation is required
 - offers Czech, English, Slovak, Esperanto, and French interface languages
@@ -18,7 +19,7 @@ Use the flag buttons and language codes **CS**, **EN**, **SK**, **EO**, and **FR
 
 ## Flowcharts and supported pseudocode
 
-The flowchart updates shortly after the pseudocode is edited. Use **Update Diagram from Pseudocode** to refresh it immediately. Selecting an example algorithm renders its diagram right away. The generator converts each non-empty line into a diagram step and ignores blank lines. Indentation determines block membership, so use consistent indentation (two spaces per level are recommended). If a control structure is malformed or the diagram cannot be rendered, the error is displayed in the diagram pane.
+The flowchart updates automatically shortly after the pseudocode is edited. Selecting an example algorithm renders its diagram right away. The generator converts each non-empty line into a diagram step and ignores blank lines. Indentation determines block membership, so use consistent indentation (two spaces per level are recommended). If a control structure is malformed or the diagram cannot be rendered, the error is displayed in the diagram pane.
 
 Example diagrams are generated from their pseudocode; separate predefined diagrams are not used.
 
@@ -57,7 +58,9 @@ ALGORITMUS IterateMatrix(matrix):
 
 ### Saving an algorithm
 
-Click **JSON**. The file is downloaded using the selected algorithm's human-readable name and the `.json` extension. Invalid filename characters are replaced with underscores. A browser save dialog may allow you to change the filename.
+Click **Save JSON**. The file is downloaded using the selected algorithm's human-readable name and the `.json` extension. Invalid filename characters are replaced with underscores. A browser save dialog may allow you to change the filename.
+
+Use **Load JSON** to import a file in this format. The imported algorithm name appears in the selector, and its pseudocode replaces the current pseudocode. Because the JSON format does not include Python code, the Python editor is left unchanged.
 
 The export contains the algorithm name and pseudocode as an array of lines. Each line has `text`, containing the content without leading indentation, and `indent`, containing the indentation in spaces; tabs count as four spaces. Blank lines are preserved.
 

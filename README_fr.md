@@ -10,6 +10,7 @@ Un outil pédagogique web simple pour visualiser des algorithmes de base et leur
 - permet d’exécuter le code Python pas à pas et de suivre les variables
 - affiche la sortie du programme et met en évidence la ligne de code source actuelle
 - exporte le pseudocode courant en JSON, avec une entrée par ligne et une indication d’indentation
+- importe le pseudocode depuis un fichier JSON au même format
 - adapte automatiquement l’échelle des diagrammes et propose des commandes de zoom
 - exécute Python dans le navigateur grâce à Pyodide, sans installation locale de Python
 - propose une interface en tchèque, anglais, slovaque, espéranto et français
@@ -18,7 +19,7 @@ Utilisez les boutons avec drapeaux et codes **CS**, **EN**, **SK**, **EO** et **
 
 ## Organigrammes et pseudocode pris en charge
 
-L’organigramme est actualisé peu après la modification du pseudocode. Le bouton **Actualiser le diagramme depuis le pseudocode** permet de le redessiner immédiatement. La sélection d’un algorithme d’exemple affiche son diagramme sans délai. Le générateur transforme chaque ligne non vide en une étape du diagramme et ignore les lignes vides. L’indentation détermine l’appartenance aux blocs ; utilisez une indentation cohérente (deux espaces par niveau sont recommandés). Si une structure de contrôle est mal formée ou si le diagramme ne peut pas être affiché, une erreur apparaît dans le panneau du diagramme.
+L’organigramme est actualisé automatiquement peu après la modification du pseudocode. La sélection d’un algorithme d’exemple affiche son diagramme sans délai. Le générateur transforme chaque ligne non vide en une étape du diagramme et ignore les lignes vides. L’indentation détermine l’appartenance aux blocs ; utilisez une indentation cohérente (deux espaces par niveau sont recommandés). Si une structure de contrôle est mal formée ou si le diagramme ne peut pas être affiché, une erreur apparaît dans le panneau du diagramme.
 
 Les diagrammes des algorithmes d’exemple sont générés à partir de leur pseudocode ; aucun diagramme prédéfini indépendant n’est utilisé.
 
@@ -57,7 +58,9 @@ ALGORITMUS IterateMatrix(matrix):
 
 ### Enregistrer un algorithme
 
-Cliquez sur **JSON**. Le fichier est téléchargé avec le nom lisible de l’algorithme sélectionné et l’extension `.json`. Les caractères interdits dans les noms de fichier sont remplacés par des traits de soulignement. Une boîte de dialogue du navigateur peut permettre de modifier le nom.
+Cliquez sur **Enregistrer JSON**. Le fichier est téléchargé avec le nom lisible de l’algorithme sélectionné et l’extension `.json`. Les caractères interdits dans les noms de fichier sont remplacés par des traits de soulignement. Une boîte de dialogue du navigateur peut permettre de modifier le nom.
+
+Utilisez **Charger JSON** pour importer un fichier au même format. Le nom de l’algorithme importé apparaît dans la liste et son pseudocode remplace le pseudocode actuel. Le format JSON ne contenant pas de code Python, l’éditeur Python reste inchangé.
 
 L’export contient le nom de l’algorithme et le pseudocode sous forme de tableau de lignes. Chaque ligne possède `text`, qui contient le texte sans indentation initiale, et `indent`, qui indique le nombre d’espaces d’indentation ; une tabulation compte pour quatre espaces. Les lignes vides sont conservées.
 

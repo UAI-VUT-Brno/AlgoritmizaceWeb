@@ -10,6 +10,7 @@ Jednoduchý webový výukový nástroj pro vizualizaci základních algoritmů a
 - umožňuje krokovat Python kód a sledovat proměnné v čase
 - zobrazuje výstup programu a zvýrazňuje aktuální řádek ve zdrojovém kódu
 - umožňuje uložit aktuální pseudokód do JSON souboru pojmenovaného podle algoritmu, s odsazením jednotlivých řádků
+- umožňuje načíst pseudokód ze souboru JSON ve stejném formátu
 - automaticky přizpůsobuje měřítko diagramu a nabízí jeho přiblížení, oddálení a návrat na přizpůsobené měřítko
 - používá Pyodide (Python v prohlížeči) bez nutnosti lokální instalace Pythonu
 - umožňuje přepnout jazyk rozhraní mezi češtinou, angličtinou, slovenštinou, esperantem a francouzštinou
@@ -18,7 +19,7 @@ Jazyk rozhraní lze změnit tlačítky s vlajkami a zkratkami **CS**, **EN**, **
 
 ## Použití diagramu a podporovaný pseudokód
 
-Diagram se automaticky aktualizuje po krátké prodlevě od poslední změny pseudokódu. Tlačítkem **Aktualizovat Diagram z Pseudokódu** jej lze překreslit ihned. Po výběru předpřipraveného algoritmu se diagram vykreslí okamžitě. Generátor převádí jednotlivé neprázdné řádky na kroky diagramu; prázdné řádky ignoruje. Odsazení určuje příslušnost řádků k bloku, proto používejte konzistentní odsazení (doporučené jsou dva mezery na úroveň). Pokud je syntaxe řídicí struktury chybná nebo diagram nelze vykreslit, zobrazí se chyba přímo v panelu diagramu.
+Diagram se automaticky aktualizuje po krátké prodlevě od poslední změny pseudokódu. Po výběru předpřipraveného algoritmu se diagram vykreslí okamžitě. Generátor převádí jednotlivé neprázdné řádky na kroky diagramu; prázdné řádky ignoruje. Odsazení určuje příslušnost řádků k bloku, proto používejte konzistentní odsazení (doporučené jsou dva mezery na úroveň). Pokud je syntaxe řídicí struktury chybná nebo diagram nelze vykreslit, zobrazí se chyba přímo v panelu diagramu.
 
 Diagramy předpřipravených algoritmů se generují z jejich pseudokódu; samostatné předdefinované diagramy se nepoužívají.
 
@@ -57,7 +58,9 @@ ALGORITMUS IterateMatrix(matrix):
 
 ### Uložení algoritmu
 
-Stiskněte tlačítko **JSON**. Soubor se stáhne s lidsky čitelným názvem vybraného algoritmu a příponou `.json`; název lze změnit v dialogu pro ukládání prohlížeče, pokud jej prohlížeč zobrazí. Neplatné znaky pro název souboru se nahradí podtržítkem.
+Stiskněte tlačítko **Uložit JSON**. Soubor se stáhne s lidsky čitelným názvem vybraného algoritmu a příponou `.json`; název lze změnit v dialogu pro ukládání prohlížeče, pokud jej prohlížeč zobrazí. Neplatné znaky pro název souboru se nahradí podtržítkem.
+
+Tlačítkem **Načíst JSON** lze načíst soubor ve stejném formátu. Název importovaného algoritmu se zobrazí ve výběru a jeho pseudokód nahradí aktuální pseudokód. JSON neobsahuje Python kód, proto editor Pythonu zůstane beze změny.
 
 Export obsahuje lidský název algoritmu a pseudokód jako pole řádků. Každý řádek má `text` s obsahem bez počátečního odsazení a `indent` s počtem odsazovacích mezer; tabulátor se počítá jako čtyři mezery. Prázdné řádky se zachovávají.
 

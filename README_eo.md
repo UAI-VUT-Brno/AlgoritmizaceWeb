@@ -10,6 +10,7 @@ Simpla eduka reteja ilo por bildigi bazajn algoritmojn kaj ilian ruladon en Pyth
 - ebligas paŝe ruli Python-kodon kaj observi variablojn laŭlonge de la tempo
 - montras programan eligon kaj emfazas la aktualan fontkodan linion
 - eksportas la aktualan pseŭdokodon al JSON, unu ero por linio kun informo pri indento
+- importas pseŭdokodon el JSON-dosiero en la sama formato
 - aŭtomate adaptas diagramojn al la disponebla spaco kaj ofertas zomajn regilojn
 - rulas Python en la retumilo per Pyodide; loka instalado de Python ne estas bezonata
 - ofertas interfacon en la ĉeĥa, angla, slovaka, Esperanto kaj franca lingvoj
@@ -18,7 +19,7 @@ Simpla eduka reteja ilo por bildigi bazajn algoritmojn kaj ilian ruladon en Pyth
 
 ## Fluodiagramoj kaj subtenata pseŭdokodo
 
-La fluodiagramo aŭtomate ĝisdatiĝas baldaŭ post redaktado de la pseŭdokodo. Uzu **Ĝisdatigi diagramon el pseŭdokodo** por tuj refreŝigi ĝin. Elektinte ekzemplan algoritmon, ĝia diagramo tuj montriĝas. La generatoro konvertas ĉiun ne-malplenan linion al diagram-paŝo kaj ignoras malplenajn liniojn. Indento difinas apartenon al blokoj; uzu konsekvencan indenton (du spacoj por nivelo estas rekomendataj). Se kontrolstrukturo estas misformita aŭ diagramo ne povas esti bildigita, la eraro aperas en la diagram-panelo.
+La fluodiagramo aŭtomate ĝisdatiĝas baldaŭ post redaktado de la pseŭdokodo. Elektinte ekzemplan algoritmon, ĝia diagramo tuj montriĝas. La generatoro konvertas ĉiun ne-malplenan linion al diagram-paŝo kaj ignoras malplenajn liniojn. Indento difinas apartenon al blokoj; uzu konsekvencan indenton (du spacoj por nivelo estas rekomendataj). Se kontrolstrukturo estas misformita aŭ diagramo ne povas esti bildigita, la eraro aperas en la diagram-panelo.
 
 La diagramoj de ekzemplaj algoritmoj estas generataj el ilia pseŭdokodo; apartaj antaŭdifinitaj diagramoj ne estas uzataj.
 
@@ -57,7 +58,9 @@ ALGORITMUS IterateMatrix(matrix):
 
 ### Konservi algoritmon
 
-Alklaku **JSON**. La dosiero elŝutiĝas kun la homlegebla nomo de la elektita algoritmo kaj la sufikso `.json`. Nevalidaj signoj en la dosiernomo estas anstataŭigitaj per substrekoj. Retumila dialogo por konservi la dosieron povas ebligi ŝanĝi la nomon.
+Alklaku **Konservi JSON**. La dosiero elŝutiĝas kun la homlegebla nomo de la elektita algoritmo kaj la sufikso `.json`. Nevalidaj signoj en la dosiernomo estas anstataŭigitaj per substrekoj. Retumila dialogo por konservi la dosieron povas ebligi ŝanĝi la nomon.
+
+Uzu **Ŝargi JSON** por importi dosieron en la sama formato. La nomo de la importita algoritmo aperas en la elektilo, kaj ĝia pseŭdokodo anstataŭigas la aktualan. Ĉar la JSON-formato ne enhavas Python-kodon, la Python-redaktilo restas senŝanĝa.
 
 La eksporto enhavas la algoritman nomon kaj la pseŭdokodon kiel tabelon de linioj. Ĉiu linio havas `text` kun la enhavo sen komenca indento kaj `indent` kun la nombro de indentaj spacoj; tabo kalkuliĝas kiel kvar spacoj. Malplenaj linioj estas konservataj.
 
