@@ -9,24 +9,33 @@ Jednoduchý webový výukový nástroj pro vizualizaci základních algoritmů a
 - převádí odsazený pseudokód na Mermaid diagram včetně větvení a cyklů
 - umožňuje krokovat Python kód a sledovat proměnné v čase
 - zobrazuje výstup programu a zvýrazňuje aktuální řádek ve zdrojovém kódu
-- umožňuje uložit aktuální pseudokód, Python a Mermaid diagram do JSON souboru s vlastním názvem
+- umožňuje uložit aktuální pseudokód do JSON souboru s vlastním názvem a odsazením jednotlivých řádků
 - automaticky přizpůsobuje měřítko diagramu a nabízí jeho přiblížení, oddálení a návrat na přizpůsobené měřítko
 - používá Pyodide (Python v prohlížeči) bez nutnosti lokální instalace Pythonu
 
 ## Použití diagramu a podporovaný pseudokód
 
-Upravte pseudokód v levém panelu a zvolte **Aktualizovat Diagram z Pseudokódu**. Generátor převádí jednotlivé neprázdné řádky na kroky diagramu; prázdné řádky ignoruje. Odsazení určuje příslušnost řádků k bloku, proto používejte konzistentní odsazení (doporučené jsou dva mezery na úroveň).
+Diagram se automaticky aktualizuje po krátké prodlevě od poslední změny pseudokódu. Tlačítkem **Aktualizovat Diagram z Pseudokódu** jej lze překreslit ihned. Po výběru předpřipraveného algoritmu se diagram vykreslí okamžitě. Generátor převádí jednotlivé neprázdné řádky na kroky diagramu; prázdné řádky ignoruje. Odsazení určuje příslušnost řádků k bloku, proto používejte konzistentní odsazení (doporučené jsou dva mezery na úroveň). Pokud je syntaxe řídicí struktury chybná nebo diagram nelze vykreslit, zobrazí se chyba přímo v panelu diagramu.
+
+Diagramy předpřipravených algoritmů se generují z jejich pseudokódu; samostatné předdefinované diagramy se nepoužívají.
+
+Nápověda s podporovanými termíny pseudokódu má zvětšenou výchozí výšku. Její výšku lze měnit tažením dělicího pruhu mezi nápovědou a editorem nebo klávesami šipka nahoru/dolů při zaměření pruhu.
 
 Podporované řídicí struktury:
 
+- Hlavička algoritmu: `ALGORITMUS název(parametry):`.
 - Podmínka: `POKUD podmínka:` nebo `IF podmínka:`.
+- Dlouhé popisky rozhodovacích uzlů se zalamují po slovech, aby se zmenšila výška diagramového kosočtverce.
 - Volitelná alternativní větev: `JINAK:` nebo `ELSE:`. Řádek `JINAK`/`ELSE` zarovnejte buď s odpovídajícím `POKUD`/`IF`, nebo s příkazy první větve.
 - Cyklus s podmínkou: `DOKUD podmínka:` nebo `WHILE podmínka:`.
 - Cyklus přes prvky kolekce: `PRO prvek V kolekce:` nebo `FOR prvek IN kolekce:`. Diagram zobrazuje rozhodnutí, zda je k dispozici další prvek, přiřazení prvku a návratovou hranu cyklu.
-- Počítaný cyklus: `PRO i OD začátek DO konec:` nebo `FOR i OD začátek DO konec:`. Je zobrazen jako cyklus s návratem k rozhodovacímu uzlu; kroky a hranice iterací se nevyhodnocují.
+- Počítaný cyklus: `PRO i OD začátek DO konec:` nebo `FOR i FROM start TO end:`. Hlavička cyklu je zobrazena jako šestiúhelník s návratovou hranou; kroky a hranice iterací se nevyhodnocují.
+- Následující blok větve `Ne` je v diagramu umístěn pod všemi bloky větve `Ano`, a to i u vnořených cyklů.
 - Všechny uvedené struktury lze vnořovat. Jejich těla musí být odsazena vůči hlavičce.
 
-Příkazy, které nejsou rozpoznány jako řídicí struktury, se zobrazí jako běžné kroky. Návratový uzel se rozpozná pomocí `VRÁTI`, `VRÁTÍ` nebo `RETURN`. Generátor vytváří přehledový diagram; neinterpretuje výrazy, neověřuje jejich syntaxi ani nespouští pseudokód. Počítané cykly a podmínky jsou tedy znázorněné, ale jejich průběh se nepočítá.
+Příkaz `VYPIS hodnota` nebo `WRITE value` zobrazí tisk hodnoty jako běžný krok diagramu. Editor pseudokódu průběžně červeně podtrhává neznámá slova psaná velkými písmeny na začátku řádku a zobrazuje počet nálezů. Jde o orientační upozornění, nikoli o validaci pseudokódu: běžná přiřazení a slova uvnitř řádku nekontroluje a neznámé příkazy se stále zobrazí jako běžné kroky.
+
+Příkazy, které nejsou rozpoznány jako řídicí struktury, se zobrazí jako běžné kroky. Předání výsledku funkce se rozpozná pomocí `VRAT` nebo `RETURN` a zobrazí se jako výstupní rovnoběžník propojený s koncem diagramu. Generátor vytváří přehledový diagram; neinterpretuje výrazy, neověřuje jejich syntaxi ani nespouští pseudokód. Počítané cykly a podmínky jsou tedy znázorněné, ale jejich průběh se nepočítá.
 
 Příklad:
 
@@ -38,14 +47,24 @@ ALGORITMUS ProjdiMatici(matice):
         kladnych = kladnych + 1
       JINAK:
         zapornych = zapornych + 1
-  VRÁTI kladnych
+  VRAT kladnych
 ```
 
 ### Uložení algoritmu
 
 Do pole **Název souboru** zadejte požadovaný název a stiskněte tlačítko **JSON**. Přípona `.json` se doplní automaticky; při prázdném poli se použije název vybraného algoritmu. Neplatné znaky pro název souboru se nahradí podtržítkem.
 
-Export obsahuje název algoritmu, aktuální obsah editorů pseudokódu a Pythonu a Mermaid zdroj vygenerovaný z aktuálního pseudokódu. Aktuální Mermaid zdroj je možné dále použít nebo upravit v nástroji podporujícím Mermaid.
+Export obsahuje lidský název algoritmu a pseudokód jako pole řádků. Každý řádek má `text` s obsahem bez počátečního odsazení a `indent` s počtem odsazovacích mezer; tabulátor se počítá jako čtyři mezery. Prázdné řádky se zachovávají.
+
+```json
+{
+  "name": "Název algoritmu",
+  "pseudocode": [
+    { "text": "ALGORITMUS Ukazka:", "indent": 0 },
+    { "text": "VYPIS hodnota", "indent": 2 }
+  ]
+}
+```
 
 ### Ovládání měřítka diagramu
 

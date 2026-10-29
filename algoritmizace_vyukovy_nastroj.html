@@ -54,6 +54,12 @@
             background-color: rgba(59, 130, 246, 0.25) !important;
             border-left: 4px solid #3b82f6;
         }
+        .cm-unknown-control {
+            color: #fca5a5 !important;
+            background-color: rgba(239, 68, 68, 0.12);
+            text-decoration: underline wavy #ef4444;
+            text-underline-offset: 2px;
+        }
         /* Custom scrollbars */
         ::-webkit-scrollbar {
             width: 6px;
@@ -78,6 +84,20 @@
         }
         .gutter-horizontal:hover {
             background-color: #3b82f6;
+        }
+        .gutter-vertical {
+            flex: 0 0 6px;
+            cursor: row-resize;
+            background-color: #1e293b;
+            touch-action: none;
+        }
+        .gutter-vertical:hover, .gutter-vertical:focus-visible {
+            background-color: #3b82f6;
+            outline: none;
+        }
+        #pseudocodeHelp {
+            height: 224px;
+            min-height: 96px;
         }
         /* Mermaid styling inside canvas */
         .node rect, .node circle, .node polygon {
@@ -113,11 +133,6 @@
             <div class="flex items-center space-x-2">
                 <label class="text-xs text-slate-400 font-medium">Algoritmus:</label>
                 <select id="templateSelect" onchange="loadTemplate(this.value)" class="bg-darkbg border border-darkaccent text-xs rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-brand text-slate-200">
-                    <option value="bubbleSort">Bubble Sort (Řazení)</option>
-                    <option value="factorial">Faktoriál (Rekurze/Cykly)</option>
-                    <option value="findMax">Najdi Maximum v poli</option>
-                    <option value="gcd">Eukleidův algoritmus (GCD)</option>
-                    <option value="triangleArea">Obsah trojúhelníku ze tří stran</option>
                 </select>
                 <input id="saveFileName" type="text" placeholder="Název souboru" aria-label="Název uloženého JSON souboru" title="Název uloženého JSON souboru" class="w-32 bg-darkbg border border-darkaccent text-xs rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-brand text-slate-200 placeholder:text-slate-500">
                 <button onclick="saveSelectedTemplate()" class="flex items-center space-x-1 bg-slate-700 hover:bg-slate-600 text-xs text-white px-2.5 py-1.5 rounded transition" title="Uložit zvolený algoritmus do JSON" aria-label="Uložit zvolený algoritmus do JSON">
@@ -170,6 +185,8 @@
             </div>
             <div class="flex-1 relative">
                 <textarea id="pseudocodeEditor"></textarea>
+                <div id="pseudocodeWarning" class="hidden absolute top-2 right-3 z-10 rounded border border-red-500/50 bg-slate-900/95 px-2 py-1 text-[10px] text-red-300 shadow" role="status" aria-live="polite" title="Kontrola označuje neznámá slova psaná velkými písmeny na začátku řádku; běžné přiřazení ignoruje.">
+                </div>
             </div>
             <!-- Sync Button -->
             <div class="p-2 bg-darkcard border-t border-darkaccent flex justify-between items-center">
@@ -178,18 +195,22 @@
                     <span>Aktualizovat Diagram z Pseudokódu</span>
                 </button>
             </div>
-            <div class="h-32 flex-shrink-0 overflow-y-auto border-t border-darkaccent bg-slate-900/70 px-3 py-2 text-[10px] leading-4 text-slate-400">
+            <div class="h-56 flex-shrink-0 overflow-y-auto border-t border-darkaccent bg-slate-900/70 px-3 py-2 text-[10px] leading-4 text-slate-400" id="pseudocodeHelp">
                 <h2 class="mb-1 text-[11px] font-semibold text-slate-200">Podporované termíny pseudokódu</h2>
                 <ul class="space-y-0.5">
+                    <li><code class="text-indigo-300">ALGORITMUS název(...):</code> — hlavička algoritmu</li>
                     <li><code class="text-indigo-300">POKUD</code> / <code class="text-indigo-300">IF</code> — podmínka</li>
                     <li><code class="text-indigo-300">JINAK</code> / <code class="text-indigo-300">ELSE</code> — alternativní větev</li>
                     <li><code class="text-indigo-300">DOKUD</code> / <code class="text-indigo-300">WHILE</code> — podmíněný cyklus</li>
                     <li><code class="text-indigo-300">PRO prvek V kolekce</code> / <code class="text-indigo-300">FOR prvek IN collection</code> — průchod kolekcí</li>
-                    <li><code class="text-indigo-300">PRO i OD začátek DO konec</code> — počítaný cyklus</li>
-                    <li><code class="text-indigo-300">VRÁTI</code> / <code class="text-indigo-300">VRÁTÍ</code> / <code class="text-indigo-300">RETURN</code> — návrat</li>
+                    <li><code class="text-indigo-300">PRO i OD začátek DO konec</code> / <code class="text-indigo-300">FOR i FROM start TO end</code> — počítaný cyklus (šestiúhelník)</li>
+                    <li><code class="text-indigo-300">VRAT hodnota</code> / <code class="text-indigo-300">RETURN value</code> — předání výsledku funkce (rovnoběžník)</li>
+                    <li><code class="text-indigo-300">VYPIS hodnota</code> / <code class="text-indigo-300">WRITE value</code> — tisk hodnoty</li>
                     <li>Bloky pište s dvojtečkou a odsazujte; ostatní řádky se zobrazí jako kroky.</li>
+                    <li>Neznámá velká slova na začátku řádku jsou podtržena červeně; upozornění je pouze orientační.</li>
                 </ul>
             </div>
+            <div id="pseudocodeHelpResizer" class="gutter-vertical" role="separator" aria-label="Změnit výšku nápovědy" aria-orientation="horizontal" aria-valuemin="96" tabindex="0"></div>
         </section>
 
         <!-- Divider 1 -->
@@ -285,13 +306,14 @@
         // --- 1. PRE-DEFINED ALGORITHM TEMPLATES ---
         const templates = {
             bubbleSort: {
+                name: 'Bubble Sort (Řazení)',
                 pseudocode: `ALGORITMUS BubbleSort(pole):
-  N = délka(pole)
-  PRO i OD 0 DO N-1:
-    PRO j OD 0 DO N-i-2:
+  n = délka(pole)
+  PRO i OD 0 DO n-1:
+    PRO j OD 0 DO n-i-2:
       POKUD pole[j] > pole[j+1]:
-        VYMĚŇ pole[j] a pole[j+1]
-  VRÁTIS pole`,
+        vyměň(pole[j], pole[j+1])
+  VRAT pole`,
                 python: `def bubble_sort(arr):
     n = len(arr)
     for i in range(n):
@@ -301,29 +323,16 @@
     return arr
 
 pole = [64, 34, 25, 12, 22]
-bubble_sort(pole)`,
-                mermaid: `graph TD
-    Start([Start: Bubble Sort]) --> Init["N = LenArray"]
-    Init --> LoopI["Outer Loop: i"]
-    LoopI --> LoopJ["Inner Loop: j"]
-    LoopJ --> Cond{"arr[j] > arr[j+1]?"}
-    Cond -- Ano --> Swap["Swap elements"]
-    Cond -- Ne --> NextJ["Next j"]
-    Swap --> NextJ
-    NextJ --> EndLoopJ{"End of j?"}
-    EndLoopJ -- Ne --> LoopJ
-    EndLoopJ -- Ano --> NextI["Next i"]
-    NextI --> EndLoopI{"End of i?"}
-    EndLoopI -- Ne --> LoopI
-    EndLoopI -- Ano --> End([Konec / Vrátit pole])`
+bubble_sort(pole)`
             },
 
             factorial: {
+                name: 'Faktoriál (Rekurze/Cykly)',
                 pseudocode: `ALGORITMUS Faktorial(n):
   vysledek = 1
   PRO i OD 1 DO n:
     vysledek = vysledek * i
-  VRÁTI vysledek`,
+  VRAT vysledek`,
                 python: `def factorial(n):
     vysledek = 1
     for i in range(1, n + 1):
@@ -331,23 +340,17 @@ bubble_sort(pole)`,
     return vysledek
 
 vysledek = factorial(5)
-print("Faktorial:", vysledek)`,
-                mermaid: `graph TD
-    Start([Start: Faktoriál]) --> Init["vysledek = 1"]
-    Init --> Loop["Loop i: 1 to n"]
-    Loop --> Mult["vysledek = vysledek * i"]
-    Mult --> Check{"i <= n?"}
-    Check -- Ano --> Loop
-    Check -- Ne --> End([Konec: Vrátit vysledek])`
+print("Faktorial:", vysledek)`
             },
 
             findMax: {
+                name: 'Najdi Maximum v poli',
                 pseudocode: `ALGORITMUS NajdiMax(pole):
   max_val = pole[0]
   PRO prvek V pole:
     POKUD prvek > max_val:
       max_val = prvek
-  VRÁTIS max_val`,
+  VRAT max_val`,
                 python: `def find_max(arr):
     max_val = arr[0]
     for prvek in arr:
@@ -357,26 +360,17 @@ print("Faktorial:", vysledek)`,
 
 cisla = [14, 45, 8, 99, 23]
 max_cislo = find_max(cisla)
-print("Max:", max_cislo)`,
-                mermaid: `graph TD
-    Start([Start: Najdi Max]) --> Init["max_val = arr[0]"]
-    Init --> Loop["For each prvek in arr"]
-    Loop --> Cond{"prvek > max_val?"}
-    Cond -- Ano --> Update["max_val = prvek"]
-    Cond -- Ne --> Next["Next element"]
-    Update --> Next
-    Next --> Check{"Done?"}
-    Check -- Ne --> Loop
-    Check -- Ano --> End([End: Return max_val])`
+print("Max:", max_cislo)`
             },
 
             gcd: {
+                name: 'Eukleidův algoritmus (GCD)',
                 pseudocode: `ALGORITMUS Eukleid(a, b):
   DOKUD b != 0:
     temp = b
     b = a MOD b
     a = temp
-  VRÁTI a`,
+  VRAT a`,
                 python: `def gcd(a, b):
     while b != 0:
         temp = b
@@ -385,22 +379,18 @@ print("Max:", max_cislo)`,
     return a
 
 vysledek = gcd(48, 18)
-print("GCD:", vysledek)`,
-                mermaid: `graph TD
-    Start([Start: GCD]) --> Cond{"b != 0?"}
-    Cond -- Ano --> Step["temp = b<br>b = a % b<br>a = temp"]
-    Step --> Cond
-    Cond -- Ne --> End([Return a])`
+print("GCD:", vysledek)`
             },
 
             triangleArea: {
+                name: 'Obsah trojúhelníku ze tří stran',
                 pseudocode: `ALGORITMUS ObsahTrojuhelniku(a, b, c):
   POKUD a <= 0 NEBO b <= 0 NEBO c <= 0 NEBO a + b <= c NEBO a + c <= b NEBO b + c <= a:
-    VYPIŠ "Neplatné strany trojúhelníku"
+    VYPIS "Neplatné strany trojúhelníku"
   JINAK:
     s = (a + b + c) / 2
     obsah = ODMOCNINA(s * (s - a) * (s - b) * (s - c))
-    VRÁTI obsah`,
+    VRAT obsah`,
                 python: `import math
 
 def obsah_trojuhelniku(a, b, c):
@@ -410,14 +400,7 @@ def obsah_trojuhelniku(a, b, c):
     return math.sqrt(s * (s - a) * (s - b) * (s - c))
 
 obsah = obsah_trojuhelniku(3, 4, 5)
-print("Obsah trojúhelníku:", obsah)`,
-                mermaid: `graph TD
-    Start([Start: Obsah trojúhelníku]) --> Valid{"a, b, c > 0 a platí trojúhelníková nerovnost?"}
-    Valid -- Ne --> Error["Neplatné strany"]
-    Error --> End([Konec])
-    Valid -- Ano --> Semi["s = (a + b + c) / 2"]
-    Semi --> Area["obsah = sqrt(s * (s - a) * (s - b) * (s - c))"]
-    Area --> Result([Vrátit obsah])`
+print("Obsah trojúhelníku:", obsah)`
             }
         };
 
@@ -430,15 +413,62 @@ print("Obsah trojúhelníku:", obsah)`,
         let playInterval = null;
         let diagramZoom = 1;
         let diagramResizeObserver = null;
+        let pseudocodeDiagramUpdateTimer = null;
+        let diagramRenderVersion = 0;
+        const pseudocodeDiagramUpdateDelay = 350;
+        const supportedPseudocodeLeadingTerms = new Set([
+            'ALGORITMUS', 'POKUD', 'IF', 'JINAK', 'ELSE', 'DOKUD', 'WHILE',
+            'PRO', 'FOR', 'VRAT', 'RETURN', 'VYPIS', 'WRITE'
+        ]);
+
+        function getUnknownPseudocodeControlWord(line) {
+            const match = line.match(/^[\t ]*([\p{L}_][\p{L}\p{N}_]*)/u);
+            if (!match) return null;
+
+            const word = match[1];
+            const normalizedWord = word.toLocaleUpperCase('cs-CZ');
+            const isUppercase = word === normalizedWord;
+            const isAssignment = /^\s*(?:=|←)/u.test(line.slice(match[0].length));
+            if (!isUppercase || word.length < 2
+                || supportedPseudocodeLeadingTerms.has(normalizedWord)
+                || isAssignment) {
+                return null;
+            }
+            return word;
+        }
+
+        CodeMirror.defineMode('pseudocode', () => ({
+            startState: () => ({ atLineStart: true }),
+            copyState: state => ({ atLineStart: state.atLineStart }),
+            token(stream, state) {
+                if (stream.sol()) state.atLineStart = true;
+                if (stream.eatSpace()) return null;
+                if (state.atLineStart) {
+                    state.atLineStart = false;
+                    const match = stream.match(/[\p{L}_][\p{L}\p{N}_]*/u);
+                    if (match) {
+                        return getUnknownPseudocodeControlWord(stream.string) === match[0]
+                            ? 'unknown-control'
+                            : null;
+                    }
+                }
+                stream.skipToEnd();
+                return null;
+            }
+        }));
 
         // Initialize CodeMirror Editors
         window.addEventListener('DOMContentLoaded', () => {
             // Pseudocode Editor
             pseudoEditor = CodeMirror.fromTextArea(document.getElementById('pseudocodeEditor'), {
-                mode: 'text/plain',
+                mode: 'pseudocode',
                 theme: 'dracula',
                 lineNumbers: true,
                 lineWrapping: true
+            });
+            pseudoEditor.on('change', () => {
+                updatePseudocodeWarning();
+                scheduleDiagramUpdate();
             });
 
             // Python Editor
@@ -449,9 +479,6 @@ print("Obsah trojúhelníku:", obsah)`,
                 lineWrapping: true
             });
 
-            // Load initial template
-            loadTemplate('bubbleSort');
-
             // Init Mermaid
             mermaid.initialize({
                 startOnLoad: false,
@@ -459,6 +486,8 @@ print("Obsah trojúhelníku:", obsah)`,
                 securityLevel: 'loose',
                 flowchart: { curve: 'basis' }
             });
+            populateTemplateSelect();
+            loadTemplate(document.getElementById('templateSelect').value);
             diagramResizeObserver = new ResizeObserver(() => applyDiagramZoom());
             diagramResizeObserver.observe(document.getElementById('diagramContainer'));
 
@@ -476,40 +505,75 @@ print("Obsah trojúhelníku:", obsah)`,
             });
         });
 
+        function updatePseudocodeWarning() {
+            const unknownTerms = pseudoEditor.getValue()
+                .split('\n')
+                .filter(line => getUnknownPseudocodeControlWord(line));
+            const warning = document.getElementById('pseudocodeWarning');
+            warning.textContent = unknownTerms.length
+                ? `Neznámé řídicí výrazy: ${unknownTerms.length}`
+                : '';
+            warning.classList.toggle('hidden', unknownTerms.length === 0);
+        }
+
+        function scheduleDiagramUpdate() {
+            clearTimeout(pseudocodeDiagramUpdateTimer);
+            pseudocodeDiagramUpdateTimer = setTimeout(
+                updateDiagramFromPseudocode,
+                pseudocodeDiagramUpdateDelay
+            );
+        }
+
+        function populateTemplateSelect() {
+            const select = document.getElementById('templateSelect');
+            select.replaceChildren(...Object.entries(templates).map(([key, template]) => {
+                const option = document.createElement('option');
+                option.value = key;
+                option.textContent = template.name;
+                return option;
+            }));
+        }
+
         // Load Algorithm Templates
         function loadTemplate(key) {
             const tmpl = templates[key];
             if (!tmpl) return;
 
+            clearTimeout(pseudocodeDiagramUpdateTimer);
             pseudoEditor.setValue(tmpl.pseudocode);
             pyEditor.setValue(tmpl.python);
-            renderMermaid(tmpl.mermaid);
+            clearTimeout(pseudocodeDiagramUpdateTimer);
+            updateDiagramFromPseudocode();
 
             resetExecutionState();
         }
 
         function saveSelectedTemplate() {
             const select = document.getElementById('templateSelect');
-            const selectedOption = select.options[select.selectedIndex];
+            const selectedTemplate = templates[select.value];
             const pseudocode = pseudoEditor.getValue();
-            const python = pyEditor.getValue();
-            if (!selectedOption) {
+            if (!selectedTemplate) {
                 alert("Zvolený algoritmus se nepodařilo uložit.");
                 return;
             }
 
             const requestedFileName = document.getElementById('saveFileName').value.trim()
-                || selectedOption.textContent.trim();
+                || selectedTemplate.name;
             const fileName = requestedFileName
                 .replace(/\.json$/i, '')
                 .replace(/[<>:"/\\|?*\u0000-\u001F]/g, '_')
                 .replace(/[. ]+$/g, '')
                 .trim();
+            const pseudocodeLines = pseudocode.split(/\r?\n/).map(line => {
+                const leadingWhitespace = line.match(/^[\t ]*/)[0];
+                return {
+                    text: line.slice(leadingWhitespace.length),
+                    indent: leadingWhitespace.replace(/\t/g, '    ').length
+                };
+            });
             const json = JSON.stringify({
-                name: selectedOption.textContent.trim(),
-                pseudocode,
-                python,
-                mermaid: generateMermaidFromPseudocode(pseudocode)
+                name: selectedTemplate.name,
+                pseudocode: pseudocodeLines
             }, null, 2);
             const blob = new Blob([json], { type: 'application/json;charset=utf-8' });
             const url = URL.createObjectURL(blob);
@@ -524,6 +588,7 @@ print("Obsah trojúhelníku:", obsah)`,
 
         // --- 3. MERMAID FLOWCHART RENDERER ---
         async function renderMermaid(graphDefinition) {
+            const renderVersion = ++diagramRenderVersion;
             const target = document.getElementById('mermaidTarget');
             try {
                 target.removeAttribute('data-processed');
@@ -531,15 +596,32 @@ print("Obsah trojúhelníku:", obsah)`,
                 await mermaid.run({
                     nodes: [target]
                 });
+                if (renderVersion !== diagramRenderVersion) return;
                 diagramZoom = 1;
                 applyDiagramZoom(true);
                 document.getElementById('mermaidStatus').innerText = 'Diagram OK';
                 document.getElementById('mermaidStatus').className = 'text-[10px] text-emerald-400';
             } catch (err) {
+                if (renderVersion !== diagramRenderVersion) return;
                 console.error("Mermaid Render Error:", err);
-                document.getElementById('mermaidStatus').innerText = 'Chyba syntaxe diagramu';
-                document.getElementById('mermaidStatus').className = 'text-[10px] text-rose-400';
+                showDiagramError('Diagram se nepodařilo vykreslit. Zkontrolujte syntaxi pseudokódu.', err);
             }
+        }
+
+        function showDiagramError(message, error) {
+            diagramRenderVersion++;
+            const target = document.getElementById('mermaidTarget');
+            const errorMessage = document.createElement('p');
+            errorMessage.className = 'max-w-md rounded-lg border border-rose-500/50 bg-rose-950/60 p-4 text-sm text-rose-200';
+            errorMessage.setAttribute('role', 'alert');
+            errorMessage.textContent = error instanceof Error && error.message
+                ? `${message} ${error.message}`
+                : message;
+            target.replaceChildren(errorMessage);
+            target.style.removeProperty('width');
+            target.style.removeProperty('height');
+            document.getElementById('mermaidStatus').innerText = 'Chyba pseudokódu';
+            document.getElementById('mermaidStatus').className = 'text-[10px] text-rose-400';
         }
 
         function applyDiagramZoom(resetScroll = false) {
@@ -604,6 +686,12 @@ print("Obsah trojúhelníku:", obsah)`,
                     text: line.trim()
                 }))
                 .filter(line => line.text.length > 0);
+            const malformedElse = lines.find(line =>
+                isElse(line.text) && !/^(?:JINAK|ELSE):$/i.test(line.text)
+            );
+            if (malformedElse) {
+                throw new Error(`Alternativní větev "${malformedElse.text}" musí být zapsána jako JINAK: nebo ELSE:.`);
+            }
             let lineIndex = 0;
             let nodeIndex = 0;
 
@@ -657,6 +745,9 @@ print("Obsah trojúhelníku:", obsah)`,
                         conditionText += ` ${lines[lineIndex].text}`;
                         lineIndex++;
                     }
+                    if (!conditionText.trimEnd().endsWith(':')) {
+                        throw new Error(`Hlavička "${current.text}" musí končit dvojtečkou.`);
+                    }
                     const statement = {
                         type: isLoop ? 'loop' : 'decision',
                         text: conditionText.replace(/^(POKUD|IF|DOKUD|WHILE|PRO|FOR)\s*/i, '').replace(/:\s*$/, ''),
@@ -669,6 +760,8 @@ print("Obsah trojúhelníku:", obsah)`,
                         statement.iterator = iterableHeader[1].trim();
                         statement.iterable = iterableHeader[2].trim().replace(/:\s*$/, '');
                         statement.text = `Další prvek v ${statement.iterable}?`;
+                    } else if (isLoop && /^(?:PRO|FOR)\s+.+?\s+(?:OD\s+.+?\s+DO|FROM\s+.+?\s+TO)\s+.+?:?$/i.test(conditionText)) {
+                        statement.type = 'countedLoop';
                     }
                     let thenIndent = null;
                     if (lineIndex < lines.length && lines[lineIndex].indent > current.indent && !isElse(lines[lineIndex].text)) {
@@ -708,23 +801,23 @@ print("Obsah trojúhelníku:", obsah)`,
                 for (const statement of block) {
                     const deferredLayoutSources = pendingLoopLayoutSources.splice(0);
                     const statementStartIndex = nodes.length;
-                    if (statement.type === 'decision' || statement.type === 'loop' || statement.type === 'forEach') {
-                        const decision = makeNode('decision', statement.text || 'Podmínka');
+                    if (statement.type === 'decision' || statement.type === 'loop' || statement.type === 'forEach' || statement.type === 'countedLoop') {
+                        const decision = makeNode(statement.type === 'countedLoop' ? 'countedLoop' : 'decision', statement.text || 'Podmínka');
                         exits.forEach(edge => edges.push({ from: edge.from, to: decision.id, label: edge.label }));
+                        const loopBodyStartIndex = nodes.length;
                         let loopBodyIncoming = [{ from: decision.id, label: 'Ano' }];
                         if (statement.type === 'forEach') {
                             const iteratorStep = makeNode('step', `${statement.iterator} = další prvek z ${statement.iterable}`);
                             loopBodyIncoming.forEach(edge => edges.push({ from: edge.from, to: iteratorStep.id, label: edge.label }));
                             loopBodyIncoming = [{ from: iteratorStep.id, label: '' }];
                         }
-                        const thenBranchStartIndex = nodes.length;
                         const thenExits = emitBlock(statement.thenBranch, loopBodyIncoming);
-                        const thenBranchNodes = nodes.slice(thenBranchStartIndex);
-                        if (statement.type === 'loop' || statement.type === 'forEach') {
+                        const thenBranchNodes = nodes.slice(loopBodyStartIndex);
+                        if (statement.type === 'loop' || statement.type === 'forEach' || statement.type === 'countedLoop') {
                             thenExits.forEach(edge => edges.push({ from: edge.from, to: decision.id, label: edge.label }));
                             exits = [{ from: decision.id, label: 'Ne' }];
-                            if (statement.type === 'forEach' && thenBranchNodes.length > 0) {
-                                pendingLoopLayoutSources.push(thenBranchNodes[thenBranchNodes.length - 1].id);
+                            if (thenBranchNodes.length > 0) {
+                                pendingLoopLayoutSources.push(...thenBranchNodes.map(node => node.id));
                             }
                         } else {
                             let elseExits = [{ from: decision.id, label: 'Ne' }];
@@ -734,7 +827,7 @@ print("Obsah trojúhelníku:", obsah)`,
                             exits = [...thenExits, ...elseExits];
                         }
                     } else {
-                        const isReturn = /^(VRÁTI|VRÁTÍ|RETURN)\b/i.test(statement.text);
+                        const isReturn = /^(?:VRAT|RETURN)(?=\s|$)/i.test(statement.text);
                         const node = makeNode(isReturn ? 'return' : 'step', statement.text);
                         exits.forEach(edge => edges.push({ from: edge.from, to: node.id, label: edge.label }));
                         if (isReturn) {
@@ -762,11 +855,31 @@ print("Obsah trojúhelníku:", obsah)`,
                 return text.replace(/&/g, '#amp;').replace(/"/g, '#quot;').replace(/[{}\[\]]/g, ' ');
             }
 
+            function formatDecisionLabel(text) {
+                const maxLineLength = 28;
+                const lines = [];
+                let line = '';
+                text.split(/\s+/).forEach(word => {
+                    if (line && line.length + word.length + 1 > maxLineLength) {
+                        lines.push(line);
+                        line = word;
+                    } else {
+                        line = line ? `${line} ${word}` : word;
+                    }
+                });
+                if (line) lines.push(line);
+                return lines.map(escapeLabel).join('<br/>');
+            }
+
             let mermaidStr = 'graph TD\n';
             nodes.forEach(node => {
-                const label = escapeLabel(node.text);
+                const label = node.type === 'decision'
+                    ? formatDecisionLabel(node.text)
+                    : escapeLabel(node.text);
                 if (node.type === 'decision') {
                     mermaidStr += `  ${node.id}{"${label}"}\n`;
+                } else if (node.type === 'countedLoop') {
+                    mermaidStr += `  ${node.id}{{"${label}"}}\n`;
                 } else if (node.type === 'return') {
                     mermaidStr += `  ${node.id}[/"${label}"/]\n`;
                 } else if (node.type === 'start') {
@@ -789,7 +902,13 @@ print("Obsah trojúhelníku:", obsah)`,
         }
 
         function updateDiagramFromPseudocode() {
-            renderMermaid(generateMermaidFromPseudocode(pseudoEditor.getValue()));
+            clearTimeout(pseudocodeDiagramUpdateTimer);
+            try {
+                renderMermaid(generateMermaidFromPseudocode(pseudoEditor.getValue()));
+            } catch (error) {
+                console.error("Pseudocode Parse Error:", error);
+                showDiagramError('Diagram se nepodařilo vytvořit. Opravte pseudokód.', error);
+            }
         }
 
         // --- 4. PYODIDE & PYTHON EXECUTION TRACER ---
@@ -1045,8 +1164,56 @@ finally:
         const pane3 = document.getElementById('pane3');
         const gutter1 = document.getElementById('gutter1');
         const gutter2 = document.getElementById('gutter2');
+        const pseudocodeHelp = document.getElementById('pseudocodeHelp');
+        const pseudocodeHelpResizer = document.getElementById('pseudocodeHelpResizer');
+        const minimumHelpHeight = 96;
 
         let activeGutter = null;
+        let helpResizeStart = null;
+
+        function setPseudocodeHelpHeight(height) {
+            const paneRect = pane1.getBoundingClientRect();
+            const fixedHeight = pane1.querySelector(':scope > div:first-child').offsetHeight
+                + pane1.querySelector(':scope > div:nth-child(3)').offsetHeight
+                + pseudocodeHelpResizer.offsetHeight;
+            const maximumHeight = Math.max(minimumHelpHeight, paneRect.height - fixedHeight - 120);
+            const boundedHeight = Math.min(maximumHeight, Math.max(minimumHelpHeight, height));
+            pseudocodeHelp.style.height = `${boundedHeight}px`;
+            pseudocodeHelpResizer.setAttribute('aria-valuemax', String(Math.round(maximumHeight)));
+            pseudocodeHelpResizer.setAttribute('aria-valuenow', String(Math.round(boundedHeight)));
+        }
+
+        pseudocodeHelpResizer.addEventListener('pointerdown', event => {
+            helpResizeStart = {
+                pointerId: event.pointerId,
+                clientY: event.clientY,
+                height: pseudocodeHelp.getBoundingClientRect().height
+            };
+            pseudocodeHelpResizer.setPointerCapture(event.pointerId);
+            event.preventDefault();
+        });
+
+        pseudocodeHelpResizer.addEventListener('pointermove', event => {
+            if (!helpResizeStart || event.pointerId !== helpResizeStart.pointerId) return;
+            setPseudocodeHelpHeight(helpResizeStart.height - (event.clientY - helpResizeStart.clientY));
+        });
+
+        pseudocodeHelpResizer.addEventListener('pointerup', () => {
+            helpResizeStart = null;
+        });
+        pseudocodeHelpResizer.addEventListener('lostpointercapture', () => {
+            helpResizeStart = null;
+        });
+        pseudocodeHelpResizer.addEventListener('keydown', event => {
+            if (event.key !== 'ArrowUp' && event.key !== 'ArrowDown') return;
+            event.preventDefault();
+            const adjustment = event.key === 'ArrowUp' ? 16 : -16;
+            setPseudocodeHelpHeight(pseudocodeHelp.getBoundingClientRect().height + adjustment);
+        });
+        window.addEventListener('resize', () => {
+            setPseudocodeHelpHeight(pseudocodeHelp.getBoundingClientRect().height);
+        });
+        setPseudocodeHelpHeight(pseudocodeHelp.getBoundingClientRect().height);
 
         gutter1.addEventListener('mousedown', () => activeGutter = 1);
         gutter2.addEventListener('mousedown', () => activeGutter = 2);
