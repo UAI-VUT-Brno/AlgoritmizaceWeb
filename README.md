@@ -9,7 +9,7 @@ Jednoduchý webový výukový nástroj pro vizualizaci základních algoritmů a
 - převádí odsazený pseudokód na Mermaid diagram včetně větvení a cyklů
 - umožňuje krokovat Python kód a sledovat proměnné v čase
 - zobrazuje výstup programu a zvýrazňuje aktuální řádek ve zdrojovém kódu
-- umožňuje uložit aktuální pseudokód do JSON souboru s vlastním názvem a odsazením jednotlivých řádků
+- umožňuje uložit aktuální pseudokód do JSON souboru pojmenovaného podle algoritmu, s odsazením jednotlivých řádků
 - automaticky přizpůsobuje měřítko diagramu a nabízí jeho přiblížení, oddálení a návrat na přizpůsobené měřítko
 - používá Pyodide (Python v prohlížeči) bez nutnosti lokální instalace Pythonu
 
@@ -52,7 +52,7 @@ ALGORITMUS ProjdiMatici(matice):
 
 ### Uložení algoritmu
 
-Do pole **Název souboru** zadejte požadovaný název a stiskněte tlačítko **JSON**. Přípona `.json` se doplní automaticky; při prázdném poli se použije název vybraného algoritmu. Neplatné znaky pro název souboru se nahradí podtržítkem.
+Stiskněte tlačítko **JSON**. Soubor se stáhne s lidsky čitelným názvem vybraného algoritmu a příponou `.json`; název lze změnit v dialogu pro ukládání prohlížeče, pokud jej prohlížeč zobrazí. Neplatné znaky pro název souboru se nahradí podtržítkem.
 
 Export obsahuje lidský název algoritmu a pseudokód jako pole řádků. Každý řádek má `text` s obsahem bez počátečního odsazení a `indent` s počtem odsazovacích mezer; tabulátor se počítá jako čtyři mezery. Prázdné řádky se zachovávají.
 

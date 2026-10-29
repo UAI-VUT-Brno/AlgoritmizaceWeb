@@ -134,8 +134,7 @@
                 <label class="text-xs text-slate-400 font-medium">Algoritmus:</label>
                 <select id="templateSelect" onchange="loadTemplate(this.value)" class="bg-darkbg border border-darkaccent text-xs rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-brand text-slate-200">
                 </select>
-                <input id="saveFileName" type="text" placeholder="Název souboru" aria-label="Název uloženého JSON souboru" title="Název uloženého JSON souboru" class="w-32 bg-darkbg border border-darkaccent text-xs rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-brand text-slate-200 placeholder:text-slate-500">
-                <button onclick="saveSelectedTemplate()" class="flex items-center space-x-1 bg-slate-700 hover:bg-slate-600 text-xs text-white px-2.5 py-1.5 rounded transition" title="Uložit zvolený algoritmus do JSON" aria-label="Uložit zvolený algoritmus do JSON">
+                <button onclick="saveSelectedTemplate()" class="flex items-center space-x-1 bg-slate-700 hover:bg-slate-600 text-xs text-white px-2.5 py-1.5 rounded transition" title="Uložit pseudokód jako JSON" aria-label="Uložit pseudokód jako JSON">
                     <i class="fa-solid fa-download"></i>
                     <span>JSON</span>
                 </button>
@@ -557,10 +556,7 @@ print("Obsah trojúhelníku:", obsah)`
                 return;
             }
 
-            const requestedFileName = document.getElementById('saveFileName').value.trim()
-                || selectedTemplate.name;
-            const fileName = requestedFileName
-                .replace(/\.json$/i, '')
+            const fileName = selectedTemplate.name
                 .replace(/[<>:"/\\|?*\u0000-\u001F]/g, '_')
                 .replace(/[. ]+$/g, '')
                 .trim();
