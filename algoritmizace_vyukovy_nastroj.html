@@ -90,6 +90,10 @@
             stroke-width: 3px !important;
             filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.6));
         }
+        #mermaidTarget svg {
+            max-width: none !important;
+            max-height: none !important;
+        }
     </style>
 </head>
 <body class="bg-darkbg text-slate-100 h-screen flex flex-col">
@@ -192,7 +196,18 @@
             </div>
             <!-- Dynamic Flowchart Viewport -->
             <div class="flex-1 bg-darkbg p-4 overflow-auto flex items-center justify-center relative" id="diagramContainer">
-                <div id="mermaidTarget" class="mermaid flex justify-center items-center w-full min-h-full">
+                <div class="absolute top-2 right-2 z-10 flex items-center gap-1 rounded-lg border border-darkaccent bg-darkcard/95 p-1 shadow">
+                    <button onclick="zoomDiagram(-1)" class="h-7 w-7 rounded text-slate-200 hover:bg-darkaccent" title="Oddálit diagram" aria-label="Oddálit diagram">
+                        <i class="fa-solid fa-magnifying-glass-minus"></i>
+                    </button>
+                    <button onclick="zoomDiagram(1)" class="h-7 w-7 rounded text-slate-200 hover:bg-darkaccent" title="Přiblížit diagram" aria-label="Přiblížit diagram">
+                        <i class="fa-solid fa-magnifying-glass-plus"></i>
+                    </button>
+                    <button onclick="resetDiagramZoom()" class="h-7 w-7 rounded text-slate-200 hover:bg-darkaccent" title="Přizpůsobit diagram ploše" aria-label="Přizpůsobit diagram ploše">
+                        <i class="fa-solid fa-house"></i>
+                    </button>
+                </div>
+                <div id="mermaidTarget" class="mermaid flex justify-center items-center">
                     %% Diagram se vygeneruje zde %%
                 </div>
             </div>
@@ -401,6 +416,8 @@ print("Obsah trojúhelníku:", obsah)`,
         let currentStepIndex = -1;
         let isPlaying = false;
         let playInterval = null;
+        let diagramZoom = 1;
+        let diagramResizeObserver = null;
 
         // Initialize CodeMirror Editors
         window.addEventListener('DOMContentLoaded', () => {
@@ -430,6 +447,8 @@ print("Obsah trojúhelníku:", obsah)`,
                 securityLevel: 'loose',
                 flowchart: { curve: 'basis' }
             });
+            diagramResizeObserver = new ResizeObserver(() => applyDiagramZoom());
+            diagramResizeObserver.observe(document.getElementById('diagramContainer'));
 
             // Initialize Pyodide WASM
             initPyodide();
@@ -500,6 +519,8 @@ print("Obsah trojúhelníku:", obsah)`,
                 await mermaid.run({
                     nodes: [target]
                 });
+                diagramZoom = 1;
+                applyDiagramZoom(true);
                 document.getElementById('mermaidStatus').innerText = 'Diagram OK';
                 document.getElementById('mermaidStatus').className = 'text-[10px] text-emerald-400';
             } catch (err) {
@@ -507,6 +528,61 @@ print("Obsah trojúhelníku:", obsah)`,
                 document.getElementById('mermaidStatus').innerText = 'Chyba syntaxe diagramu';
                 document.getElementById('mermaidStatus').className = 'text-[10px] text-rose-400';
             }
+        }
+
+        function applyDiagramZoom(resetScroll = false) {
+            const container = document.getElementById('diagramContainer');
+            const target = document.getElementById('mermaidTarget');
+            const svg = target.querySelector('svg');
+            if (!container || !svg) return;
+
+            const viewBox = svg.viewBox.baseVal;
+            if (!viewBox.width || !viewBox.height) return;
+
+            const style = getComputedStyle(container);
+            const horizontalPadding = parseFloat(style.paddingLeft) + parseFloat(style.paddingRight);
+            const verticalPadding = parseFloat(style.paddingTop) + parseFloat(style.paddingBottom);
+            const toolbarSpace = 44;
+            const availableWidth = Math.max(1, container.clientWidth - horizontalPadding);
+            const availableHeight = Math.max(1, container.clientHeight - verticalPadding - toolbarSpace);
+            const canFit = container.clientWidth >= 250 && container.clientHeight >= 400;
+            const fitScale = canFit
+                ? Math.min(1, availableWidth / viewBox.width, availableHeight / viewBox.height)
+                : 1;
+            const scale = fitScale * diagramZoom;
+            const width = viewBox.width * scale;
+            const height = viewBox.height * scale;
+
+            target.style.setProperty('width', `${width}px`);
+            target.style.setProperty('height', `${height}px`);
+            target.style.setProperty('min-height', '0');
+            target.style.setProperty('max-width', 'none');
+            target.style.setProperty('flex', '0 0 auto');
+            svg.style.setProperty('width', `${width}px`, 'important');
+            svg.style.setProperty('height', `${height}px`, 'important');
+            svg.style.setProperty('max-width', 'none', 'important');
+            svg.style.setProperty('max-height', 'none', 'important');
+
+            if (resetScroll) {
+                container.scrollLeft = 0;
+                container.scrollTop = 0;
+            }
+        }
+
+        function zoomDiagram(direction) {
+            const container = document.getElementById('diagramContainer');
+            const previousWidth = document.getElementById('mermaidTarget').getBoundingClientRect().width;
+            const previousHeight = document.getElementById('mermaidTarget').getBoundingClientRect().height;
+            diagramZoom = Math.min(4, Math.max(0.25, diagramZoom * (direction > 0 ? 1.2 : 1 / 1.2)));
+            applyDiagramZoom();
+            const target = document.getElementById('mermaidTarget');
+            container.scrollLeft += (target.getBoundingClientRect().width - previousWidth) / 2;
+            container.scrollTop += (target.getBoundingClientRect().height - previousHeight) / 2;
+        }
+
+        function resetDiagramZoom() {
+            diagramZoom = 1;
+            applyDiagramZoom(true);
         }
 
         function generateMermaidFromPseudocode(code) {
@@ -521,6 +597,14 @@ print("Obsah trojúhelníku:", obsah)`,
 
             function isIf(line) {
                 return /^(POKUD|IF)\b/i.test(line);
+            }
+
+            function isWhile(line) {
+                return /^(DOKUD|WHILE)\b/i.test(line);
+            }
+
+            function isFor(line) {
+                return /^(PRO|FOR)\b/i.test(line);
             }
 
             function isElse(line) {
@@ -547,11 +631,12 @@ print("Obsah trojúhelníku:", obsah)`,
                     }
 
                     lineIndex++;
-                    if (!isIf(current.text)) {
+                    if (!isIf(current.text) && !isWhile(current.text) && !isFor(current.text)) {
                         statements.push({ type: 'step', text: current.text });
                         continue;
                     }
 
+                    const isLoop = isWhile(current.text) || isFor(current.text);
                     let conditionText = current.text;
                     while (!conditionText.trimEnd().endsWith(':')
                         && lineIndex < lines.length
@@ -561,11 +646,18 @@ print("Obsah trojúhelníku:", obsah)`,
                         lineIndex++;
                     }
                     const statement = {
-                        type: 'decision',
-                        text: conditionText.replace(/^(POKUD|IF)\s*/i, '').replace(/:\s*$/, ''),
+                        type: isLoop ? 'loop' : 'decision',
+                        text: conditionText.replace(/^(POKUD|IF|DOKUD|WHILE|PRO|FOR)\s*/i, '').replace(/:\s*$/, ''),
                         thenBranch: [],
                         elseBranch: []
                     };
+                    const iterableHeader = isLoop && conditionText.match(/^(?:PRO|FOR)\s+(.+?)\s+(?:V|IN)\s+(.+?):?$/i);
+                    if (iterableHeader) {
+                        statement.type = 'forEach';
+                        statement.iterator = iterableHeader[1].trim();
+                        statement.iterable = iterableHeader[2].trim().replace(/:\s*$/, '');
+                        statement.text = `Další prvek v ${statement.iterable}?`;
+                    }
                     let thenIndent = null;
                     if (lineIndex < lines.length && lines[lineIndex].indent > current.indent && !isElse(lines[lineIndex].text)) {
                         thenIndent = lines[lineIndex].indent;
@@ -596,18 +688,39 @@ print("Obsah trojúhelníku:", obsah)`,
             const start = makeNode('start', 'Start');
             const end = makeNode('end', 'Konec');
             const edges = [];
+            const layoutEdges = [];
 
             function emitBlock(block, incoming) {
                 let exits = incoming;
+                const pendingLoopLayoutSources = [];
                 for (const statement of block) {
-                    if (statement.type === 'decision') {
+                    const deferredLayoutSources = pendingLoopLayoutSources.splice(0);
+                    const statementStartIndex = nodes.length;
+                    if (statement.type === 'decision' || statement.type === 'loop' || statement.type === 'forEach') {
                         const decision = makeNode('decision', statement.text || 'Podmínka');
                         exits.forEach(edge => edges.push({ from: edge.from, to: decision.id, label: edge.label }));
-                        const thenExits = emitBlock(statement.thenBranch, [{ from: decision.id, label: 'Ano' }]);
-                        const elseExits = statement.elseBranch.length > 0
-                            ? emitBlock(statement.elseBranch, [{ from: decision.id, label: 'Ne' }])
-                            : [{ from: decision.id, label: 'Ne' }];
-                        exits = [...thenExits, ...elseExits];
+                        let loopBodyIncoming = [{ from: decision.id, label: 'Ano' }];
+                        if (statement.type === 'forEach') {
+                            const iteratorStep = makeNode('step', `${statement.iterator} = další prvek z ${statement.iterable}`);
+                            loopBodyIncoming.forEach(edge => edges.push({ from: edge.from, to: iteratorStep.id, label: edge.label }));
+                            loopBodyIncoming = [{ from: iteratorStep.id, label: '' }];
+                        }
+                        const thenBranchStartIndex = nodes.length;
+                        const thenExits = emitBlock(statement.thenBranch, loopBodyIncoming);
+                        const thenBranchNodes = nodes.slice(thenBranchStartIndex);
+                        if (statement.type === 'loop' || statement.type === 'forEach') {
+                            thenExits.forEach(edge => edges.push({ from: edge.from, to: decision.id, label: edge.label }));
+                            exits = [{ from: decision.id, label: 'Ne' }];
+                            if (statement.type === 'forEach' && thenBranchNodes.length > 0) {
+                                pendingLoopLayoutSources.push(thenBranchNodes[thenBranchNodes.length - 1].id);
+                            }
+                        } else {
+                            let elseExits = [{ from: decision.id, label: 'Ne' }];
+                            if (statement.elseBranch.length > 0) {
+                                elseExits = emitBlock(statement.elseBranch, [{ from: decision.id, label: 'Ne' }]);
+                            }
+                            exits = [...thenExits, ...elseExits];
+                        }
                     } else {
                         const isReturn = /^(VRÁTI|VRÁTÍ|RETURN)\b/i.test(statement.text);
                         const node = makeNode(isReturn ? 'return' : 'step', statement.text);
@@ -618,6 +731,13 @@ print("Obsah trojúhelníku:", obsah)`,
                         } else {
                             exits = [{ from: node.id, label: '' }];
                         }
+                    }
+                    const statementFirstNode = nodes[statementStartIndex];
+                    if (statementFirstNode) {
+                        deferredLayoutSources.forEach(from => layoutEdges.push({
+                            from,
+                            to: statementFirstNode.id
+                        }));
                     }
                 }
                 return exits;
@@ -648,6 +768,9 @@ print("Obsah trojúhelníku:", obsah)`,
             edges.forEach(edge => {
                 const label = edge.label ? ` -- ${edge.label} --> ` : ' --> ';
                 mermaidStr += `  ${edge.from}${label}${edge.to}\n`;
+            });
+            layoutEdges.forEach(edge => {
+                mermaidStr += `  ${edge.from} ~~~ ${edge.to}\n`;
             });
 
             return mermaidStr;
