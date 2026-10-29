@@ -340,13 +340,7 @@
         // --- 1. PRE-DEFINED ALGORITHM TEMPLATES ---
         const templates = {
             bubbleSort: {
-                names: {
-                    cs: 'Bubble Sort',
-                    en: 'Bubble Sort',
-                    sk: 'Bubble Sort',
-                    eo: 'Bubble Sort',
-                    fr: 'Bubble Sort'
-                },
+                name: 'Bubble Sort',
                 pseudocode: `ALGORITMUS BubbleSort(array):
   n = length(array)
   PRO i OD 0 DO n-1:
@@ -367,13 +361,7 @@ bubble_sort(values)`
             },
 
             factorial: {
-                names: {
-                    cs: 'Factorial (Recursion/Loops)',
-                    en: 'Factorial (Recursion/Loops)',
-                    sk: 'Factorial (Recursion/Loops)',
-                    eo: 'Factorial (Recursion/Loops)',
-                    fr: 'Factorial (Recursion/Loops)'
-                },
+                name: 'Factorial (Recursion/Loops)',
                 pseudocode: `ALGORITMUS Factorial(n):
   result = 1
   PRO i OD 1 DO n:
@@ -390,13 +378,7 @@ print("Factorial:", result)`
             },
 
             findMax: {
-                names: {
-                    cs: 'Find Maximum in an Array',
-                    en: 'Find Maximum in an Array',
-                    sk: 'Find Maximum in an Array',
-                    eo: 'Find Maximum in an Array',
-                    fr: 'Find Maximum in an Array'
-                },
+                name: 'Find Maximum in an Array',
                 pseudocode: `ALGORITMUS FindMaximum(array):
   max_value = array[0]
   PRO item V array:
@@ -416,13 +398,7 @@ print("Maximum:", maximum)`
             },
 
             gcd: {
-                names: {
-                    cs: 'Euclidean Algorithm (GCD)',
-                    en: 'Euclidean Algorithm (GCD)',
-                    sk: 'Euclidean Algorithm (GCD)',
-                    eo: 'Euclidean Algorithm (GCD)',
-                    fr: 'Euclidean Algorithm (GCD)'
-                },
+                name: 'Euclidean Algorithm (GCD)',
                 pseudocode: `ALGORITMUS EuclideanGCD(a, b):
   DOKUD b != 0:
     temp = b
@@ -441,35 +417,102 @@ print("GCD:", result)`
             },
 
             triangleArea: {
-                names: {
-                    cs: 'Triangle Area from Three Sides',
-                    en: 'Triangle Area from Three Sides',
-                    sk: 'Triangle Area from Three Sides',
-                    eo: 'Triangle Area from Three Sides',
-                    fr: 'Triangle Area from Three Sides'
-                },
+                name: 'Triangle Area from Three Sides',
                 pseudocode: `ALGORITMUS TriangleArea(a, b, c):
-  POKUD a <= 0 NEBO b <= 0 NEBO c <= 0 NEBO a + b <= c NEBO a + c <= b NEBO b + c <= a:
-    VYPIS "Invalid triangle sides"
-  JINAK:
-    semiperimeter = (a + b + c) / 2
-    area = sqrt(semiperimeter * (semiperimeter - a) * (semiperimeter - b) * (semiperimeter - c))
-    VRAT area`,
+  POKUD a <= 0 NEBO b <= 0 NEBO c <= 0:
+    VYPIS "Side lengths must be greater than zero"
+    VRAT None
+  POKUD a + b <= c NEBO a + c <= b NEBO b + c <= a:
+    VYPIS "Side lengths do not form a valid triangle"
+    VRAT None
+  sp = (a + b + c) / 2
+  area = sqrt(sp * (sp - a) * (sp - b) * (sp - c))
+  VRAT area`,
                 python: `import math
 
 def triangle_area(a, b, c):
-    if a <= 0 or b <= 0 or c <= 0 or a + b <= c or a + c <= b or b + c <= a:
-        raise ValueError("The sides do not form a valid triangle")
-    semiperimeter = (a + b + c) / 2
+    if a <= 0 or b <= 0 or c <= 0:
+        print("Side lengths must be greater than zero")
+        return None
+    if a + b <= c or a + c <= b or b + c <= a:
+        print("Side lengths do not form a valid triangle")
+        return None
+    sp = (a + b + c) / 2
     return math.sqrt(
-        semiperimeter
-        * (semiperimeter - a)
-        * (semiperimeter - b)
-        * (semiperimeter - c)
+        sp
+        * (sp - a)
+        * (sp - b)
+        * (sp - c)
     )
 
 area = triangle_area(3, 4, 5)
 print("Triangle area:", area)`
+            },
+
+            pedestrianCrossingBasic: {
+                name: 'Pedestrian Crossing (Basic)',
+                pseudocode: `ALGORITMUS PedestrianCrossingBasic(traffic_snapshots):
+  stop_at_curb()
+  look_left()
+  look_right()
+  look_left_again()
+  FOR traffic_approaching IN traffic_snapshots:
+    POKUD traffic_approaching:
+      wait()
+      recheck_traffic()
+    JINAK:
+      cross_carefully_while_watching_traffic()
+      VRAT true
+  VYPIS "Traffic is still approaching. Keep waiting."
+  VRAT false`,
+                python: `def cross_road_basic(traffic_snapshots):
+    print("Stop at the curb.")
+    for traffic_approaching in traffic_snapshots:
+        print("Look left, right, then left again.")
+        if traffic_approaching:
+            print("Traffic is approaching. Wait and check again.")
+            continue
+        print("The road is clear. Cross carefully while watching traffic.")
+        return True
+    print("Traffic is still approaching. Keep waiting.")
+    return False
+
+traffic_snapshots = [True, True, False]
+cross_road_basic(traffic_snapshots)`
+            },
+
+            pedestrianCrossingComplex: {
+                name: 'Pedestrian Crossing (Unsignalized, Complex)',
+                pseudocode: `ALGORITMUS PedestrianCrossingUnsignalized(traffic_snapshots):
+  choose_crossing_with_clear_view()
+  stop_before_entering_road()
+  remove_distractions()
+  check_both_directions()
+  FOR snapshot IN traffic_snapshots:
+    all_lanes_clear = true
+    FOR lane_is_unsafe IN snapshot:
+      POKUD lane_is_unsafe:
+        all_lanes_clear = false
+    POKUD all_lanes_clear:
+      cross_without_running_while_watching_traffic()
+      VRAT true
+    wait_and_recheck_both_directions()
+  VYPIS "No safe gap yet. Keep waiting."
+  VRAT false`,
+                python: `def cross_road_complex(traffic_snapshots):
+    print("Choose a crossing place with a clear view.")
+    print("Stop before the road, remove distractions, and check both directions.")
+    for snapshot in traffic_snapshots:
+        all_lanes_clear = all(not lane_is_unsafe for lane_is_unsafe in snapshot)
+        if all_lanes_clear:
+            print("All lanes have a safe gap. Cross without running and keep watching traffic.")
+            return True
+        print("At least one lane is unsafe. Wait and check both directions again.")
+    print("No safe gap yet. Keep waiting.")
+    return False
+
+traffic_snapshots = [[True, False], [False, True], [False, False]]
+cross_road_complex(traffic_snapshots)`
             }
         };
 
@@ -824,10 +867,6 @@ print("Triangle area:", area)`
             return text;
         }
 
-        function getTemplateName(template, language = currentLanguage) {
-            return template.names[language];
-        }
-
         function setDiagramStatus(key) {
             diagramStatusKey = key;
             const status = document.getElementById('mermaidStatus');
@@ -1006,7 +1045,7 @@ print("Triangle area:", area)`
             select.replaceChildren(...Object.entries(templates).map(([key, template]) => {
                 const option = document.createElement('option');
                 option.value = key;
-                option.textContent = getTemplateName(template);
+                option.textContent = template.name;
                 return option;
             }));
             if (templates[selectedKey]) select.value = selectedKey;
@@ -1035,7 +1074,7 @@ print("Triangle area:", area)`
                 return;
             }
 
-            const fileName = getTemplateName(selectedTemplate)
+            const fileName = selectedTemplate.name
                 .replace(/[<>:"/\\|?*\u0000-\u001F]/g, '_')
                 .replace(/[. ]+$/g, '')
                 .trim();
@@ -1047,7 +1086,7 @@ print("Triangle area:", area)`
                 };
             });
             const json = JSON.stringify({
-                name: getTemplateName(selectedTemplate),
+                name: selectedTemplate.name,
                 pseudocode: pseudocodeLines
             }, null, 2);
             const blob = new Blob([json], { type: 'application/json;charset=utf-8' });

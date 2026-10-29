@@ -4,7 +4,7 @@ Un outil pédagogique web simple pour visualiser des algorithmes de base et leur
 
 ## Fonctionnalités
 
-- propose des exemples d’algorithmes : Bubble Sort, Factorial (Recursion/Loops), Find Maximum in an Array, Euclidean Algorithm (GCD) et Triangle Area from Three Sides
+- propose des exemples d’algorithmes : Bubble Sort, Factorial (Recursion/Loops), Find Maximum in an Array, Euclidean Algorithm (GCD), Triangle Area from Three Sides, Pedestrian Crossing (Basic) et Pedestrian Crossing (Unsignalized, Complex)
 - affiche le pseudocode et l’organigramme correspondant
 - convertit le pseudocode indenté en diagrammes Mermaid avec des branches et des boucles
 - permet d’exécuter le code Python pas à pas et de suivre les variables
@@ -21,6 +21,8 @@ Utilisez les boutons avec drapeaux et codes **CS**, **EN**, **SK**, **EO** et **
 L’organigramme est actualisé peu après la modification du pseudocode. Le bouton **Actualiser le diagramme depuis le pseudocode** permet de le redessiner immédiatement. La sélection d’un algorithme d’exemple affiche son diagramme sans délai. Le générateur transforme chaque ligne non vide en une étape du diagramme et ignore les lignes vides. L’indentation détermine l’appartenance aux blocs ; utilisez une indentation cohérente (deux espaces par niveau sont recommandés). Si une structure de contrôle est mal formée ou si le diagramme ne peut pas être affiché, une erreur apparaît dans le panneau du diagramme.
 
 Les diagrammes des algorithmes d’exemple sont générés à partir de leur pseudocode ; aucun diagramme prédéfini indépendant n’est utilisé.
+
+Les exemples de traversée modélisent un passage sans feux de circulation. L’exemple de base attend que la voie soit libre ; dans son entrée Python, `True` signifie qu’un véhicule approche. L’exemple complexe vérifie chaque voie avant de traverser ; chaque situation de circulation Python est une liste où `True` signifie que la voie concernée est dangereuse à traverser.
 
 Le panneau d’aide des termes pris en charge a une hauteur initiale de **224 px**. Vous pouvez la modifier en faisant glisser le séparateur entre l’aide et l’éditeur, ou en sélectionnant ce séparateur et en utilisant les flèches Haut/Bas.
 

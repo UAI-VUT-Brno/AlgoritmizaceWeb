@@ -4,7 +4,7 @@ Jednoduchý výučbový webový nástroj na vizualizáciu základných algoritmo
 
 ## Funkcie
 
-- obsahuje ukážkové algoritmy: Bubble Sort, Factorial (Recursion/Loops), Find Maximum in an Array, Euclidean Algorithm (GCD) a Triangle Area from Three Sides
+- obsahuje ukážkové algoritmy: Bubble Sort, Factorial (Recursion/Loops), Find Maximum in an Array, Euclidean Algorithm (GCD), Triangle Area from Three Sides, Pedestrian Crossing (Basic) a Pedestrian Crossing (Unsignalized, Complex)
 - zobrazuje pseudokód a príslušný vývojový diagram
 - prevádza odsadený pseudokód na diagramy Mermaid vrátane vetvenia a cyklov
 - umožňuje krokovať Python kód a sledovať hodnoty premenných
@@ -21,6 +21,8 @@ Jazyk rozhrania zmeníte tlačidlami s vlajkami a skratkami **CS**, **EN**, **SK
 Vývojový diagram sa aktualizuje krátko po úprave pseudokódu. Tlačidlom **Aktualizovať diagram z pseudokódu** ho možno prekresliť okamžite. Po výbere ukážkového algoritmu sa diagram vykreslí ihneď. Generátor prevádza každý neprázdny riadok na krok diagramu a prázdne riadky ignoruje. Odsadenie určuje príslušnosť k bloku, preto používajte konzistentné odsadenie (odporúčané sú dva medzery na úroveň). Ak je riadiaca štruktúra nesprávne zapísaná alebo sa diagram nepodarí vykresliť, chyba sa zobrazí v paneli diagramu.
 
 Diagramy ukážkových algoritmov sa generujú z ich pseudokódu; samostatné preddefinované diagramy sa nepoužívajú.
+
+Príklady prechádzania cez cestu opisujú priechod bez semafora. Základný príklad čaká, kým bude cesta voľná; v jeho ukážke Pythonu znamená `True`, že sa približuje vozidlo. Zložitejší príklad pred prechodom kontroluje každý jazdný pruh; každá dopravná situácia v jeho ukážke Pythonu je zoznam, kde `True` znamená, že je daný pruh nebezpečné prechádzať.
 
 Panel pomocníka s podporovanými termínmi má predvolenú výšku **224 px**. Výšku možno zmeniť ťahaním oddeľovača medzi pomocníkom a editorom alebo zameraním oddeľovača a použitím šípok nahor/nadol.
 

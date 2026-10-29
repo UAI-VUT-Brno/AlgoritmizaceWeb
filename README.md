@@ -4,7 +4,7 @@ A simple educational web tool for visualizing basic algorithms and their executi
 
 ## Features
 
-- includes example algorithms: Bubble Sort, Factorial (Recursion/Loops), Find Maximum in an Array, Euclidean Algorithm (GCD), and Triangle Area from Three Sides
+- includes example algorithms: Bubble Sort, Factorial (Recursion/Loops), Find Maximum in an Array, Euclidean Algorithm (GCD), Triangle Area from Three Sides, Pedestrian Crossing (Basic), and Pedestrian Crossing (Unsignalized, Complex)
 - displays pseudocode and the corresponding flowchart
 - converts indented pseudocode into Mermaid diagrams with branches and loops
 - supports stepping through Python code and inspecting variables over time
@@ -21,6 +21,8 @@ Use the flag buttons and language codes **CS**, **EN**, **SK**, **EO**, and **FR
 The flowchart updates shortly after the pseudocode is edited. Use **Update Diagram from Pseudocode** to refresh it immediately. Selecting an example algorithm renders its diagram right away. The generator converts each non-empty line into a diagram step and ignores blank lines. Indentation determines block membership, so use consistent indentation (two spaces per level are recommended). If a control structure is malformed or the diagram cannot be rendered, the error is displayed in the diagram pane.
 
 Example diagrams are generated from their pseudocode; separate predefined diagrams are not used.
+
+The pedestrian-crossing examples model crossings without traffic signals. The basic example waits for traffic to clear; its Python input uses `True` when traffic is approaching. The complex example checks every lane in each observation before crossing; each Python snapshot is a list where `True` means that lane is unsafe to cross.
 
 The supported-terms help panel has a default height of **224 px**. Resize it by dragging the divider between the help and editor, or focus the divider and use the Up/Down arrow keys.
 

@@ -4,7 +4,7 @@ Simpla eduka reteja ilo por bildigi bazajn algoritmojn kaj ilian ruladon en Pyth
 
 ## Funkcioj
 
-- enhavas ekzemplajn algoritmojn: Bubble Sort, Factorial (Recursion/Loops), Find Maximum in an Array, Euclidean Algorithm (GCD) kaj Triangle Area from Three Sides
+- enhavas ekzemplajn algoritmojn: Bubble Sort, Factorial (Recursion/Loops), Find Maximum in an Array, Euclidean Algorithm (GCD), Triangle Area from Three Sides, Pedestrian Crossing (Basic) kaj Pedestrian Crossing (Unsignalized, Complex)
 - montras pseŭdokodon kaj la respondan fluodiagramon
 - konvertas indentitan pseŭdokodon al Mermaid-diagramoj kun branĉoj kaj iteracioj
 - ebligas paŝe ruli Python-kodon kaj observi variablojn laŭlonge de la tempo
@@ -21,6 +21,8 @@ Simpla eduka reteja ilo por bildigi bazajn algoritmojn kaj ilian ruladon en Pyth
 La fluodiagramo aŭtomate ĝisdatiĝas baldaŭ post redaktado de la pseŭdokodo. Uzu **Ĝisdatigi diagramon el pseŭdokodo** por tuj refreŝigi ĝin. Elektinte ekzemplan algoritmon, ĝia diagramo tuj montriĝas. La generatoro konvertas ĉiun ne-malplenan linion al diagram-paŝo kaj ignoras malplenajn liniojn. Indento difinas apartenon al blokoj; uzu konsekvencan indenton (du spacoj por nivelo estas rekomendataj). Se kontrolstrukturo estas misformita aŭ diagramo ne povas esti bildigita, la eraro aperas en la diagram-panelo.
 
 La diagramoj de ekzemplaj algoritmoj estas generataj el ilia pseŭdokodo; apartaj antaŭdifinitaj diagramoj ne estas uzataj.
+
+La ekzemploj pri strattransiro modelas transiron sen trafiklumoj. La baza ekzemplo atendas ĝis la vojo estas libera; en ĝia Python-enigo `True` signifas, ke veturilo alproksimiĝas. La kompleksa ekzemplo kontrolas ĉiun vojstrion antaŭ transiri; ĉiu Python-a trafika stato estas listo, kie `True` signifas, ke tiu vojstrio estas danĝera por transiri.
 
 La help-panelo kun subtenataj terminoj havas defaŭltan altecon de **224 px**. Ŝanĝu ĝin trenante la dividilon inter la helpo kaj redaktilo, aŭ fokusante la dividilon kaj uzante la sagoklavojn Supren/Malsupren.
 

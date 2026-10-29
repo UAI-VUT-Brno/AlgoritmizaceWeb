@@ -4,7 +4,7 @@ Jednoduchý webový výukový nástroj pro vizualizaci základních algoritmů a
 
 ## Co umí
 
-- zobrazuje předpřipravené algoritmy (Bubble Sort, Factorial (Recursion/Loops), Find Maximum in an Array, Euclidean Algorithm (GCD) a Triangle Area from Three Sides)
+- zobrazuje předpřipravené algoritmy (Bubble Sort, Factorial (Recursion/Loops), Find Maximum in an Array, Euclidean Algorithm (GCD), Triangle Area from Three Sides, Pedestrian Crossing (Basic) a Pedestrian Crossing (Unsignalized, Complex)
 - ukazuje pseudokód a odpovídající vývojový diagram
 - převádí odsazený pseudokód na Mermaid diagram včetně větvení a cyklů
 - umožňuje krokovat Python kód a sledovat proměnné v čase
@@ -21,6 +21,8 @@ Jazyk rozhraní lze změnit tlačítky s vlajkami a zkratkami **CS**, **EN**, **
 Diagram se automaticky aktualizuje po krátké prodlevě od poslední změny pseudokódu. Tlačítkem **Aktualizovat Diagram z Pseudokódu** jej lze překreslit ihned. Po výběru předpřipraveného algoritmu se diagram vykreslí okamžitě. Generátor převádí jednotlivé neprázdné řádky na kroky diagramu; prázdné řádky ignoruje. Odsazení určuje příslušnost řádků k bloku, proto používejte konzistentní odsazení (doporučené jsou dva mezery na úroveň). Pokud je syntaxe řídicí struktury chybná nebo diagram nelze vykreslit, zobrazí se chyba přímo v panelu diagramu.
 
 Diagramy předpřipravených algoritmů se generují z jejich pseudokódu; samostatné předdefinované diagramy se nepoužívají.
+
+Příklady přecházení silnice popisují přechod bez semaforu. Základní varianta čeká, dokud není vozovka volná; v jejím příkladu Pythonu znamená `True`, že se blíží vozidlo. Složitější varianta před přechodem kontroluje každý jízdní pruh; každá dopravní situace v jejím příkladu Pythonu je seznam, kde `True` znamená, že je daný pruh nebezpečné přecházet.
 
 Nápověda s podporovanými termíny pseudokódu má výchozí výšku **224 px**. Její výšku lze měnit tažením dělicího pruhu mezi nápovědou a editorem nebo klávesami šipka nahoru/dolů při zaměření pruhu.
 
