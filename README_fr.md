@@ -39,7 +39,7 @@ Structures de contrôle prises en charge :
 - Le bloc suivant de la branche `Ne` est placé sous tous les blocs de la branche `Ano`, y compris dans les boucles imbriquées.
 - Toutes les structures indiquées peuvent être imbriquées. Leur corps doit être indenté par rapport à l’en-tête.
 
-La commande `VYPIS valeur` ou `WRITE value` affiche une valeur comme une étape ordinaire du diagramme. L’éditeur de pseudocode souligne en rouge les mots inconnus écrits en majuscules au début d’une ligne et en indique le nombre. Il s’agit d’un simple avertissement, pas d’une validation du pseudocode : les affectations ordinaires et les mots au milieu d’une ligne ne sont pas vérifiés, et les commandes inconnues restent affichées comme des étapes ordinaires.
+La commande `VYPIS valeur` ou `WRITE value` affiche une valeur comme une étape ordinaire du diagramme. `VSTUP variable` ou `INPUT variable` lit une valeur et l’affiche sous forme de parallélogramme d’entrée. L’éditeur de pseudocode souligne en rouge les mots inconnus écrits en majuscules au début d’une ligne et en indique le nombre. Il s’agit d’un simple avertissement, pas d’une validation du pseudocode : les affectations ordinaires et les mots au milieu d’une ligne ne sont pas vérifiés, et les commandes inconnues restent affichées comme des étapes ordinaires.
 
 Les commandes qui ne sont pas reconnues comme des structures de contrôle s’affichent comme des étapes ordinaires. Le résultat d’une fonction peut être renvoyé avec `VRAT` ou `RETURN` et apparaît sous forme de parallélogramme de sortie relié à la fin du diagramme. Le générateur crée un diagramme récapitulatif ; il n’interprète pas les expressions, ne vérifie pas leur syntaxe et n’exécute pas le pseudocode. Les boucles comptées et les conditions sont donc représentées, mais pas évaluées.
 
@@ -58,7 +58,7 @@ ALGORITMUS IterateMatrix(matrix):
 
 ### Générer du Python
 
-Le panneau Python génère le code dans la région délimitée par les commentaires `# BEGIN GENERATED CODE` et `# END GENERATED CODE`. Placez les imports et préconditions avant le premier commentaire, puis les données d’exemple et appels après le second ; la régénération préserve le code situé hors de cette région. Les modifications du pseudocode actualisent automatiquement la région jusqu’à une modification manuelle de l’éditeur Python. Ensuite, le bouton **Générer Python** remplace explicitement la région. La borne finale des boucles comptées est incluse. Les en-têtes d’algorithme, conditions, boucles, `WRITE`/`VYPIS` et `RETURN`/`VRAT` sont pris en charge ; les autres instructions doivent être du Python valide.
+Le panneau Python génère le code dans la région délimitée par les commentaires `# BEGIN GENERATED CODE` et `# END GENERATED CODE`. Placez les imports et préconditions avant le premier commentaire, puis les données d’exemple et appels après le second ; la régénération préserve le code situé hors de cette région. Les modifications du pseudocode actualisent automatiquement la région jusqu’à une modification manuelle de l’éditeur Python. Ensuite, le bouton **Générer Python** remplace explicitement la région. La borne finale des boucles comptées est incluse. Les en-têtes d’algorithme, conditions, boucles, `WRITE`/`VYPIS`, `INPUT`/`VSTUP` et `RETURN`/`VRAT` sont pris en charge. La saisie utilise `input()` et produit une chaîne ; les autres instructions doivent être du Python valide.
 
 ### Enregistrer un algorithme
 

@@ -39,7 +39,7 @@ Supported control structures:
 - The following `Ne` branch is placed below all blocks in the `Ano` branch, including in nested loops.
 - All listed structures can be nested. Their bodies must be indented relative to the header.
 
-`VYPIS value` or `WRITE value` displays output as a regular flowchart step. The pseudocode editor underlines unknown uppercase words at the beginning of a line in red and shows their count. This is only a hint, not pseudocode validation: ordinary assignments and words inside a line are not checked, and unknown commands are still rendered as regular steps.
+`VYPIS value` or `WRITE value` displays output as a regular flowchart step. `VSTUP variable` or `INPUT variable` reads a value and appears as an input parallelogram. The pseudocode editor underlines unknown uppercase words at the beginning of a line in red and shows their count. This is only a hint, not pseudocode validation: ordinary assignments and words inside a line are not checked, and unknown commands are still rendered as regular steps.
 
 Commands that are not recognized as control structures are displayed as regular steps. Function results can be returned with `VRAT` or `RETURN`, shown as an output parallelogram connected to the diagram end. The generator creates an overview diagram; it does not interpret expressions, validate their syntax, or execute pseudocode. Counted loops and conditions are shown but not evaluated.
 
@@ -60,7 +60,7 @@ ALGORITMUS IterateMatrix(matrix):
 
 The Python pane generates code from the pseudocode into the region between the comments `# BEGIN GENERATED CODE` and `# END GENERATED CODE`. Keep imports or preconditions before the start marker and example inputs or calls after the end marker; regeneration preserves both surrounding regions. The markers must appear exactly once and in that order.
 
-The supported pseudocode structures and commands (`ALGORITMUS`/`ALGORITHM`, `IF`/`POKUD`, `ELSE`/`JINAK`, `WHILE`/`DOKUD`, both `FOR`/`PRO` forms, `WRITE`/`VYPIS`, and `RETURN`/`VRAT`) generate Python. Counted-loop end bounds are inclusive. Basic expressions are retained, with `MOD`, `NEBO`, standalone `A`, `AND`, `OR`, `NOT`, `true`, `false`, and `length(...)` translated to their Python equivalents. Other statement text is emitted as Python and must be valid Python.
+The supported pseudocode structures and commands (`ALGORITMUS`/`ALGORITHM`, `IF`/`POKUD`, `ELSE`/`JINAK`, `WHILE`/`DOKUD`, both `FOR`/`PRO` forms, `WRITE`/`VYPIS`, `INPUT`/`VSTUP`, and `RETURN`/`VRAT`) generate Python. Input assigns the result of Python's `input()` to one variable; the value is a string. Counted-loop end bounds are inclusive. Basic expressions are retained, with `MOD`, `NEBO`, standalone `A`, `AND`, `OR`, `NOT`, `true`, `false`, and `length(...)` translated to their Python equivalents. Other statement text is emitted as Python and must be valid Python.
 
 Pseudocode edits regenerate the marked section automatically until the Python editor is edited manually. After a manual edit, use **Generate Python** to explicitly replace only the marked section. Generation errors are shown beside the button and leave the existing code unchanged. Imported JSON contains only pseudocode; it updates the generated region when the Python editor has not been manually edited.
 

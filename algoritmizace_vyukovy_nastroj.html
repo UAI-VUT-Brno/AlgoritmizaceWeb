@@ -95,9 +95,29 @@
             background-color: #3b82f6;
             outline: none;
         }
+        #pseudocodeHelpResizer {
+            position: relative;
+            z-index: 1;
+            flex-basis: 12px;
+            user-select: none;
+        }
+        #pseudocodeHelpResizer::after {
+            position: absolute;
+            top: 4px;
+            left: calc(50% - 18px);
+            width: 36px;
+            height: 4px;
+            border-radius: 9999px;
+            background: #64748b;
+            content: "";
+            pointer-events: none;
+        }
         #pseudocodeHelp {
             height: 224px;
             min-height: 96px;
+        }
+        #pane1 > div:nth-child(2) {
+            min-height: 120px;
         }
         #pythonEditorPane {
             flex: 0 0 55%;
@@ -254,6 +274,7 @@
                 <div id="pseudocodeWarning" data-i18n-title="pseudocodeWarningTitle" class="hidden absolute top-2 right-3 z-10 rounded border border-red-500/50 bg-slate-900/95 px-2 py-1 text-[10px] text-red-300 shadow" role="status" aria-live="polite" title="Kontrola označuje neznámá slova psaná velkými písmeny na začátku řádku; běžné přiřazení ignoruje.">
                 </div>
             </div>
+            <div id="pseudocodeHelpResizer" class="gutter-vertical" role="separator" data-i18n-aria-label="resizeHelp" aria-label="Změnit výšku nápovědy" aria-orientation="horizontal" aria-valuemin="96" tabindex="0"></div>
             <div class="h-56 flex-shrink-0 overflow-y-auto border-t border-darkaccent bg-slate-900/70 px-3 py-2 text-[10px] leading-4 text-slate-400" id="pseudocodeHelp">
                 <h2 data-i18n="supportedTerms" class="mb-1 text-[11px] font-semibold text-slate-200">Podporované termíny pseudokódu</h2>
                 <ul class="space-y-0.5">
@@ -265,12 +286,12 @@
                     <li data-i18n="termForCount" data-i18n-html="true"><code class="text-indigo-300">PRO i OD začátek DO konec</code> / <code class="text-indigo-300">FOR i FROM start TO end</code> — počítaný cyklus (šestiúhelník)</li>
                     <li data-i18n="termReturn" data-i18n-html="true"><code class="text-indigo-300">VRAT hodnota</code> / <code class="text-indigo-300">RETURN value</code> — předání výsledku funkce (rovnoběžník)</li>
                     <li data-i18n="termWrite" data-i18n-html="true"><code class="text-indigo-300">VYPIS hodnota</code> / <code class="text-indigo-300">WRITE value</code> — tisk hodnoty</li>
+                    <li data-i18n="termInput" data-i18n-html="true"><code class="text-indigo-300">VSTUP proměnná</code> / <code class="text-indigo-300">INPUT variable</code> — načtení textového vstupu (rovnoběžník)</li>
                     <li data-i18n="termIndent" data-i18n-html="true">Bloky pište s dvojtečkou a odsazujte; ostatní řádky se zobrazí jako kroky.</li>
                     <li data-i18n="termPythonGeneration" data-i18n-html="true">Python se generuje mezi komentáři <code class="text-indigo-300"># BEGIN GENERATED CODE</code> a <code class="text-indigo-300"># END GENERATED CODE</code>.</li>
                     <li data-i18n="termWarning" data-i18n-html="true">Neznámá velká slova na začátku řádku jsou podtržena červeně; upozornění je pouze orientační.</li>
                 </ul>
             </div>
-            <div id="pseudocodeHelpResizer" class="gutter-vertical" role="separator" data-i18n-aria-label="resizeHelp" aria-label="Změnit výšku nápovědy" aria-orientation="horizontal" aria-valuemin="96" tabindex="0"></div>
         </section>
 
         <!-- Divider 1 -->
@@ -587,6 +608,7 @@ print("konec")`
                 termForCount: '<code class="text-indigo-300">PRO i OD začátek DO konec</code> / <code class="text-indigo-300">FOR i FROM start TO end</code> — počítaný cyklus (šestiúhelník)',
                 termReturn: '<code class="text-indigo-300">VRAT hodnota</code> / <code class="text-indigo-300">RETURN value</code> — předání výsledku funkce (rovnoběžník)',
                 termWrite: '<code class="text-indigo-300">VYPIS hodnota</code> / <code class="text-indigo-300">WRITE value</code> — tisk hodnoty',
+                termInput: '<code class="text-indigo-300">VSTUP proměnná</code> / <code class="text-indigo-300">INPUT variable</code> — načtení textového vstupu (rovnoběžník)',
                 termIndent: 'Bloky pište s dvojtečkou a odsazujte; ostatní řádky se zobrazí jako kroky.',
                 termPythonGeneration: 'Python se generuje mezi komentáři <code class="text-indigo-300"># BEGIN GENERATED CODE</code> a <code class="text-indigo-300"># END GENERATED CODE</code>.',
                 termWarning: 'Neznámá velká slova na začátku řádku jsou podtržena červeně; upozornění je pouze orientační.',
@@ -628,6 +650,7 @@ print("konec")`
                 unknownTerms: 'Neznámé řídicí výrazy: {count}',
                 malformedElse: 'Alternativní větev "{line}" musí být zapsána jako JINAK: nebo ELSE:.',
                 malformedBlock: 'Pseudokód nelze zpracovat u řádku: {line}',
+                malformedInput: 'Příkaz VSTUP/INPUT na řádku {line} musí mít tvar VSTUP proměnná nebo INPUT variable.',
                 missingColon: 'Hlavička "{line}" musí končit dvojtečkou.',
                 malformedAlgorithm: 'Hlavička algoritmu na řádku {line} musí mít tvar ALGORITMUS/ALGORITHM název(parametry): a musí být první.',
                 iteratorQuestion: 'Další prvek v {iterable}?',
@@ -664,6 +687,7 @@ print("konec")`
                 termForCount: '<code class="text-indigo-300">PRO i OD začátek DO konec</code> / <code class="text-indigo-300">FOR i FROM start TO end</code> — counted loop (hexagon)',
                 termReturn: '<code class="text-indigo-300">VRAT hodnota</code> / <code class="text-indigo-300">RETURN value</code> — return a function result (parallelogram)',
                 termWrite: '<code class="text-indigo-300">VYPIS hodnota</code> / <code class="text-indigo-300">WRITE value</code> — print a value',
+                termInput: '<code class="text-indigo-300">VSTUP proměnná</code> / <code class="text-indigo-300">INPUT variable</code> — read text input (parallelogram)',
                 termIndent: 'End blocks with a colon and indent them; other lines appear as steps.',
                 termPythonGeneration: 'Python is generated between the comments <code class="text-indigo-300"># BEGIN GENERATED CODE</code> and <code class="text-indigo-300"># END GENERATED CODE</code>.',
                 termWarning: 'Unknown uppercase words at the start of a line are underlined in red; this is only a hint.',
@@ -705,6 +729,7 @@ print("konec")`
                 unknownTerms: 'Unknown control terms: {count}',
                 malformedElse: 'The alternative branch "{line}" must be written as JINAK: or ELSE:.',
                 malformedBlock: 'Could not parse pseudocode at line: {line}',
+                malformedInput: 'The VSTUP/INPUT command on line {line} must have the form INPUT variable.',
                 missingColon: 'Header "{line}" must end with a colon.',
                 malformedAlgorithm: 'The algorithm header on line {line} must be ALGORITMUS or ALGORITHM name(parameters): and must come first.',
                 iteratorQuestion: 'Next item in {iterable}?',
@@ -741,6 +766,7 @@ print("konec")`
                 termForCount: '<code class="text-indigo-300">PRO i OD začátek DO konec</code> / <code class="text-indigo-300">FOR i FROM start TO end</code> — nombrila iteracio (seslatero)',
                 termReturn: '<code class="text-indigo-300">VRAT hodnota</code> / <code class="text-indigo-300">RETURN value</code> — redoni funkcir rezulton (paralelogramo)',
                 termWrite: '<code class="text-indigo-300">VYPIS hodnota</code> / <code class="text-indigo-300">WRITE value</code> — presi valoron',
+                termInput: '<code class="text-indigo-300">VSTUP proměnná</code> / <code class="text-indigo-300">INPUT variable</code> — legi tekstan enigon (paralelogramo)',
                 termIndent: 'Finu blokojn per dupunkto kaj indentu ilin; aliaj linioj aperas kiel paŝoj.',
                 termPythonGeneration: 'Python estas generata inter la komentoj <code class="text-indigo-300"># BEGIN GENERATED CODE</code> kaj <code class="text-indigo-300"># END GENERATED CODE</code>.',
                 termWarning: 'Nekonataj majusklaj vortoj ĉe la komenco de linio estas substrekataj ruĝe; tio estas nur averto.',
@@ -782,6 +808,7 @@ print("konec")`
                 unknownTerms: 'Nekonataj stiraj terminoj: {count}',
                 malformedElse: 'La alternativa branĉo "{line}" devas esti skribita kiel JINAK: aŭ ELSE:.',
                 malformedBlock: 'Ne eblis analizi pseŭdokodon ĉe linio: {line}',
+                malformedInput: 'La komando VSTUP/INPUT ĉe linio {line} devas havi la formon INPUT variable.',
                 missingColon: 'La kaplinio "{line}" devas finiĝi per dupunkto.',
                 malformedAlgorithm: 'La algoritmo-kapo ĉe linio {line} devas havi la formon ALGORITMUS aŭ ALGORITHM nomo(parametroj): kaj esti la unua.',
                 iteratorQuestion: 'Ĉu estas plia elemento en {iterable}?',
@@ -818,6 +845,7 @@ print("konec")`
                 termForCount: '<code class="text-indigo-300">PRO i OD začátek DO konec</code> / <code class="text-indigo-300">FOR i FROM start TO end</code> — boucle compteur (hexagone)',
                 termReturn: '<code class="text-indigo-300">VRAT hodnota</code> / <code class="text-indigo-300">RETURN value</code> — renvoyer le résultat d’une fonction (parallélogramme)',
                 termWrite: '<code class="text-indigo-300">VYPIS hodnota</code> / <code class="text-indigo-300">WRITE value</code> — afficher une valeur',
+                termInput: '<code class="text-indigo-300">VSTUP proměnná</code> / <code class="text-indigo-300">INPUT variable</code> — lire une entrée textuelle (parallélogramme)',
                 termIndent: 'Terminez les blocs par deux-points et indentez-les ; les autres lignes apparaissent comme des étapes.',
                 termPythonGeneration: 'Python est généré entre les commentaires <code class="text-indigo-300"># BEGIN GENERATED CODE</code> et <code class="text-indigo-300"># END GENERATED CODE</code>.',
                 termWarning: 'Les mots inconnus en majuscules au début d’une ligne sont soulignés en rouge ; il s’agit seulement d’un avertissement.',
@@ -859,6 +887,7 @@ print("konec")`
                 unknownTerms: 'Termes de contrôle inconnus : {count}',
                 malformedElse: 'La branche alternative « {line} » doit être écrite JINAK: ou ELSE:.',
                 malformedBlock: 'Impossible d’analyser le pseudocode à la ligne : {line}',
+                malformedInput: 'La commande VSTUP/INPUT à la ligne {line} doit avoir la forme INPUT variable.',
                 missingColon: 'L’en-tête « {line} » doit se terminer par deux-points.',
                 malformedAlgorithm: 'L’en-tête d’algorithme à la ligne {line} doit avoir la forme ALGORITMUS ou ALGORITHM nom(paramètres): et être en premier.',
                 iteratorQuestion: 'Y a-t-il un autre élément dans {iterable} ?',
@@ -895,6 +924,7 @@ print("konec")`
                 termForCount: '<code class="text-indigo-300">PRO i OD začátek DO konec</code> / <code class="text-indigo-300">FOR i FROM start TO end</code> — počítaný cyklus (šesťuholník)',
                 termReturn: '<code class="text-indigo-300">VRAT hodnota</code> / <code class="text-indigo-300">RETURN value</code> — odovzdanie výsledku funkcie (rovnobežník)',
                 termWrite: '<code class="text-indigo-300">VYPIS hodnota</code> / <code class="text-indigo-300">WRITE value</code> — výpis hodnoty',
+                termInput: '<code class="text-indigo-300">VSTUP premenná</code> / <code class="text-indigo-300">INPUT variable</code> — načítanie textového vstupu (rovnobežník)',
                 termIndent: 'Bloky ukončite dvojbodkou a odsadzujte; ostatné riadky sa zobrazia ako kroky.',
                 termPythonGeneration: 'Python sa generuje medzi komentármi <code class="text-indigo-300"># BEGIN GENERATED CODE</code> a <code class="text-indigo-300"># END GENERATED CODE</code>.',
                 termWarning: 'Neznáme veľké slová na začiatku riadka sú podčiarknuté červenou; upozornenie je iba orientačné.',
@@ -936,6 +966,7 @@ print("konec")`
                 unknownTerms: 'Neznáme riadiace výrazy: {count}',
                 malformedElse: 'Alternatívna vetva "{line}" musí byť zapísaná ako JINAK: alebo ELSE:.',
                 malformedBlock: 'Pseudokód sa nepodarilo spracovať na riadku: {line}',
+                malformedInput: 'Príkaz VSTUP/INPUT na riadku {line} musí mať tvar INPUT variable.',
                 missingColon: 'Hlavička "{line}" musí končiť dvojbodkou.',
                 malformedAlgorithm: 'Hlavička algoritmu na riadku {line} musí mať tvar ALGORITMUS/ALGORITHM názov(parametre): a musí byť prvá.',
                 iteratorQuestion: 'Je ďalší prvok v {iterable}?',
@@ -973,7 +1004,7 @@ print("konec")`
         const pseudocodeDiagramUpdateDelay = 350;
         const supportedPseudocodeLeadingTerms = new Set([
             'ALGORITMUS', 'ALGORITHM', 'POKUD', 'IF', 'JINAK', 'ELSE', 'DOKUD', 'WHILE',
-            'PRO', 'FOR', 'VRAT', 'RETURN', 'VYPIS', 'WRITE'
+            'PRO', 'FOR', 'VRAT', 'RETURN', 'VYPIS', 'WRITE', 'VSTUP', 'INPUT'
         ]);
 
         function translate(key, values = {}) {
@@ -1501,6 +1532,19 @@ print("konec")`
                         });
                         continue;
                     }
+                    if (/^(?:VSTUP|INPUT)\b/i.test(current.text)) {
+                        const input = current.text.match(/^(?:VSTUP|INPUT)\s+([A-Za-z_][A-Za-z0-9_]*)$/i);
+                        if (!input) {
+                            throw new Error(translate('malformedInput', { line: current.line }));
+                        }
+                        statements.push({
+                            type: 'input',
+                            target: input[1],
+                            text: current.text,
+                            line: current.line
+                        });
+                        continue;
+                    }
                     if (!isIf(current.text) && !isWhile(current.text) && !isFor(current.text)) {
                         statements.push({ type: 'step', text: current.text, line: current.line });
                         continue;
@@ -1618,7 +1662,12 @@ print("konec")`
                         }
                     } else {
                         const isReturn = /^(?:VRAT|RETURN)(?=\s|$)/i.test(statement.text);
-                        const node = makeNode(isReturn ? 'return' : 'step', statement.text);
+                        const nodeType = statement.type === 'input'
+                            ? 'input'
+                            : isReturn
+                                ? 'return'
+                                : 'step';
+                        const node = makeNode(nodeType, statement.text);
                         exits.forEach(edge => edges.push({ from: edge.from, to: node.id, label: edge.label }));
                         if (isReturn) {
                             edges.push({ from: node.id, to: end.id, label: '' });
@@ -1672,6 +1721,8 @@ print("konec")`
                     mermaidStr += `  ${node.id}{{"${label}"}}\n`;
                 } else if (node.type === 'return') {
                     mermaidStr += `  ${node.id}[/"${label}"/]\n`;
+                } else if (node.type === 'input') {
+                    mermaidStr += `  ${node.id}[\\${label}\\]\n`;
                 } else if (node.type === 'start') {
                     mermaidStr += `  ${node.id}(["${label}"])\n`;
                 } else if (node.type === 'end') {
@@ -1800,6 +1851,11 @@ print("konec")`
                             `${prefix}for ${statement.iterator} in range(${start}, (${end}) + 1):`
                         );
                         appendBlock(statement.thenBranch, indentation + 4);
+                        continue;
+                    }
+
+                    if (statement.type === 'input') {
+                        generatedLines.push(`${prefix}${statement.target} = input()`);
                         continue;
                     }
 
@@ -2151,6 +2207,7 @@ sys._getframe().f_trace = _trace_func
         const variablePane = document.getElementById('variablePane');
         const variableConsoleResizer = document.getElementById('variableConsoleResizer');
         const minimumHelpHeight = 96;
+        const minimumPseudocodeEditorHeight = 120;
         const minimumPythonEditorHeight = 100;
         const minimumPythonInspectorHeight = 260;
         const minimumVariablePaneHeight = 90;
@@ -2163,10 +2220,11 @@ sys._getframe().f_trace = _trace_func
 
         function setPseudocodeHelpHeight(height) {
             const paneRect = pane1.getBoundingClientRect();
-            const fixedHeight = pane1.querySelector(':scope > div:first-child').offsetHeight
-                + pane1.querySelector(':scope > div:nth-child(3)').offsetHeight
-                + pseudocodeHelpResizer.offsetHeight;
-            const maximumHeight = Math.max(minimumHelpHeight, paneRect.height - fixedHeight - 120);
+            const headerHeight = pane1.querySelector(':scope > div:first-child').offsetHeight;
+            const maximumHeight = Math.max(
+                minimumHelpHeight,
+                paneRect.height - headerHeight - minimumPseudocodeEditorHeight - pseudocodeHelpResizer.offsetHeight
+            );
             const boundedHeight = Math.min(maximumHeight, Math.max(minimumHelpHeight, height));
             pseudocodeHelp.style.height = `${boundedHeight}px`;
             pseudocodeHelpResizer.setAttribute('aria-valuemax', String(Math.round(maximumHeight)));
@@ -2174,24 +2232,26 @@ sys._getframe().f_trace = _trace_func
         }
 
         pseudocodeHelpResizer.addEventListener('pointerdown', event => {
+            if (event.button !== 0 || !event.isPrimary) return;
             helpResizeStart = {
                 pointerId: event.pointerId,
                 clientY: event.clientY,
                 height: pseudocodeHelp.getBoundingClientRect().height
             };
-            pseudocodeHelpResizer.setPointerCapture(event.pointerId);
             event.preventDefault();
         });
 
-        pseudocodeHelpResizer.addEventListener('pointermove', event => {
+        document.addEventListener('pointermove', event => {
             if (!helpResizeStart || event.pointerId !== helpResizeStart.pointerId) return;
             setPseudocodeHelpHeight(helpResizeStart.height - (event.clientY - helpResizeStart.clientY));
         });
 
-        pseudocodeHelpResizer.addEventListener('pointerup', () => {
+        document.addEventListener('pointerup', event => {
+            if (!helpResizeStart || event.pointerId !== helpResizeStart.pointerId) return;
             helpResizeStart = null;
         });
-        pseudocodeHelpResizer.addEventListener('lostpointercapture', () => {
+        document.addEventListener('pointercancel', event => {
+            if (!helpResizeStart || event.pointerId !== helpResizeStart.pointerId) return;
             helpResizeStart = null;
         });
         pseudocodeHelpResizer.addEventListener('keydown', event => {

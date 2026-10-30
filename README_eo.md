@@ -39,7 +39,7 @@ Subtenataj kontrolstrukturoj:
 - La sekva bloko de la branĉo `Ne` aperas sub ĉiuj blokoj de la branĉo `Ano`, ankaŭ ĉe nestitaj iteracioj.
 - Ĉiuj listigitaj strukturoj povas esti nestitaj. Iliaj korpoj devas esti indentitaj rilate al la kaplinio.
 
-La komando `VYPIS value` aŭ `WRITE value` montras valoron kiel ordinaran diagram-paŝon. La pseŭdokoda redaktilo ruĝe substrekas nekonatajn vortojn per majuskloj ĉe la komenco de linio kaj montras ilian nombron. Tio estas nur atentigo, ne validigo de pseŭdokodo: ordinaraj atribuoj kaj vortoj ene de linio ne estas kontrolataj, kaj nekonataj komandoj ankoraŭ aperas kiel ordinaraj paŝoj.
+La komando `VYPIS value` aŭ `WRITE value` montras valoron kiel ordinaran diagram-paŝon. `VSTUP variable` aŭ `INPUT variable` legas valoron kaj montras ĝin kiel enigan paralelogramon. La pseŭdokoda redaktilo ruĝe substrekas nekonatajn vortojn per majuskloj ĉe la komenco de linio kaj montras ilian nombron. Tio estas nur atentigo, ne validigo de pseŭdokodo: ordinaraj atribuoj kaj vortoj ene de linio ne estas kontrolataj, kaj nekonataj komandoj ankoraŭ aperas kiel ordinaraj paŝoj.
 
 Komandoj, kiuj ne estas rekonataj kiel kontrolstrukturoj, aperas kiel ordinaraj paŝoj. Funkcia rezulto estas redonata per `VRAT` aŭ `RETURN` kaj montriĝas kiel eliga paralelogramo konektita al la fino de la diagramo. La generatoro kreas superrigardan diagramon; ĝi ne interpretas esprimojn, kontrolas ilian sintakson aŭ rulas pseŭdokodon. Nombrilaj iteracioj kaj kondiĉoj do estas montrataj sed ne kalkulataj.
 
@@ -58,7 +58,7 @@ ALGORITMUS IterateMatrix(matrix):
 
 ### Generi Python
 
-La Python-panelo generas kodon inter la komentoj `# BEGIN GENERATED CODE` kaj `# END GENERATED CODE`. Lasu importojn kaj antaŭkondiĉojn antaŭ la unua komento, kaj ekzemplajn datumojn kaj vokojn post la dua; regenerado konservas la kodon ekster tiu regiono. Pseŭdokodaj ŝanĝoj aŭtomate ĝisdatigas la regionon ĝis la Python-redaktilo estas permane ŝanĝita. Poste la butono **Generi Python** eksplicite anstataŭigas la regionon. Nombrilaj iteracioj inkluzivas sian finan valoron. Algoritmaj kaplinioj, kondiĉoj, iteracioj, `WRITE`/`VYPIS` kaj `RETURN`/`VRAT` estas subtenataj; aliaj komandoj devas esti validaj Python-komandoj.
+La Python-panelo generas kodon inter la komentoj `# BEGIN GENERATED CODE` kaj `# END GENERATED CODE`. Lasu importojn kaj antaŭkondiĉojn antaŭ la unua komento, kaj ekzemplajn datumojn kaj vokojn post la dua; regenerado konservas la kodon ekster tiu regiono. Pseŭdokodaj ŝanĝoj aŭtomate ĝisdatigas la regionon ĝis la Python-redaktilo estas permane ŝanĝita. Poste la butono **Generi Python** eksplicite anstataŭigas la regionon. Nombrilaj iteracioj inkluzivas sian finan valoron. Algoritmaj kaplinioj, kondiĉoj, iteracioj, `WRITE`/`VYPIS`, `INPUT`/`VSTUP` kaj `RETURN`/`VRAT` estas subtenataj. Enigo estas legata per `input()` kiel ĉeno; aliaj komandoj devas esti validaj Python-komandoj.
 
 ### Konservi algoritmon
 

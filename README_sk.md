@@ -39,7 +39,7 @@ Podporované riadiace štruktúry:
 - Nasledujúci blok vetvy `Ne` sa v diagrame umiestni pod všetky bloky vetvy `Ano`, a to aj pri vnorených cykloch.
 - Všetky uvedené štruktúry možno vnárať. Ich telá musia byť odsadené voči hlavičke.
 
-Príkaz `VYPIS hodnota` alebo `WRITE value` zobrazí výpis hodnoty ako bežný krok diagramu. Editor pseudokódu červenou farbou podčiarkuje neznáme slová napísané veľkými písmenami na začiatku riadka a zobrazuje ich počet. Je to iba upozornenie, nie kontrola pseudokódu: bežné priradenia ani slová uprostred riadka nekontroluje a neznáme príkazy sa stále zobrazia ako bežné kroky.
+Príkaz `VYPIS hodnota` alebo `WRITE value` zobrazí výpis hodnoty ako bežný krok diagramu. `VSTUP premenná` alebo `INPUT variable` načíta hodnotu a zobrazí ju ako vstupný rovnobežník. Editor pseudokódu červenou farbou podčiarkuje neznáme slová napísané veľkými písmenami na začiatku riadka a zobrazuje ich počet. Je to iba upozornenie, nie kontrola pseudokódu: bežné priradenia ani slová uprostred riadka nekontroluje a neznáme príkazy sa stále zobrazia ako bežné kroky.
 
 Príkazy, ktoré nie sú rozpoznané ako riadiace štruktúry, sa zobrazia ako bežné kroky. Výsledok funkcie možno odovzdať pomocou `VRAT` alebo `RETURN`; zobrazí sa ako výstupný rovnobežník prepojený s koncom diagramu. Generátor vytvára prehľadový diagram; neinterpretuje výrazy, nekontroluje ich syntax a nespúšťa pseudokód. Počítané cykly a podmienky sa zobrazia, ale nevyhodnocujú.
 
@@ -58,7 +58,7 @@ ALGORITMUS IterateMatrix(matrix):
 
 ### Generovanie Pythonu
 
-Panel Pythonu generuje kód do oblasti medzi komentármi `# BEGIN GENERATED CODE` a `# END GENERATED CODE`. Importy a predpoklady ponechajte pred prvým komentárom, ukážkové dáta a volania za druhým; pri generovaní sa zachová všetok kód mimo tejto oblasti. Po úprave pseudokódu sa oblasť aktualizuje automaticky, kým používateľ ručne neupraví editor Pythonu. Potom možno oblasť prepísať tlačidlom **Generovať Python**. Počítaný cyklus zahŕňa koncovú hodnotu. Podporované sú hlavičky algoritmov, podmienky, cykly, `WRITE`/`VYPIS` a `RETURN`/`VRAT`; ostatné príkazy musia byť platné príkazy Pythonu.
+Panel Pythonu generuje kód do oblasti medzi komentármi `# BEGIN GENERATED CODE` a `# END GENERATED CODE`. Importy a predpoklady ponechajte pred prvým komentárom, ukážkové dáta a volania za druhým; pri generovaní sa zachová všetok kód mimo tejto oblasti. Po úprave pseudokódu sa oblasť aktualizuje automaticky, kým používateľ ručne neupraví editor Pythonu. Potom možno oblasť prepísať tlačidlom **Generovať Python**. Podporované sú hlavičky algoritmov, podmienky, cykly, `WRITE`/`VYPIS`, `INPUT`/`VSTUP` a `RETURN`/`VRAT`; vstup sa načíta pomocou `input()` a má typ reťazec. Počítaný cyklus zahŕňa koncovú hodnotu. Ostatné príkazy musia byť platné príkazy Pythonu.
 
 ### Uloženie algoritmu
 

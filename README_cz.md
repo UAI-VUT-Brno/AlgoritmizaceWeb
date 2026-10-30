@@ -39,7 +39,7 @@ Podporované řídicí struktury:
 - Následující blok větve `Ne` je v diagramu umístěn pod všemi bloky větve `Ano`, a to i u vnořených cyklů.
 - Všechny uvedené struktury lze vnořovat. Jejich těla musí být odsazena vůči hlavičce.
 
-Příkaz `VYPIS hodnota` nebo `WRITE value` zobrazí tisk hodnoty jako běžný krok diagramu. Editor pseudokódu průběžně červeně podtrhává neznámá slova psaná velkými písmeny na začátku řádku a zobrazuje počet nálezů. Jde o orientační upozornění, nikoli o validaci pseudokódu: běžná přiřazení a slova uvnitř řádku nekontroluje a neznámé příkazy se stále zobrazí jako běžné kroky.
+Příkaz `VYPIS hodnota` nebo `WRITE value` zobrazí tisk hodnoty jako běžný krok diagramu. `VSTUP proměnná` nebo `INPUT variable` načte hodnotu a zobrazí ji jako vstupní rovnoběžník. Editor pseudokódu průběžně červeně podtrhává neznámá slova psaná velkými písmeny na začátku řádku a zobrazuje počet nálezů. Jde o orientační upozornění, nikoli o validaci pseudokódu: běžná přiřazení a slova uvnitř řádku nekontroluje a neznámé příkazy se stále zobrazí jako běžné kroky.
 
 Příkazy, které nejsou rozpoznány jako řídicí struktury, se zobrazí jako běžné kroky. Předání výsledku funkce se rozpozná pomocí `VRAT` nebo `RETURN` a zobrazí se jako výstupní rovnoběžník propojený s koncem diagramu. Generátor vytváří přehledový diagram; neinterpretuje výrazy, neověřuje jejich syntaxi ani nespouští pseudokód. Počítané cykly a podmínky jsou tedy znázorněné, ale jejich průběh se nepočítá.
 
@@ -60,7 +60,7 @@ ALGORITMUS IterateMatrix(matrix):
 
 Panel Pythonu generuje kód z pseudokódu do oblasti mezi komentáři `# BEGIN GENERATED CODE` a `# END GENERATED CODE`. Importy nebo předpoklady ponechte před počátečním komentářem, ukázková data a volání za koncovým komentářem; při opětovném generování zůstanou okolní části zachovány. Každý komentář musí být uveden právě jednou a ve správném pořadí.
 
-Podporované struktury a příkazy pseudokódu (`ALGORITMUS`/`ALGORITHM`, `IF`/`POKUD`, `ELSE`/`JINAK`, `WHILE`/`DOKUD`, obě podoby `FOR`/`PRO`, `WRITE`/`VYPIS` a `RETURN`/`VRAT`) se převádějí na Python. Horní mez počítaného cyklu je zahrnuta. Základní výrazy se zachovávají; `MOD`, `NEBO`, samostatné `A`, `AND`, `OR`, `NOT`, `true`, `false` a `length(...)` se převádějí na ekvivalenty v Pythonu. Ostatní text příkazů se přenáší jako Python a musí mít platnou syntaxi.
+Podporované struktury a příkazy pseudokódu (`ALGORITMUS`/`ALGORITHM`, `IF`/`POKUD`, `ELSE`/`JINAK`, `WHILE`/`DOKUD`, obě podoby `FOR`/`PRO`, `WRITE`/`VYPIS`, `INPUT`/`VSTUP` a `RETURN`/`VRAT`) se převádějí na Python. `INPUT variable` přiřadí do jedné proměnné výsledek Pythonového `input()`; načtená hodnota je řetězec. Horní mez počítaného cyklu je zahrnuta. Základní výrazy se zachovávají; `MOD`, `NEBO`, samostatné `A`, `AND`, `OR`, `NOT`, `true`, `false` a `length(...)` se převádějí na ekvivalenty v Pythonu. Ostatní text příkazů se přenáší jako Python a musí mít platnou syntaxi.
 
 Při úpravě pseudokódu se označená oblast automaticky aktualizuje, dokud uživatel ručně neupraví editor Pythonu. Po ruční úpravě použijte **Generovat Python**; přepíše se pouze označená oblast. Chyba generování se zobrazí vedle tlačítka a stávající kód zůstane zachován. Importovaný JSON obsahuje pouze pseudokód; pokud editor Pythonu nebyl ručně upraven, vygenerovaná oblast se z něj aktualizuje.
 
