@@ -468,18 +468,17 @@ print("Triangle area:", area)`
             pedestrianCrossingBasic: {
                 name: 'Pedestrian Crossing (Basic)',
                 pseudocode: `ALGORITMUS PedestrianCrossingBasic(traffic_snapshots):
-  stop_at_curb()
-  look_left()
-  look_right()
-  look_left_again()
+  VYPIS "stop_at_curb"
+  VYPIS "look left, right, left again"
   FOR traffic_approaching IN traffic_snapshots:
     POKUD traffic_approaching:
-      wait()
-      recheck_traffic()
+      VYPIS "wait 5 seconds"
+      VYPIS "recheck traffic"
     JINAK:
-      cross_carefully_while_watching_traffic()
+      VYPIS "cross while watching traffic"
       VRAT true
   VYPIS "Traffic is still approaching. Keep waiting."
+  VRAT false  VYPIS "Traffic is still approaching. Keep waiting."
   VRAT false`,
                 python: `def cross_road_basic(traffic_snapshots):
     print("Stop at the curb.")
@@ -504,9 +503,9 @@ cross_road_basic(traffic_snapshots)`
   stop_before_entering_road()
   remove_distractions()
   check_both_directions()
-  FOR snapshot IN traffic_snapshots:
+  PRO snapshot V traffic_snapshots:
     all_lanes_clear = true
-    FOR lane_is_unsafe IN snapshot:
+    PRO lane_is_unsafe V snapshot:
       POKUD lane_is_unsafe:
         all_lanes_clear = false
     POKUD all_lanes_clear:
