@@ -29,7 +29,7 @@ Panel pomocníka s podporovanými termínmi má predvolenú výšku **224 px**. 
 
 Podporované riadiace štruktúry:
 
-- Hlavička algoritmu: `ALGORITMUS názov(parametre):`.
+- Hlavička algoritmu: `ALGORITMUS názov(parametre):` alebo `ALGORITHM name(parameters):`.
 - Podmienka: `POKUD podmienka:` alebo `IF podmienka:`.
 - Dlhé popisy rozhodovacích uzlov sa zalamujú na hraniciach slov, aby sa zmenšila výška kosoštvorca.
 - Voliteľná alternatívna vetva: `JINAK:` alebo `ELSE:`. Riadok `JINAK`/`ELSE` zarovnajte buď s príslušným `POKUD`/`IF`, alebo s príkazmi prvej vetvy.
@@ -56,11 +56,15 @@ ALGORITMUS IterateMatrix(matrix):
   VRAT positive_count
 ```
 
+### Generovanie Pythonu
+
+Panel Pythonu generuje kód do oblasti medzi komentármi `# BEGIN GENERATED CODE` a `# END GENERATED CODE`. Importy a predpoklady ponechajte pred prvým komentárom, ukážkové dáta a volania za druhým; pri generovaní sa zachová všetok kód mimo tejto oblasti. Po úprave pseudokódu sa oblasť aktualizuje automaticky, kým používateľ ručne neupraví editor Pythonu. Potom možno oblasť prepísať tlačidlom **Generovať Python**. Počítaný cyklus zahŕňa koncovú hodnotu. Podporované sú hlavičky algoritmov, podmienky, cykly, `WRITE`/`VYPIS` a `RETURN`/`VRAT`; ostatné príkazy musia byť platné príkazy Pythonu.
+
 ### Uloženie algoritmu
 
 Kliknite na tlačidlo **Uložiť JSON**. Súbor sa stiahne s ľudsky čitateľným názvom vybraného algoritmu a príponou `.json`. Neplatné znaky v názve súboru sa nahradia podčiarkovníkom. Ak prehliadač zobrazí dialóg na uloženie, názov možno zmeniť.
 
-Tlačidlom **Načítať JSON** možno načítať súbor v rovnakom formáte. Názov importovaného algoritmu sa zobrazí vo výbere a jeho pseudokód nahradí aktuálny pseudokód. JSON neobsahuje Python kód, preto editor Pythonu zostane nezmenený.
+Tlačidlom **Načítať JSON** možno načítať súbor v rovnakom formáte. Názov importovaného algoritmu sa zobrazí vo výbere a jeho pseudokód nahradí aktuálny pseudokód. JSON neobsahuje Python kód, preto sa pri neupravenom editore Pythonu vygenerovaná oblasť obnoví z pseudokódu a okolitý kód zostane zachovaný.
 
 Export obsahuje názov algoritmu a pseudokód ako pole riadkov. Každý riadok obsahuje `text` bez úvodného odsadenia a `indent` s počtom odsadzovacích medzier; tabulátor sa počíta ako štyri medzery. Prázdne riadky sa zachovajú.
 

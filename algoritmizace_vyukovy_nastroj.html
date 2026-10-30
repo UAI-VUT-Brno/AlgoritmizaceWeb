@@ -103,6 +103,14 @@
             flex: 0 0 55%;
             min-height: 100px;
         }
+        #pythonEditorPane .CodeMirror {
+            position: absolute;
+            top: 28px;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            height: auto !important;
+        }
         #pythonInspectorPane {
             flex: 1 1 0;
             min-height: 260px;
@@ -249,7 +257,7 @@
             <div class="h-56 flex-shrink-0 overflow-y-auto border-t border-darkaccent bg-slate-900/70 px-3 py-2 text-[10px] leading-4 text-slate-400" id="pseudocodeHelp">
                 <h2 data-i18n="supportedTerms" class="mb-1 text-[11px] font-semibold text-slate-200">Podporované termíny pseudokódu</h2>
                 <ul class="space-y-0.5">
-                    <li data-i18n="termAlgorithm" data-i18n-html="true"><code class="text-indigo-300">ALGORITMUS název(...):</code> — hlavička algoritmu</li>
+                    <li data-i18n="termAlgorithm" data-i18n-html="true"><code class="text-indigo-300">ALGORITMUS název(...):</code> / <code class="text-indigo-300">ALGORITHM name(...):</code> — hlavička algoritmu</li>
                     <li data-i18n="termIf" data-i18n-html="true"><code class="text-indigo-300">POKUD</code> / <code class="text-indigo-300">IF</code> — podmínka</li>
                     <li data-i18n="termElse" data-i18n-html="true"><code class="text-indigo-300">JINAK</code> / <code class="text-indigo-300">ELSE</code> — alternativní větev</li>
                     <li data-i18n="termWhile" data-i18n-html="true"><code class="text-indigo-300">DOKUD</code> / <code class="text-indigo-300">WHILE</code> — podmíněný cyklus</li>
@@ -258,6 +266,7 @@
                     <li data-i18n="termReturn" data-i18n-html="true"><code class="text-indigo-300">VRAT hodnota</code> / <code class="text-indigo-300">RETURN value</code> — předání výsledku funkce (rovnoběžník)</li>
                     <li data-i18n="termWrite" data-i18n-html="true"><code class="text-indigo-300">VYPIS hodnota</code> / <code class="text-indigo-300">WRITE value</code> — tisk hodnoty</li>
                     <li data-i18n="termIndent" data-i18n-html="true">Bloky pište s dvojtečkou a odsazujte; ostatní řádky se zobrazí jako kroky.</li>
+                    <li data-i18n="termPythonGeneration" data-i18n-html="true">Python se generuje mezi komentáři <code class="text-indigo-300"># BEGIN GENERATED CODE</code> a <code class="text-indigo-300"># END GENERATED CODE</code>.</li>
                     <li data-i18n="termWarning" data-i18n-html="true">Neznámá velká slova na začátku řádku jsou podtržena červeně; upozornění je pouze orientační.</li>
                 </ul>
             </div>
@@ -315,6 +324,12 @@
 
             <!-- Python Editor (Top 55%) -->
             <div id="pythonEditorPane" class="relative border-b border-darkaccent overflow-hidden">
+                <div class="absolute inset-x-0 top-0 z-10 flex h-7 items-center justify-between border-b border-darkaccent bg-slate-900 px-2">
+                    <span id="pythonGenerationStatus" class="max-w-[200px] truncate text-[10px] text-slate-400" role="status" aria-live="polite"></span>
+                    <button id="generatePythonButton" type="button" onclick="generatePythonFromPseudocode()"
+                        class="rounded bg-indigo-700 hover:bg-indigo-600 px-2 py-1 text-[10px] text-white transition"
+                        data-i18n="generatePythonButton">Generovat Python</button>
+                </div>
                 <textarea id="pythonEditor"></textarea>
             </div>
 
@@ -367,18 +382,21 @@
   PRO i OD 0 DO n-1:
     PRO j OD 0 DO n-i-2:
       POKUD array[j] > array[j+1]:
-        swap(array[j], array[j+1])
+        array[j], array[j+1] = array[j+1], array[j]
   VRAT array`,
-                python: `def bubble_sort(array):
+                python: `# BEGIN GENERATED CODE
+def bubble_sort(array):
     n = len(array)
     for i in range(n):
         for j in range(0, n - i - 1):
             if array[j] > array[j + 1]:
                 array[j], array[j + 1] = array[j + 1], array[j]
     return array
+# END GENERATED CODE
 
 values = [64, 34, 25, 12, 22, 8, -10, -5, 0, 3, 99]
-bubble_sort(values)`
+bubble_sort(values)
+print("konec")`
             },
 
             factorial: {
@@ -388,11 +406,13 @@ bubble_sort(values)`
   PRO i OD 1 DO n:
     result = result * i
   VRAT result`,
-                python: `def factorial(n):
+                python: `# BEGIN GENERATED CODE
+def factorial(n):
     result = 1
     for i in range(1, n + 1):
         result = result * i
     return result
+# END GENERATED CODE
 
 result = factorial(5)
 print("Factorial:", result)`
@@ -406,15 +426,17 @@ print("Factorial:", result)`
     POKUD item > max_value:
       max_value = item
   VRAT max_value`,
-                python: `def find_max(array):
+                python: `# BEGIN GENERATED CODE
+def find_max(array):
     max_value = array[0]
     for item in array:
         if item > max_value:
             max_value = item
     return max_value
+# END GENERATED CODE
 
 numbers = [14, 45, 8, 99, 23]
-maximum = find_max(numbers)
+maximum = find_maximum(numbers)
 print("Maximum:", maximum)`
             },
 
@@ -426,12 +448,14 @@ print("Maximum:", maximum)`
     b = a MOD b
     a = temp
   VRAT a`,
-                python: `def euclidean_gcd(a, b):
+                python: `# BEGIN GENERATED CODE
+def euclidean_gcd(a, b):
     while b != 0:
         temp = b
         b = a % b
         a = temp
     return a
+# END GENERATED CODE
 
 result = euclidean_gcd(48, 18)
 print("GCD:", result)`
@@ -447,10 +471,11 @@ print("GCD:", result)`
     VYPIS "Side lengths do not form a valid triangle"
     VRAT None
   sp = (a + b + c) / 2
-  area = sqrt(sp * (sp - a) * (sp - b) * (sp - c))
+  area = math.sqrt(sp * (sp - a) * (sp - b) * (sp - c))
   VRAT area`,
                 python: `import math
 
+# BEGIN GENERATED CODE
 def triangle_area(a, b, c):
     if a <= 0 or b <= 0 or c <= 0:
         print("Side lengths must be greater than zero")
@@ -460,6 +485,7 @@ def triangle_area(a, b, c):
         return None
     sp = (a + b + c) / 2
     return math.sqrt(sp * (sp - a) * (sp - b) * (sp - c))
+# END GENERATED CODE
 
 area = triangle_area(3, 4, 5)
 print("Triangle area:", area)`
@@ -478,9 +504,9 @@ print("Triangle area:", area)`
       VYPIS "cross while watching traffic"
       VRAT true
   VYPIS "Traffic is still approaching. Keep waiting."
-  VRAT false  VYPIS "Traffic is still approaching. Keep waiting."
   VRAT false`,
-                python: `def cross_road_basic(traffic_snapshots):
+                python: `# BEGIN GENERATED CODE
+def cross_road_basic(traffic_snapshots):
     print("Stop at the curb.")
     for traffic_approaching in traffic_snapshots:
         print("Look left, right, then left again.")
@@ -491,30 +517,31 @@ print("Triangle area:", area)`
         return True
     print("Traffic is still approaching. Keep waiting.")
     return False
+# END GENERATED CODE
 
 traffic_snapshots = [True, True, False]
-cross_road_basic(traffic_snapshots)`
+pedestrian_crossing_basic(traffic_snapshots)
+print("konec")`
             },
 
             pedestrianCrossingComplex: {
                 name: 'Pedestrian Crossing (Unsignalized, Complex)',
                 pseudocode: `ALGORITMUS PedestrianCrossingUnsignalized(traffic_snapshots):
-  choose_crossing_with_clear_view()
-  stop_before_entering_road()
-  remove_distractions()
-  check_both_directions()
+  VYPIS "Choose a crossing place with a clear view."
+  VYPIS "Stop before the road, remove distractions, and check both directions."
   PRO snapshot V traffic_snapshots:
     all_lanes_clear = true
     PRO lane_is_unsafe V snapshot:
       POKUD lane_is_unsafe:
         all_lanes_clear = false
     POKUD all_lanes_clear:
-      cross_without_running_while_watching_traffic()
+      VYPIS "All lanes have a safe gap. Cross without running and keep watching traffic."
       VRAT true
-    wait_and_recheck_both_directions()
+    VYPIS "At least one lane is unsafe. Wait and check both directions again."
   VYPIS "No safe gap yet. Keep waiting."
   VRAT false`,
-                python: `def cross_road_complex(traffic_snapshots):
+                python: `# BEGIN GENERATED CODE
+def cross_road_complex(traffic_snapshots):
     print("Choose a crossing place with a clear view.")
     print("Stop before the road, remove distractions, and check both directions.")
     for snapshot in traffic_snapshots:
@@ -525,9 +552,11 @@ cross_road_basic(traffic_snapshots)`
         print("At least one lane is unsafe. Wait and check both directions again.")
     print("No safe gap yet. Keep waiting.")
     return False
+# END GENERATED CODE
 
 traffic_snapshots = [[True, False], [False, True], [False, False]]
-cross_road_complex(traffic_snapshots)`
+pedestrian_crossing_unsignalized(traffic_snapshots)
+print("konec")`
             }
         };
 
@@ -550,7 +579,7 @@ cross_road_complex(traffic_snapshots)`
                 algorithm: 'Algoritmus',
                 pseudocodeWarningTitle: 'Kontrola označuje neznámá slova psaná velkými písmeny na začátku řádku; běžné přiřazení ignoruje.',
                 supportedTerms: 'Podporované termíny pseudokódu',
-                termAlgorithm: '<code class="text-indigo-300">ALGORITMUS název(...):</code> — hlavička algoritmu',
+                termAlgorithm: '<code class="text-indigo-300">ALGORITMUS název(...):</code> / <code class="text-indigo-300">ALGORITHM name(...):</code> — hlavička algoritmu',
                 termIf: '<code class="text-indigo-300">POKUD</code> / <code class="text-indigo-300">IF</code> — podmínka',
                 termElse: '<code class="text-indigo-300">JINAK</code> / <code class="text-indigo-300">ELSE</code> — alternativní větev',
                 termWhile: '<code class="text-indigo-300">DOKUD</code> / <code class="text-indigo-300">WHILE</code> — podmíněný cyklus',
@@ -559,6 +588,7 @@ cross_road_complex(traffic_snapshots)`
                 termReturn: '<code class="text-indigo-300">VRAT hodnota</code> / <code class="text-indigo-300">RETURN value</code> — předání výsledku funkce (rovnoběžník)',
                 termWrite: '<code class="text-indigo-300">VYPIS hodnota</code> / <code class="text-indigo-300">WRITE value</code> — tisk hodnoty',
                 termIndent: 'Bloky pište s dvojtečkou a odsazujte; ostatní řádky se zobrazí jako kroky.',
+                termPythonGeneration: 'Python se generuje mezi komentáři <code class="text-indigo-300"># BEGIN GENERATED CODE</code> a <code class="text-indigo-300"># END GENERATED CODE</code>.',
                 termWarning: 'Neznámá velká slova na začátku řádku jsou podtržena červeně; upozornění je pouze orientační.',
                 resizeHelp: 'Změnit výšku nápovědy',
                 resizePythonEditor: 'Změnit výšku editoru Pythonu a inspektoru proměnných',
@@ -573,6 +603,12 @@ cross_road_complex(traffic_snapshots)`
                 zoomIn: 'Přiblížit diagram',
                 fitDiagram: 'Přizpůsobit diagram ploše',
                 pythonPane: '3. Python Kód & Vizualizace',
+                generatePythonButton: 'Generovat Python',
+                pythonGenerated: 'Python vygenerován',
+                pythonNeedsGeneration: 'Pseudokód změněn; vygenerujte Python',
+                pythonGenerationError: 'Python se nepodařilo vygenerovat',
+                pythonMarkersMissing: 'Vložte do editoru komentáře # BEGIN GENERATED CODE a # END GENERATED CODE.',
+                pythonMarkersInvalid: 'Komentáře pro generovaný kód musí být právě jeden pár ve správném pořadí.',
                 pyodideLoading: 'Nahrávání Pyodide...',
                 pyodideReady: 'Python připraven',
                 pyodideError: 'Chyba při načítání Pythonu',
@@ -593,6 +629,7 @@ cross_road_complex(traffic_snapshots)`
                 malformedElse: 'Alternativní větev "{line}" musí být zapsána jako JINAK: nebo ELSE:.',
                 malformedBlock: 'Pseudokód nelze zpracovat u řádku: {line}',
                 missingColon: 'Hlavička "{line}" musí končit dvojtečkou.',
+                malformedAlgorithm: 'Hlavička algoritmu na řádku {line} musí mít tvar ALGORITMUS/ALGORITHM název(parametry): a musí být první.',
                 iteratorQuestion: 'Další prvek v {iterable}?',
                 nextIterator: 'další prvek z {iterable}',
                 condition: 'Podmínka',
@@ -619,7 +656,7 @@ cross_road_complex(traffic_snapshots)`
                 algorithm: 'Algorithm',
                 pseudocodeWarningTitle: 'Highlights unknown uppercase words at the beginning of a line; ordinary assignments are ignored.',
                 supportedTerms: 'Supported pseudocode terms',
-                termAlgorithm: '<code class="text-indigo-300">ALGORITMUS název(...):</code> — algorithm header',
+                termAlgorithm: '<code class="text-indigo-300">ALGORITMUS název(...):</code> / <code class="text-indigo-300">ALGORITHM name(...):</code> — algorithm header',
                 termIf: '<code class="text-indigo-300">POKUD</code> / <code class="text-indigo-300">IF</code> — condition',
                 termElse: '<code class="text-indigo-300">JINAK</code> / <code class="text-indigo-300">ELSE</code> — alternative branch',
                 termWhile: '<code class="text-indigo-300">DOKUD</code> / <code class="text-indigo-300">WHILE</code> — conditional loop',
@@ -628,6 +665,7 @@ cross_road_complex(traffic_snapshots)`
                 termReturn: '<code class="text-indigo-300">VRAT hodnota</code> / <code class="text-indigo-300">RETURN value</code> — return a function result (parallelogram)',
                 termWrite: '<code class="text-indigo-300">VYPIS hodnota</code> / <code class="text-indigo-300">WRITE value</code> — print a value',
                 termIndent: 'End blocks with a colon and indent them; other lines appear as steps.',
+                termPythonGeneration: 'Python is generated between the comments <code class="text-indigo-300"># BEGIN GENERATED CODE</code> and <code class="text-indigo-300"># END GENERATED CODE</code>.',
                 termWarning: 'Unknown uppercase words at the start of a line are underlined in red; this is only a hint.',
                 resizeHelp: 'Resize help panel',
                 resizePythonEditor: 'Resize Python editor and variable inspector',
@@ -642,6 +680,12 @@ cross_road_complex(traffic_snapshots)`
                 zoomIn: 'Zoom in',
                 fitDiagram: 'Fit diagram to pane',
                 pythonPane: '3. Python Code & Visualization',
+                generatePythonButton: 'Generate Python',
+                pythonGenerated: 'Python generated',
+                pythonNeedsGeneration: 'Pseudocode changed; regenerate Python',
+                pythonGenerationError: 'Could not generate Python',
+                pythonMarkersMissing: 'Add the comments # BEGIN GENERATED CODE and # END GENERATED CODE to the editor.',
+                pythonMarkersInvalid: 'Generated-code markers must be one correctly ordered pair.',
                 pyodideLoading: 'Loading Pyodide...',
                 pyodideReady: 'Python ready',
                 pyodideError: 'Error loading Python',
@@ -662,6 +706,7 @@ cross_road_complex(traffic_snapshots)`
                 malformedElse: 'The alternative branch "{line}" must be written as JINAK: or ELSE:.',
                 malformedBlock: 'Could not parse pseudocode at line: {line}',
                 missingColon: 'Header "{line}" must end with a colon.',
+                malformedAlgorithm: 'The algorithm header on line {line} must be ALGORITMUS or ALGORITHM name(parameters): and must come first.',
                 iteratorQuestion: 'Next item in {iterable}?',
                 nextIterator: 'next item from {iterable}',
                 condition: 'Condition',
@@ -688,7 +733,7 @@ cross_road_complex(traffic_snapshots)`
                 algorithm: 'Algoritmo',
                 pseudocodeWarningTitle: 'Markas nekonatajn vortojn per majuskloj ĉe la komenco de linio; ordinaraj atribuoj estas ignorataj.',
                 supportedTerms: 'Subtenataj pseŭdokodaj terminoj',
-                termAlgorithm: '<code class="text-indigo-300">ALGORITMUS název(...):</code> — algoritmo-kapo',
+                termAlgorithm: '<code class="text-indigo-300">ALGORITMUS název(...):</code> / <code class="text-indigo-300">ALGORITHM name(...):</code> — algoritmo-kapo',
                 termIf: '<code class="text-indigo-300">POKUD</code> / <code class="text-indigo-300">IF</code> — kondiĉo',
                 termElse: '<code class="text-indigo-300">JINAK</code> / <code class="text-indigo-300">ELSE</code> — alternativa branĉo',
                 termWhile: '<code class="text-indigo-300">DOKUD</code> / <code class="text-indigo-300">WHILE</code> — kondiĉa iteracio',
@@ -697,6 +742,7 @@ cross_road_complex(traffic_snapshots)`
                 termReturn: '<code class="text-indigo-300">VRAT hodnota</code> / <code class="text-indigo-300">RETURN value</code> — redoni funkcir rezulton (paralelogramo)',
                 termWrite: '<code class="text-indigo-300">VYPIS hodnota</code> / <code class="text-indigo-300">WRITE value</code> — presi valoron',
                 termIndent: 'Finu blokojn per dupunkto kaj indentu ilin; aliaj linioj aperas kiel paŝoj.',
+                termPythonGeneration: 'Python estas generata inter la komentoj <code class="text-indigo-300"># BEGIN GENERATED CODE</code> kaj <code class="text-indigo-300"># END GENERATED CODE</code>.',
                 termWarning: 'Nekonataj majusklaj vortoj ĉe la komenco de linio estas substrekataj ruĝe; tio estas nur averto.',
                 resizeHelp: 'Ŝanĝi altecon de helpo',
                 resizePythonEditor: 'Ŝanĝi altecon de Python-redaktilo kaj variabla inspektilo',
@@ -711,6 +757,12 @@ cross_road_complex(traffic_snapshots)`
                 zoomIn: 'Zomi diagramon',
                 fitDiagram: 'Adapti diagramon al la panelo',
                 pythonPane: '3. Python-kodo kaj bildigo',
+                generatePythonButton: 'Generi Python',
+                pythonGenerated: 'Python generita',
+                pythonNeedsGeneration: 'Pseŭdokodo ŝanĝiĝis; regeneru Python',
+                pythonGenerationError: 'Ne eblis generi Python',
+                pythonMarkersMissing: 'Aldonu la komentojn # BEGIN GENERATED CODE kaj # END GENERATED CODE al la redaktilo.',
+                pythonMarkersInvalid: 'La markiloj de generita kodo devas esti unu ĝuste ordigita paro.',
                 pyodideLoading: 'Ŝargante Pyodide...',
                 pyodideReady: 'Python preta',
                 pyodideError: 'Eraro dum ŝargado de Python',
@@ -731,6 +783,7 @@ cross_road_complex(traffic_snapshots)`
                 malformedElse: 'La alternativa branĉo "{line}" devas esti skribita kiel JINAK: aŭ ELSE:.',
                 malformedBlock: 'Ne eblis analizi pseŭdokodon ĉe linio: {line}',
                 missingColon: 'La kaplinio "{line}" devas finiĝi per dupunkto.',
+                malformedAlgorithm: 'La algoritmo-kapo ĉe linio {line} devas havi la formon ALGORITMUS aŭ ALGORITHM nomo(parametroj): kaj esti la unua.',
                 iteratorQuestion: 'Ĉu estas plia elemento en {iterable}?',
                 nextIterator: 'plia elemento el {iterable}',
                 condition: 'Kondiĉo',
@@ -757,7 +810,7 @@ cross_road_complex(traffic_snapshots)`
                 algorithm: 'Algorithme',
                 pseudocodeWarningTitle: 'Signale les mots inconnus en majuscules au début d’une ligne ; les affectations ordinaires sont ignorées.',
                 supportedTerms: 'Termes de pseudocode pris en charge',
-                termAlgorithm: '<code class="text-indigo-300">ALGORITMUS název(...):</code> — en-tête d’algorithme',
+                termAlgorithm: '<code class="text-indigo-300">ALGORITMUS název(...):</code> / <code class="text-indigo-300">ALGORITHM name(...):</code> — en-tête d’algorithme',
                 termIf: '<code class="text-indigo-300">POKUD</code> / <code class="text-indigo-300">IF</code> — condition',
                 termElse: '<code class="text-indigo-300">JINAK</code> / <code class="text-indigo-300">ELSE</code> — branche alternative',
                 termWhile: '<code class="text-indigo-300">DOKUD</code> / <code class="text-indigo-300">WHILE</code> — boucle conditionnelle',
@@ -766,6 +819,7 @@ cross_road_complex(traffic_snapshots)`
                 termReturn: '<code class="text-indigo-300">VRAT hodnota</code> / <code class="text-indigo-300">RETURN value</code> — renvoyer le résultat d’une fonction (parallélogramme)',
                 termWrite: '<code class="text-indigo-300">VYPIS hodnota</code> / <code class="text-indigo-300">WRITE value</code> — afficher une valeur',
                 termIndent: 'Terminez les blocs par deux-points et indentez-les ; les autres lignes apparaissent comme des étapes.',
+                termPythonGeneration: 'Python est généré entre les commentaires <code class="text-indigo-300"># BEGIN GENERATED CODE</code> et <code class="text-indigo-300"># END GENERATED CODE</code>.',
                 termWarning: 'Les mots inconnus en majuscules au début d’une ligne sont soulignés en rouge ; il s’agit seulement d’un avertissement.',
                 resizeHelp: 'Modifier la hauteur de l’aide',
                 resizePythonEditor: 'Modifier la hauteur de l’éditeur Python et de l’inspecteur de variables',
@@ -780,6 +834,12 @@ cross_road_complex(traffic_snapshots)`
                 zoomIn: 'Zoomer le diagramme',
                 fitDiagram: 'Adapter le diagramme au panneau',
                 pythonPane: '3. Code Python et visualisation',
+                generatePythonButton: 'Générer Python',
+                pythonGenerated: 'Python généré',
+                pythonNeedsGeneration: 'Pseudocode modifié ; régénérez Python',
+                pythonGenerationError: 'Impossible de générer Python',
+                pythonMarkersMissing: 'Ajoutez les commentaires # BEGIN GENERATED CODE et # END GENERATED CODE dans l’éditeur.',
+                pythonMarkersInvalid: 'Les marqueurs du code généré doivent former une seule paire dans le bon ordre.',
                 pyodideLoading: 'Chargement de Pyodide...',
                 pyodideReady: 'Python prêt',
                 pyodideError: 'Erreur lors du chargement de Python',
@@ -800,6 +860,7 @@ cross_road_complex(traffic_snapshots)`
                 malformedElse: 'La branche alternative « {line} » doit être écrite JINAK: ou ELSE:.',
                 malformedBlock: 'Impossible d’analyser le pseudocode à la ligne : {line}',
                 missingColon: 'L’en-tête « {line} » doit se terminer par deux-points.',
+                malformedAlgorithm: 'L’en-tête d’algorithme à la ligne {line} doit avoir la forme ALGORITMUS ou ALGORITHM nom(paramètres): et être en premier.',
                 iteratorQuestion: 'Y a-t-il un autre élément dans {iterable} ?',
                 nextIterator: 'élément suivant de {iterable}',
                 condition: 'Condition',
@@ -826,7 +887,7 @@ cross_road_complex(traffic_snapshots)`
                 algorithm: 'Algoritmus',
                 pseudocodeWarningTitle: 'Označuje neznáme slová písané veľkými písmenami na začiatku riadka; bežné priradenia ignoruje.',
                 supportedTerms: 'Podporované termíny pseudokódu',
-                termAlgorithm: '<code class="text-indigo-300">ALGORITMUS název(...):</code> — hlavička algoritmu',
+                termAlgorithm: '<code class="text-indigo-300">ALGORITMUS název(...):</code> / <code class="text-indigo-300">ALGORITHM name(...):</code> — hlavička algoritmu',
                 termIf: '<code class="text-indigo-300">POKUD</code> / <code class="text-indigo-300">IF</code> — podmienka',
                 termElse: '<code class="text-indigo-300">JINAK</code> / <code class="text-indigo-300">ELSE</code> — alternatívna vetva',
                 termWhile: '<code class="text-indigo-300">DOKUD</code> / <code class="text-indigo-300">WHILE</code> — podmienený cyklus',
@@ -835,6 +896,7 @@ cross_road_complex(traffic_snapshots)`
                 termReturn: '<code class="text-indigo-300">VRAT hodnota</code> / <code class="text-indigo-300">RETURN value</code> — odovzdanie výsledku funkcie (rovnobežník)',
                 termWrite: '<code class="text-indigo-300">VYPIS hodnota</code> / <code class="text-indigo-300">WRITE value</code> — výpis hodnoty',
                 termIndent: 'Bloky ukončite dvojbodkou a odsadzujte; ostatné riadky sa zobrazia ako kroky.',
+                termPythonGeneration: 'Python sa generuje medzi komentármi <code class="text-indigo-300"># BEGIN GENERATED CODE</code> a <code class="text-indigo-300"># END GENERATED CODE</code>.',
                 termWarning: 'Neznáme veľké slová na začiatku riadka sú podčiarknuté červenou; upozornenie je iba orientačné.',
                 resizeHelp: 'Zmeniť výšku pomocníka',
                 resizePythonEditor: 'Zmeniť výšku editora Pythonu a inšpektora premenných',
@@ -849,6 +911,12 @@ cross_road_complex(traffic_snapshots)`
                 zoomIn: 'Priblížiť diagram',
                 fitDiagram: 'Prispôsobiť diagram ploche',
                 pythonPane: '3. Python kód a vizualizácia',
+                generatePythonButton: 'Generovať Python',
+                pythonGenerated: 'Python vygenerovaný',
+                pythonNeedsGeneration: 'Pseudokód sa zmenil; vygenerujte Python',
+                pythonGenerationError: 'Python sa nepodarilo vygenerovať',
+                pythonMarkersMissing: 'Vložte do editora komentáre # BEGIN GENERATED CODE a # END GENERATED CODE.',
+                pythonMarkersInvalid: 'Komentáre generovaného kódu musia tvoriť jeden pár v správnom poradí.',
                 pyodideLoading: 'Načítava sa Pyodide...',
                 pyodideReady: 'Python je pripravený',
                 pyodideError: 'Chyba pri načítaní Pythonu',
@@ -869,6 +937,7 @@ cross_road_complex(traffic_snapshots)`
                 malformedElse: 'Alternatívna vetva "{line}" musí byť zapísaná ako JINAK: alebo ELSE:.',
                 malformedBlock: 'Pseudokód sa nepodarilo spracovať na riadku: {line}',
                 missingColon: 'Hlavička "{line}" musí končiť dvojbodkou.',
+                malformedAlgorithm: 'Hlavička algoritmu na riadku {line} musí mať tvar ALGORITMUS/ALGORITHM názov(parametre): a musí byť prvá.',
                 iteratorQuestion: 'Je ďalší prvok v {iterable}?',
                 nextIterator: 'ďalší prvok z {iterable}',
                 condition: 'Podmienka',
@@ -884,9 +953,13 @@ cross_road_complex(traffic_snapshots)`
         let currentLanguage = 'cs';
         let importedTemplate = null;
         let diagramStatusKey = 'diagramGenerated';
+        let pythonGenerationStatusKey = 'pythonGenerated';
+        let pythonGenerationErrorDetail = '';
         let pyodideStatusKey = 'pyodideLoading';
         let pyEditor, pseudoEditor;
         let pythonCodeRevision = 0;
+        let pythonCodeDirty = false;
+        let isSettingPythonProgrammatically = false;
         let pyodideInstance = null;
         let executionTrace = [];
         let currentStepIndex = -1;
@@ -895,10 +968,11 @@ cross_road_complex(traffic_snapshots)`
         let diagramZoom = 1;
         let diagramResizeObserver = null;
         let pseudocodeDiagramUpdateTimer = null;
+        let pseudocodePythonUpdateTimer = null;
         let diagramRenderVersion = 0;
         const pseudocodeDiagramUpdateDelay = 350;
         const supportedPseudocodeLeadingTerms = new Set([
-            'ALGORITMUS', 'POKUD', 'IF', 'JINAK', 'ELSE', 'DOKUD', 'WHILE',
+            'ALGORITMUS', 'ALGORITHM', 'POKUD', 'IF', 'JINAK', 'ELSE', 'DOKUD', 'WHILE',
             'PRO', 'FOR', 'VRAT', 'RETURN', 'VYPIS', 'WRITE'
         ]);
 
@@ -936,6 +1010,20 @@ cross_road_complex(traffic_snapshots)`
                     : 'text-[10px] text-amber-400 flex items-center space-x-1';
         }
 
+        function setPythonGenerationStatus(key, detail = '') {
+            pythonGenerationStatusKey = key;
+            pythonGenerationErrorDetail = detail;
+            const status = document.getElementById('pythonGenerationStatus');
+            if (!status) return;
+            status.textContent = translate(key);
+            status.title = detail;
+            status.className = key === 'pythonGenerated'
+                ? 'max-w-[200px] truncate text-[10px] text-emerald-400'
+                : key === 'pythonGenerationError'
+                    ? 'max-w-[200px] truncate text-[10px] text-rose-400'
+                    : 'max-w-[200px] truncate text-[10px] text-amber-300';
+        }
+
         function applyLanguage(language, refreshDiagram = true) {
             if (!Object.hasOwn(translations, language)) return;
             currentLanguage = language;
@@ -964,6 +1052,7 @@ cross_road_complex(traffic_snapshots)`
             document.getElementById('playText').textContent = translate(isPlaying ? 'pause' : 'play');
             setDiagramStatus(diagramStatusKey);
             renderPyodideStatus();
+            setPythonGenerationStatus(pythonGenerationStatusKey, pythonGenerationErrorDetail);
             document.getElementById('stepCounter').textContent = translate('stepCounter', {
                 current: currentStepIndex < 0 ? 0 : currentStepIndex + 1,
                 total: executionTrace.length
@@ -1024,6 +1113,7 @@ cross_road_complex(traffic_snapshots)`
             pseudoEditor.on('change', () => {
                 updatePseudocodeWarning();
                 scheduleDiagramUpdate();
+                schedulePythonGeneration();
             });
 
             // Python Editor
@@ -1036,6 +1126,10 @@ cross_road_complex(traffic_snapshots)`
             pyEditor.on('change', () => {
                 pythonCodeRevision++;
                 resetExecutionState();
+                if (!isSettingPythonProgrammatically) {
+                    pythonCodeDirty = true;
+                    setPythonGenerationStatus('pythonNeedsGeneration');
+                }
             });
 
             // Init Mermaid
@@ -1091,6 +1185,17 @@ cross_road_complex(traffic_snapshots)`
             );
         }
 
+        function schedulePythonGeneration() {
+            clearTimeout(pseudocodePythonUpdateTimer);
+            pseudocodePythonUpdateTimer = setTimeout(() => {
+                if (pythonCodeDirty) {
+                    setPythonGenerationStatus('pythonNeedsGeneration');
+                } else {
+                    generatePythonFromPseudocode();
+                }
+            }, pseudocodeDiagramUpdateDelay);
+        }
+
         function populateTemplateSelect() {
             const select = document.getElementById('templateSelect');
             const selectedKey = select.value;
@@ -1116,9 +1221,16 @@ cross_road_complex(traffic_snapshots)`
         function loadTemplate(key) {
             if (key === importedTemplateKey && importedTemplate) {
                 clearTimeout(pseudocodeDiagramUpdateTimer);
+                clearTimeout(pseudocodePythonUpdateTimer);
                 pseudoEditor.setValue(importedTemplate.pseudocode);
                 clearTimeout(pseudocodeDiagramUpdateTimer);
+                clearTimeout(pseudocodePythonUpdateTimer);
                 updateDiagramFromPseudocode();
+                if (pythonCodeDirty) {
+                    setPythonGenerationStatus('pythonNeedsGeneration');
+                } else {
+                    generatePythonFromPseudocode();
+                }
                 resetExecutionState();
                 return;
             }
@@ -1127,10 +1239,19 @@ cross_road_complex(traffic_snapshots)`
             if (!tmpl) return;
 
             clearTimeout(pseudocodeDiagramUpdateTimer);
+            clearTimeout(pseudocodePythonUpdateTimer);
             pseudoEditor.setValue(tmpl.pseudocode);
-            pyEditor.setValue(tmpl.python);
+            isSettingPythonProgrammatically = true;
+            try {
+                pyEditor.setValue(tmpl.python);
+            } finally {
+                isSettingPythonProgrammatically = false;
+            }
+            pythonCodeDirty = false;
             clearTimeout(pseudocodeDiagramUpdateTimer);
+            clearTimeout(pseudocodePythonUpdateTimer);
             updateDiagramFromPseudocode();
+            generatePythonFromPseudocode();
 
             resetExecutionState();
         }
@@ -1312,11 +1433,12 @@ cross_road_complex(traffic_snapshots)`
             applyDiagramZoom(true);
         }
 
-        function generateMermaidFromPseudocode(code) {
+        function parsePseudocode(code) {
             const lines = code.split('\n')
-                .map(line => ({
-                    indent: line.match(/^\s*/)[0].replace(/\t/g, '    ').length,
-                    text: line.trim()
+                .map((text, index) => ({
+                    indent: text.match(/^[\t ]*/)[0].replace(/\t/g, '    ').length,
+                    text: text.trim(),
+                    line: index + 1
                 }))
                 .filter(line => line.text.length > 0);
             const malformedElse = lines.find(line =>
@@ -1326,7 +1448,6 @@ cross_road_complex(traffic_snapshots)`
                 throw new Error(translate('malformedElse', { line: malformedElse.text }));
             }
             let lineIndex = 0;
-            let nodeIndex = 0;
 
             function isIf(line) {
                 return /^(POKUD|IF)\b/i.test(line);
@@ -1344,6 +1465,10 @@ cross_road_complex(traffic_snapshots)`
                 return /^(JINAK|ELSE)\b/i.test(line);
             }
 
+            function isAlgorithm(line) {
+                return /^(ALGORITMUS|ALGORITHM)\b/i.test(line);
+            }
+
             function parseBlock(indent) {
                 const statements = [];
                 while (lineIndex < lines.length) {
@@ -1351,9 +1476,7 @@ cross_road_complex(traffic_snapshots)`
                     if (current.indent < indent || (current.indent === indent && isElse(current.text))) break;
                     if (current.indent > indent) {
                         if (isElse(current.text)) {
-                            lineIndex++;
-                            statements.push({ type: 'step', text: current.text });
-                            continue;
+                            throw new Error(translate('malformedBlock', { line: current.text }));
                         }
                         const previousLineIndex = lineIndex;
                         statements.push(...parseBlock(current.indent));
@@ -1364,8 +1487,22 @@ cross_road_complex(traffic_snapshots)`
                     }
 
                     lineIndex++;
+                    if (isAlgorithm(current.text)) {
+                        const header = current.text.match(/^(?:ALGORITMUS|ALGORITHM)\s+([A-Za-z_][A-Za-z0-9_]*)\s*\((.*?)\)\s*:\s*$/i);
+                        if (!header || current.indent !== lines[0].indent || statements.length > 0) {
+                            throw new Error(translate('malformedAlgorithm', { line: current.line }));
+                        }
+                        statements.push({
+                            type: 'algorithm',
+                            name: header[1],
+                            parameters: header[2].trim(),
+                            text: current.text,
+                            line: current.line
+                        });
+                        continue;
+                    }
                     if (!isIf(current.text) && !isWhile(current.text) && !isFor(current.text)) {
-                        statements.push({ type: 'step', text: current.text });
+                        statements.push({ type: 'step', text: current.text, line: current.line });
                         continue;
                     }
 
@@ -1385,7 +1522,8 @@ cross_road_complex(traffic_snapshots)`
                         type: isLoop ? 'loop' : 'decision',
                         text: conditionText.replace(/^(POKUD|IF|DOKUD|WHILE|PRO|FOR)\s*/i, '').replace(/:\s*$/, ''),
                         thenBranch: [],
-                        elseBranch: []
+                        elseBranch: [],
+                        line: current.line
                     };
                     const iterableHeader = isLoop && conditionText.match(/^(?:PRO|FOR)\s+(.+?)\s+(?:V|IN)\s+(.+?):?$/i);
                     if (iterableHeader) {
@@ -1393,8 +1531,18 @@ cross_road_complex(traffic_snapshots)`
                         statement.iterator = iterableHeader[1].trim();
                         statement.iterable = iterableHeader[2].trim().replace(/:\s*$/, '');
                         statement.text = translate('iteratorQuestion', { iterable: statement.iterable });
-                    } else if (isLoop && /^(?:PRO|FOR)\s+.+?\s+(?:OD\s+.+?\s+DO|FROM\s+.+?\s+TO)\s+.+?:?$/i.test(conditionText)) {
-                        statement.type = 'countedLoop';
+                    } else if (isLoop) {
+                        const countedHeader = conditionText.match(
+                            /^(?:PRO|FOR)\s+([A-Za-z_][A-Za-z0-9_]*)\s+(?:OD\s+(.+?)\s+DO|FROM\s+(.+?)\s+TO)\s+(.+?):?$/i
+                        );
+                        if (countedHeader) {
+                            statement.type = 'countedLoop';
+                            statement.iterator = countedHeader[1];
+                            statement.start = countedHeader[2] || countedHeader[3];
+                            statement.end = countedHeader[4].replace(/:\s*$/, '');
+                        } else if (isFor(current.text)) {
+                            throw new Error(translate('malformedBlock', { line: current.text }));
+                        }
                     }
                     let thenIndent = null;
                     if (lineIndex < lines.length && lines[lineIndex].indent > current.indent && !isElse(lines[lineIndex].text)) {
@@ -1416,6 +1564,15 @@ cross_road_complex(traffic_snapshots)`
             }
 
             const statements = lines.length > 0 ? parseBlock(lines[0].indent) : [];
+            if (lineIndex < lines.length) {
+                throw new Error(translate('malformedBlock', { line: lines[lineIndex].text }));
+            }
+            return statements;
+        }
+
+        function generateMermaidFromPseudocode(code) {
+            const statements = parsePseudocode(code);
+            let nodeIndex = 0;
             const nodes = [];
             function makeNode(type, text) {
                 const node = { id: `N${nodeIndex++}`, type, text };
@@ -1541,6 +1698,187 @@ cross_road_complex(traffic_snapshots)`
             } catch (error) {
                 console.error("Pseudocode Parse Error:", error);
                 showDiagramError(translate('diagramCreateError'), error);
+            }
+        }
+
+        function translatePythonExpression(expression) {
+            return expression.split(/("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')/g)
+                .map((part, index) => {
+                    if (index % 2 === 1) return part;
+                    return part
+                        .replace(/\bMOD\b/gi, '%')
+                        .replace(/\bNEBO\b/gi, 'or')
+                        .replace(/\bA\b/g, 'and')
+                        .replace(/\bAND\b/gi, 'and')
+                        .replace(/\bOR\b/gi, 'or')
+                        .replace(/\bNOT\b/gi, 'not')
+                        .replace(/<>/g, '!=')
+                        .replace(/\btrue\b/gi, 'True')
+                        .replace(/\bfalse\b/gi, 'False')
+                        .replace(/\blength\s*\(/gi, 'len(')
+                        .replace(/←/g, '=');
+                })
+                .join('');
+        }
+
+        function toPythonIdentifier(name) {
+            const snakeCaseName = name
+                .replace(/([a-z0-9])([A-Z])/g, '$1_$2')
+                .replace(/([A-Z])([A-Z][a-z])/g, '$1_$2')
+                .replace(/[^A-Za-z0-9_]/g, '_')
+                .toLowerCase();
+            return /^[A-Za-z_]/.test(snakeCaseName) ? snakeCaseName : `_${snakeCaseName}`;
+        }
+
+        function generatePythonCode(code) {
+            const statements = parsePseudocode(code);
+            const algorithmIndex = statements.findIndex(statement => statement.type === 'algorithm');
+            const algorithm = algorithmIndex >= 0 ? statements[algorithmIndex] : null;
+            const body = statements.filter(statement => statement.type !== 'algorithm');
+            const generatedLines = [];
+
+            function appendBlock(block, indentation) {
+                if (block.length === 0) {
+                    generatedLines.push(`${' '.repeat(indentation)}pass`);
+                    return;
+                }
+
+                for (const statement of block) {
+                    const prefix = ' '.repeat(indentation);
+                    if (statement.type === 'decision') {
+                        if (!statement.text.trim()) {
+                            throw new Error(`Missing condition on line ${statement.line}.`);
+                        }
+                        generatedLines.push(`${prefix}if ${translatePythonExpression(statement.text)}:`);
+                        appendBlock(statement.thenBranch, indentation + 4);
+                        if (statement.elseBranch.length > 0) {
+                            generatedLines.push(`${prefix}else:`);
+                            appendBlock(statement.elseBranch, indentation + 4);
+                        }
+                        continue;
+                    }
+
+                    if (statement.type === 'loop') {
+                        if (!statement.text.trim()) {
+                            throw new Error(`Missing WHILE condition on line ${statement.line}.`);
+                        }
+                        if (statement.elseBranch.length > 0) {
+                            throw new Error(`An ELSE branch is not supported for loops (line ${statement.line}).`);
+                        }
+                        generatedLines.push(`${prefix}while ${translatePythonExpression(statement.text)}:`);
+                        appendBlock(statement.thenBranch, indentation + 4);
+                        continue;
+                    }
+
+                    if (statement.type === 'forEach') {
+                        if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(statement.iterator)
+                            || !statement.iterable.trim()) {
+                            throw new Error(`Invalid FOR item IN collection header on line ${statement.line}.`);
+                        }
+                        if (statement.elseBranch.length > 0) {
+                            throw new Error(`An ELSE branch is not supported for loops (line ${statement.line}).`);
+                        }
+                        generatedLines.push(
+                            `${prefix}for ${statement.iterator} in ${translatePythonExpression(statement.iterable)}:`
+                        );
+                        appendBlock(statement.thenBranch, indentation + 4);
+                        continue;
+                    }
+
+                    if (statement.type === 'countedLoop') {
+                        if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(statement.iterator)
+                            || !statement.start.trim()
+                            || !statement.end.trim()) {
+                            throw new Error(`Invalid counted FOR header on line ${statement.line}.`);
+                        }
+                        if (statement.elseBranch.length > 0) {
+                            throw new Error(`An ELSE branch is not supported for loops (line ${statement.line}).`);
+                        }
+                        const start = translatePythonExpression(statement.start);
+                        const end = translatePythonExpression(statement.end);
+                        generatedLines.push(
+                            `${prefix}for ${statement.iterator} in range(${start}, (${end}) + 1):`
+                        );
+                        appendBlock(statement.thenBranch, indentation + 4);
+                        continue;
+                    }
+
+                    if (statement.type !== 'step') {
+                        throw new Error(`Unsupported pseudocode structure on line ${statement.line}.`);
+                    }
+                    const write = statement.text.match(/^(?:VYPIS|WRITE)(?:\s+([\s\S]*))?$/i);
+                    if (write) {
+                        if (!write[1]) {
+                            throw new Error(`WRITE needs a value on line ${statement.line}.`);
+                        }
+                        generatedLines.push(`${prefix}print(${translatePythonExpression(write[1])})`);
+                        continue;
+                    }
+                    const result = statement.text.match(/^(?:VRAT|RETURN)(?:\s+([\s\S]*))?$/i);
+                    if (result) {
+                        generatedLines.push(
+                            `${prefix}return${result[1] ? ` ${translatePythonExpression(result[1])}` : ''}`
+                        );
+                        continue;
+                    }
+                    if (/^[A-ZČĎĚŇŘŠŤŮŽ][A-Z0-9_ČĎĚŇŘŠŤŮŽ]*\b/.test(statement.text)
+                        && !/^[A-Z_][A-Z0-9_]*\s*(?:=|←)/i.test(statement.text)) {
+                        throw new Error(`Unsupported pseudocode statement on line ${statement.line}: ${statement.text}`);
+                    }
+                    generatedLines.push(`${prefix}${translatePythonExpression(statement.text)}`);
+                }
+            }
+
+            if (algorithm) {
+                const parameters = translatePythonExpression(algorithm.parameters);
+                generatedLines.push(`def ${toPythonIdentifier(algorithm.name)}(${parameters}):`);
+                appendBlock(body, 4);
+            } else {
+                appendBlock(body, 0);
+            }
+            return generatedLines.join('\n');
+        }
+
+        function generatePythonFromPseudocode() {
+            clearTimeout(pseudocodePythonUpdateTimer);
+            if (!pseudoEditor || !pyEditor) return;
+
+            try {
+                const lines = pyEditor.getValue().split('\n');
+                const startMarkers = [];
+                const endMarkers = [];
+                lines.forEach((line, index) => {
+                    if (/^\s*# BEGIN GENERATED CODE\s*$/i.test(line)) startMarkers.push(index);
+                    if (/^\s*# END GENERATED CODE\s*$/i.test(line)) endMarkers.push(index);
+                });
+                if (startMarkers.length === 0 || endMarkers.length === 0) {
+                    throw new Error(translate('pythonMarkersMissing'));
+                }
+                if (startMarkers.length !== 1 || endMarkers.length !== 1
+                    || startMarkers[0] >= endMarkers[0]) {
+                    throw new Error(translate('pythonMarkersInvalid'));
+                }
+
+                const generatedCode = generatePythonCode(pseudoEditor.getValue());
+                const updatedLines = [
+                    ...lines.slice(0, startMarkers[0] + 1),
+                    ...generatedCode.split('\n'),
+                    ...lines.slice(endMarkers[0])
+                ];
+                const updatedCode = updatedLines.join('\n');
+                if (updatedCode !== pyEditor.getValue()) {
+                    isSettingPythonProgrammatically = true;
+                    try {
+                        pyEditor.setValue(updatedCode);
+                    } finally {
+                        isSettingPythonProgrammatically = false;
+                    }
+                }
+                pythonCodeDirty = false;
+                setPythonGenerationStatus('pythonGenerated');
+            } catch (error) {
+                console.error('Python Generation Error:', error);
+                setPythonGenerationStatus('pythonGenerationError', error.message);
             }
         }
 

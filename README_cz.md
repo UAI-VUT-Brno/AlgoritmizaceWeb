@@ -29,7 +29,7 @@ Nápověda s podporovanými termíny pseudokódu má výchozí výšku **224 px*
 
 Podporované řídicí struktury:
 
-- Hlavička algoritmu: `ALGORITMUS název(parametry):`.
+- Hlavička algoritmu: `ALGORITMUS název(parametry):` nebo `ALGORITHM name(parameters):`.
 - Podmínka: `POKUD podmínka:` nebo `IF podmínka:`.
 - Dlouhé popisky rozhodovacích uzlů se zalamují po slovech, aby se zmenšila výška diagramového kosočtverce.
 - Volitelná alternativní větev: `JINAK:` nebo `ELSE:`. Řádek `JINAK`/`ELSE` zarovnejte buď s odpovídajícím `POKUD`/`IF`, nebo s příkazy první větve.
@@ -56,11 +56,19 @@ ALGORITMUS IterateMatrix(matrix):
   VRAT positive_count
 ```
 
+### Generování Pythonu
+
+Panel Pythonu generuje kód z pseudokódu do oblasti mezi komentáři `# BEGIN GENERATED CODE` a `# END GENERATED CODE`. Importy nebo předpoklady ponechte před počátečním komentářem, ukázková data a volání za koncovým komentářem; při opětovném generování zůstanou okolní části zachovány. Každý komentář musí být uveden právě jednou a ve správném pořadí.
+
+Podporované struktury a příkazy pseudokódu (`ALGORITMUS`/`ALGORITHM`, `IF`/`POKUD`, `ELSE`/`JINAK`, `WHILE`/`DOKUD`, obě podoby `FOR`/`PRO`, `WRITE`/`VYPIS` a `RETURN`/`VRAT`) se převádějí na Python. Horní mez počítaného cyklu je zahrnuta. Základní výrazy se zachovávají; `MOD`, `NEBO`, samostatné `A`, `AND`, `OR`, `NOT`, `true`, `false` a `length(...)` se převádějí na ekvivalenty v Pythonu. Ostatní text příkazů se přenáší jako Python a musí mít platnou syntaxi.
+
+Při úpravě pseudokódu se označená oblast automaticky aktualizuje, dokud uživatel ručně neupraví editor Pythonu. Po ruční úpravě použijte **Generovat Python**; přepíše se pouze označená oblast. Chyba generování se zobrazí vedle tlačítka a stávající kód zůstane zachován. Importovaný JSON obsahuje pouze pseudokód; pokud editor Pythonu nebyl ručně upraven, vygenerovaná oblast se z něj aktualizuje.
+
 ### Uložení algoritmu
 
 Stiskněte tlačítko **Uložit JSON**. Soubor se stáhne s lidsky čitelným názvem vybraného algoritmu a příponou `.json`; název lze změnit v dialogu pro ukládání prohlížeče, pokud jej prohlížeč zobrazí. Neplatné znaky pro název souboru se nahradí podtržítkem.
 
-Tlačítkem **Načíst JSON** lze načíst soubor ve stejném formátu. Název importovaného algoritmu se zobrazí ve výběru a jeho pseudokód nahradí aktuální pseudokód. JSON neobsahuje Python kód, proto editor Pythonu zůstane beze změny.
+Tlačítkem **Načíst JSON** lze načíst soubor ve stejném formátu. Název importovaného algoritmu se zobrazí ve výběru a jeho pseudokód nahradí aktuální pseudokód. JSON neobsahuje Python kód, proto se při nezměněném editoru Pythonu znovu vygeneruje pouze označená oblast; okolní kód zůstane zachován.
 
 Export obsahuje lidský název algoritmu a pseudokód jako pole řádků. Každý řádek má `text` s obsahem bez počátečního odsazení a `indent` s počtem odsazovacích mezer; tabulátor se počítá jako čtyři mezery. Prázdné řádky se zachovávají.
 

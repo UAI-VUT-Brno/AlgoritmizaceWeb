@@ -29,7 +29,7 @@ The supported-terms help panel has a default height of **224 px**. Resize it by 
 
 Supported control structures:
 
-- Algorithm header: `ALGORITMUS name(parameters):`.
+- Algorithm header: `ALGORITMUS name(parameters):` or `ALGORITHM name(parameters):`.
 - Condition: `POKUD condition:` or `IF condition:`.
 - Long decision labels wrap at word boundaries to reduce the height of the flowchart diamond.
 - Optional alternative branch: `JINAK:` or `ELSE:`. Align `JINAK`/`ELSE` either with its matching `POKUD`/`IF` or with the statements in the first branch.
@@ -56,11 +56,19 @@ ALGORITMUS IterateMatrix(matrix):
   VRAT positive_count
 ```
 
+### Generating Python
+
+The Python pane generates code from the pseudocode into the region between the comments `# BEGIN GENERATED CODE` and `# END GENERATED CODE`. Keep imports or preconditions before the start marker and example inputs or calls after the end marker; regeneration preserves both surrounding regions. The markers must appear exactly once and in that order.
+
+The supported pseudocode structures and commands (`ALGORITMUS`/`ALGORITHM`, `IF`/`POKUD`, `ELSE`/`JINAK`, `WHILE`/`DOKUD`, both `FOR`/`PRO` forms, `WRITE`/`VYPIS`, and `RETURN`/`VRAT`) generate Python. Counted-loop end bounds are inclusive. Basic expressions are retained, with `MOD`, `NEBO`, standalone `A`, `AND`, `OR`, `NOT`, `true`, `false`, and `length(...)` translated to their Python equivalents. Other statement text is emitted as Python and must be valid Python.
+
+Pseudocode edits regenerate the marked section automatically until the Python editor is edited manually. After a manual edit, use **Generate Python** to explicitly replace only the marked section. Generation errors are shown beside the button and leave the existing code unchanged. Imported JSON contains only pseudocode; it updates the generated region when the Python editor has not been manually edited.
+
 ### Saving an algorithm
 
 Click **Save JSON**. The file is downloaded using the selected algorithm's human-readable name and the `.json` extension. Invalid filename characters are replaced with underscores. A browser save dialog may allow you to change the filename.
 
-Use **Load JSON** to import a file in this format. The imported algorithm name appears in the selector, and its pseudocode replaces the current pseudocode. Because the JSON format does not include Python code, the Python editor is left unchanged.
+Use **Load JSON** to import a file in this format. The imported algorithm name appears in the selector, and its pseudocode replaces the current pseudocode. Because JSON does not contain Python code, the generated region is regenerated from the imported pseudocode when possible; code outside that region is preserved.
 
 The export contains the algorithm name and pseudocode as an array of lines. Each line has `text`, containing the content without leading indentation, and `indent`, containing the indentation in spaces; tabs count as four spaces. Blank lines are preserved.
 

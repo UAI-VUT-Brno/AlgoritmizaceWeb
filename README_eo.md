@@ -29,7 +29,7 @@ La help-panelo kun subtenataj terminoj havas defaŭltan altecon de **224 px**. �
 
 Subtenataj kontrolstrukturoj:
 
-- Algoritma kaplinio: `ALGORITMUS name(parameters):`.
+- Algoritma kaplinio: `ALGORITMUS name(parameters):` aŭ `ALGORITHM name(parameters):`.
 - Kondiĉo: `POKUD condition:` aŭ `IF condition:`.
 - Longaj etikedoj de decidaj nodoj estas falditaj ĉe vortlimoj por malpliigi la altecon de la rombo.
 - Laŭvola alternativa branĉo: `JINAK:` aŭ `ELSE:`. Vicigu la linion `JINAK`/`ELSE` kun la responda `POKUD`/`IF` aŭ kun la komandoj en la unua branĉo.
@@ -56,11 +56,15 @@ ALGORITMUS IterateMatrix(matrix):
   VRAT positive_count
 ```
 
+### Generi Python
+
+La Python-panelo generas kodon inter la komentoj `# BEGIN GENERATED CODE` kaj `# END GENERATED CODE`. Lasu importojn kaj antaŭkondiĉojn antaŭ la unua komento, kaj ekzemplajn datumojn kaj vokojn post la dua; regenerado konservas la kodon ekster tiu regiono. Pseŭdokodaj ŝanĝoj aŭtomate ĝisdatigas la regionon ĝis la Python-redaktilo estas permane ŝanĝita. Poste la butono **Generi Python** eksplicite anstataŭigas la regionon. Nombrilaj iteracioj inkluzivas sian finan valoron. Algoritmaj kaplinioj, kondiĉoj, iteracioj, `WRITE`/`VYPIS` kaj `RETURN`/`VRAT` estas subtenataj; aliaj komandoj devas esti validaj Python-komandoj.
+
 ### Konservi algoritmon
 
 Alklaku **Konservi JSON**. La dosiero elŝutiĝas kun la homlegebla nomo de la elektita algoritmo kaj la sufikso `.json`. Nevalidaj signoj en la dosiernomo estas anstataŭigitaj per substrekoj. Retumila dialogo por konservi la dosieron povas ebligi ŝanĝi la nomon.
 
-Uzu **Ŝargi JSON** por importi dosieron en la sama formato. La nomo de la importita algoritmo aperas en la elektilo, kaj ĝia pseŭdokodo anstataŭigas la aktualan. Ĉar la JSON-formato ne enhavas Python-kodon, la Python-redaktilo restas senŝanĝa.
+Uzu **Ŝargi JSON** por importi dosieron en la sama formato. La nomo de la importita algoritmo aperas en la elektilo, kaj ĝia pseŭdokodo anstataŭigas la aktualan. Ĉar JSON ne enhavas Python-kodon, la generita regiono estas ĝisdatigita el la pseŭdokodo se la Python-redaktilo ne estis permane ŝanĝita; la ĉirkaŭa kodo estas konservata.
 
 La eksporto enhavas la algoritman nomon kaj la pseŭdokodon kiel tabelon de linioj. Ĉiu linio havas `text` kun la enhavo sen komenca indento kaj `indent` kun la nombro de indentaj spacoj; tabo kalkuliĝas kiel kvar spacoj. Malplenaj linioj estas konservataj.
 

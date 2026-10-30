@@ -29,7 +29,7 @@ Le panneau d’aide des termes pris en charge a une hauteur initiale de **224 px
 
 Structures de contrôle prises en charge :
 
-- En-tête d’algorithme : `ALGORITMUS nom(paramètres):`.
+- En-tête d’algorithme : `ALGORITMUS nom(paramètres):` ou `ALGORITHM name(parameters):`.
 - Condition : `POKUD condition:` ou `IF condition:`.
 - Les longs libellés des nœuds de décision sont coupés aux limites des mots afin de réduire la hauteur du losange.
 - Branche alternative facultative : `JINAK:` ou `ELSE:`. Alignez `JINAK`/`ELSE` soit avec le `POKUD`/`IF` correspondant, soit avec les instructions de la première branche.
@@ -56,11 +56,15 @@ ALGORITMUS IterateMatrix(matrix):
   VRAT positive_count
 ```
 
+### Générer du Python
+
+Le panneau Python génère le code dans la région délimitée par les commentaires `# BEGIN GENERATED CODE` et `# END GENERATED CODE`. Placez les imports et préconditions avant le premier commentaire, puis les données d’exemple et appels après le second ; la régénération préserve le code situé hors de cette région. Les modifications du pseudocode actualisent automatiquement la région jusqu’à une modification manuelle de l’éditeur Python. Ensuite, le bouton **Générer Python** remplace explicitement la région. La borne finale des boucles comptées est incluse. Les en-têtes d’algorithme, conditions, boucles, `WRITE`/`VYPIS` et `RETURN`/`VRAT` sont pris en charge ; les autres instructions doivent être du Python valide.
+
 ### Enregistrer un algorithme
 
 Cliquez sur **Enregistrer JSON**. Le fichier est téléchargé avec le nom lisible de l’algorithme sélectionné et l’extension `.json`. Les caractères interdits dans les noms de fichier sont remplacés par des traits de soulignement. Une boîte de dialogue du navigateur peut permettre de modifier le nom.
 
-Utilisez **Charger JSON** pour importer un fichier au même format. Le nom de l’algorithme importé apparaît dans la liste et son pseudocode remplace le pseudocode actuel. Le format JSON ne contenant pas de code Python, l’éditeur Python reste inchangé.
+Utilisez **Charger JSON** pour importer un fichier au même format. Le nom de l’algorithme importé apparaît dans la liste et son pseudocode remplace le pseudocode actuel. JSON ne contient pas de code Python ; la région générée est donc mise à jour à partir du pseudocode si l’éditeur Python n’a pas été modifié manuellement, tandis que le code environnant est préservé.
 
 L’export contient le nom de l’algorithme et le pseudocode sous forme de tableau de lignes. Chaque ligne possède `text`, qui contient le texte sans indentation initiale, et `indent`, qui indique le nombre d’espaces d’indentation ; une tabulation compte pour quatre espaces. Les lignes vides sont conservées.
 
