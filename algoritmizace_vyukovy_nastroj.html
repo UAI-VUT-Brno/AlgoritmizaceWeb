@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="cs" class="dark">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -238,10 +238,10 @@
                 <span id="speedVal" class="text-slate-400 font-mono w-10">600ms</span>
             </div>
             <div class="flex items-center gap-1 rounded-lg border border-darkaccent bg-darkbg p-1" role="group" data-i18n-aria-label="languageSelector">
-                <button type="button" class="language-button rounded px-1.5 py-1 text-[11px] transition hover:bg-darkaccent" data-language="cs" aria-pressed="true" aria-label="Čeština">
+                <button type="button" class="language-button rounded px-1.5 py-1 text-[11px] transition hover:bg-darkaccent" data-language="cs" aria-pressed="false" aria-label="Čeština">
                     <svg class="language-flag" viewBox="0 0 30 20" aria-hidden="true"><rect width="30" height="10" fill="#fff"/><rect y="10" width="30" height="10" fill="#d7141a"/><path d="M0 0v20l13-10z" fill="#11457e"/></svg> CS
                 </button>
-                <button type="button" class="language-button rounded px-1.5 py-1 text-[11px] transition hover:bg-darkaccent" data-language="en" aria-pressed="false" aria-label="English">
+                <button type="button" class="language-button rounded px-1.5 py-1 text-[11px] transition hover:bg-darkaccent" data-language="en" aria-pressed="true" aria-label="English">
                     <svg class="language-flag" viewBox="0 0 30 20" aria-hidden="true"><rect width="30" height="20" fill="#012169"/><path d="M0 0l30 20M30 0L0 20" stroke="#fff" stroke-width="4"/><path d="M0 0l30 20M30 0L0 20" stroke="#c8102e" stroke-width="1.5"/><path d="M15 0v20M0 10h30" stroke="#fff" stroke-width="7"/><path d="M15 0v20M0 10h30" stroke="#c8102e" stroke-width="3"/></svg> EN
                 </button>
                 <button type="button" class="language-button rounded px-1.5 py-1 text-[11px] transition hover:bg-darkaccent" data-language="sk" aria-pressed="false" aria-label="Slovenčina">
@@ -398,13 +398,13 @@
         const templates = {
             bubbleSort: {
                 name: 'Bubble Sort',
-                pseudocode: `ALGORITMUS BubbleSort(array):
+                pseudocode: `ALGORITHM BubbleSort(array):
   n = length(array)
-  PRO i OD 0 DO n-1:
-    PRO j OD 0 DO n-i-2:
-      POKUD array[j] > array[j+1]:
-        array[j], array[j+1] = array[j+1], array[j]
-  VRAT array`,
+  FOR i FROM 0 TO n - 1:
+    FOR j FROM 0 TO n - i - 2:
+      IF array[j] > array[j + 1]:
+        array[j], array[j + 1] = array[j + 1], array[j]
+  RETURN array`,
                 python: `# BEGIN GENERATED CODE
 def bubble_sort(array):
     n = len(array)
@@ -417,16 +417,16 @@ def bubble_sort(array):
 
 values = [64, 34, 25, 12, 22, 8, -10, -5, 0, 3, 99]
 bubble_sort(values)
-print("konec")`
+print("done")`
             },
 
             factorial: {
                 name: 'Factorial (Recursion/Loops)',
-                pseudocode: `ALGORITMUS Factorial(n):
+                pseudocode: `ALGORITHM Factorial(n):
   result = 1
-  PRO i OD 1 DO n:
+  FOR i FROM 1 TO n:
     result = result * i
-  VRAT result`,
+  RETURN result`,
                 python: `# BEGIN GENERATED CODE
 def factorial(n):
     result = 1
@@ -441,12 +441,12 @@ print("Factorial:", result)`
 
             findMax: {
                 name: 'Find Maximum in an Array',
-                pseudocode: `ALGORITMUS FindMaximum(array):
+                pseudocode: `ALGORITHM FindMaximum(array):
   max_value = array[0]
-  PRO item V array:
-    POKUD item > max_value:
+  FOR item IN array:
+    IF item > max_value:
       max_value = item
-  VRAT max_value`,
+  RETURN max_value`,
                 python: `# BEGIN GENERATED CODE
 def find_max(array):
     max_value = array[0]
@@ -463,12 +463,12 @@ print("Maximum:", maximum)`
 
             gcd: {
                 name: 'Euclidean Algorithm (GCD)',
-                pseudocode: `ALGORITMUS EuclideanGCD(a, b):
-  DOKUD b != 0:
+                pseudocode: `ALGORITHM EuclideanGCD(a, b):
+  WHILE b != 0:
     temp = b
     b = a MOD b
     a = temp
-  VRAT a`,
+  RETURN a`,
                 python: `# BEGIN GENERATED CODE
 def euclidean_gcd(a, b):
     while b != 0:
@@ -484,16 +484,16 @@ print("GCD:", result)`
 
             triangleArea: {
                 name: 'Triangle Area from Three Sides',
-                pseudocode: `ALGORITMUS TriangleArea(a, b, c):
-  POKUD a <= 0 NEBO b <= 0 NEBO c <= 0:
-    VYPIS "Side lengths must be greater than zero"
-    VRAT None
-  POKUD a + b <= c NEBO a + c <= b NEBO b + c <= a:
-    VYPIS "Side lengths do not form a valid triangle"
-    VRAT None
+                pseudocode: `ALGORITHM TriangleArea(a, b, c):
+  IF a <= 0 OR b <= 0 OR c <= 0:
+    WRITE "Side lengths must be greater than zero"
+    RETURN None
+  IF a + b <= c OR a + c <= b OR b + c <= a:
+    WRITE "Side lengths do not form a valid triangle"
+    RETURN None
   sp = (a + b + c) / 2
   area = math.sqrt(sp * (sp - a) * (sp - b) * (sp - c))
-  VRAT area`,
+  RETURN area`,
                 python: `import math
 
 # BEGIN GENERATED CODE
@@ -514,18 +514,18 @@ print("Triangle area:", area)`
 
             pedestrianCrossingBasic: {
                 name: 'Pedestrian Crossing (Basic)',
-                pseudocode: `ALGORITMUS PedestrianCrossingBasic(traffic_snapshots):
-  VYPIS "stop_at_curb"
-  VYPIS "look left, right, left again"
+                pseudocode: `ALGORITHM PedestrianCrossingBasic(traffic_snapshots):
+  WRITE "Stop at the curb"
+  WRITE "Look left, right, and left again"
   FOR traffic_approaching IN traffic_snapshots:
-    POKUD traffic_approaching:
-      VYPIS "wait 5 seconds"
-      VYPIS "recheck traffic"
-    JINAK:
-      VYPIS "cross while watching traffic"
-      VRAT true
-  VYPIS "Traffic is still approaching. Keep waiting."
-  VRAT false`,
+    IF traffic_approaching:
+      WRITE "Wait 5 seconds"
+      WRITE "Check traffic again"
+    ELSE:
+      WRITE "Cross while watching traffic"
+      RETURN true
+  WRITE "Traffic is still approaching. Keep waiting."
+  RETURN false`,
                 python: `# BEGIN GENERATED CODE
 def cross_road_basic(traffic_snapshots):
     print("Stop at the curb.")
@@ -542,25 +542,25 @@ def cross_road_basic(traffic_snapshots):
 
 traffic_snapshots = [True, True, False]
 pedestrian_crossing_basic(traffic_snapshots)
-print("konec")`
+print("done")`
             },
 
             pedestrianCrossingComplex: {
                 name: 'Pedestrian Crossing (Unsignalized, Complex)',
-                pseudocode: `ALGORITMUS PedestrianCrossingUnsignalized(traffic_snapshots):
-  VYPIS "Choose a crossing place with a clear view."
-  VYPIS "Stop before the road, remove distractions, and check both directions."
-  PRO snapshot V traffic_snapshots:
+                pseudocode: `ALGORITHM PedestrianCrossingUnsignalized(traffic_snapshots):
+  WRITE "Choose a crossing place with a clear view."
+  WRITE "Stop before the road, remove distractions, and check both directions."
+  FOR snapshot IN traffic_snapshots:
     all_lanes_clear = true
-    PRO lane_is_unsafe V snapshot:
-      POKUD lane_is_unsafe:
+    FOR lane_is_unsafe IN snapshot:
+      IF lane_is_unsafe:
         all_lanes_clear = false
-    POKUD all_lanes_clear:
-      VYPIS "All lanes have a safe gap. Cross without running and keep watching traffic."
-      VRAT true
-    VYPIS "At least one lane is unsafe. Wait and check both directions again."
-  VYPIS "No safe gap yet. Keep waiting."
-  VRAT false`,
+    IF all_lanes_clear:
+      WRITE "All lanes have a safe gap. Cross without running and keep watching traffic."
+      RETURN true
+    WRITE "At least one lane is unsafe. Wait and check both directions again."
+  WRITE "No safe gap yet. Keep waiting."
+  RETURN false`,
                 python: `# BEGIN GENERATED CODE
 def cross_road_complex(traffic_snapshots):
     print("Choose a crossing place with a clear view.")
@@ -577,7 +577,7 @@ def cross_road_complex(traffic_snapshots):
 
 traffic_snapshots = [[True, False], [False, True], [False, False]]
 pedestrian_crossing_unsignalized(traffic_snapshots)
-print("konec")`
+print("done")`
             }
         };
 
@@ -679,15 +679,15 @@ print("konec")`
                 algorithm: 'Algorithm',
                 pseudocodeWarningTitle: 'Highlights unknown uppercase words at the beginning of a line; ordinary assignments are ignored.',
                 supportedTerms: 'Supported pseudocode terms',
-                termAlgorithm: '<code class="text-indigo-300">ALGORITMUS název(...):</code> / <code class="text-indigo-300">ALGORITHM name(...):</code> — algorithm header',
-                termIf: '<code class="text-indigo-300">POKUD</code> / <code class="text-indigo-300">IF</code> — condition',
-                termElse: '<code class="text-indigo-300">JINAK</code> / <code class="text-indigo-300">ELSE</code> — alternative branch',
-                termWhile: '<code class="text-indigo-300">DOKUD</code> / <code class="text-indigo-300">WHILE</code> — conditional loop',
-                termForEach: '<code class="text-indigo-300">PRO prvek V kolekce</code> / <code class="text-indigo-300">FOR prvek IN collection</code> — iterate over a collection',
-                termForCount: '<code class="text-indigo-300">PRO i OD začátek DO konec</code> / <code class="text-indigo-300">FOR i FROM start TO end</code> — counted loop (hexagon)',
-                termReturn: '<code class="text-indigo-300">VRAT hodnota</code> / <code class="text-indigo-300">RETURN value</code> — return a function result (parallelogram)',
-                termWrite: '<code class="text-indigo-300">VYPIS hodnota</code> / <code class="text-indigo-300">WRITE value</code> — print a value',
-                termInput: '<code class="text-indigo-300">VSTUP proměnná</code> / <code class="text-indigo-300">INPUT variable</code> — read text input (parallelogram)',
+                termAlgorithm: '<code class="text-indigo-300">ALGORITHM name(...):</code> — algorithm header',
+                termIf: '<code class="text-indigo-300">IF</code> — condition',
+                termElse: '<code class="text-indigo-300">ELSE</code> — alternative branch',
+                termWhile: '<code class="text-indigo-300">WHILE</code> — conditional loop',
+                termForEach: '<code class="text-indigo-300">FOR item IN collection</code> — iterate over a collection',
+                termForCount: '<code class="text-indigo-300">FOR i FROM start TO end</code> — counted loop (hexagon)',
+                termReturn: '<code class="text-indigo-300">RETURN value</code> — return a function result (parallelogram)',
+                termWrite: '<code class="text-indigo-300">WRITE value</code> — print a value',
+                termInput: '<code class="text-indigo-300">INPUT variable</code> — read text input (parallelogram)',
                 termIndent: 'End blocks with a colon and indent them; other lines appear as steps.',
                 termPythonGeneration: 'Python is generated between the comments <code class="text-indigo-300"># BEGIN GENERATED CODE</code> and <code class="text-indigo-300"># END GENERATED CODE</code>.',
                 termWarning: 'Unknown uppercase words at the start of a line are underlined in red; this is only a hint.',
@@ -727,11 +727,11 @@ print("konec")`
                 noExecutionSteps: 'No execution steps were recorded for this code block.',
                 pythonRuntimeError: 'Python runtime error:',
                 unknownTerms: 'Unknown control terms: {count}',
-                malformedElse: 'The alternative branch "{line}" must be written as JINAK: or ELSE:.',
+                malformedElse: 'The alternative branch "{line}" must be written as ELSE:.',
                 malformedBlock: 'Could not parse pseudocode at line: {line}',
-                malformedInput: 'The VSTUP/INPUT command on line {line} must have the form INPUT variable.',
+                malformedInput: 'The INPUT command on line {line} must have the form INPUT variable.',
                 missingColon: 'Header "{line}" must end with a colon.',
-                malformedAlgorithm: 'The algorithm header on line {line} must be ALGORITMUS or ALGORITHM name(parameters): and must come first.',
+                malformedAlgorithm: 'The algorithm header on line {line} must be ALGORITHM name(parameters): and must come first.',
                 iteratorQuestion: 'Next item in {iterable}?',
                 nextIterator: 'next item from {iterable}',
                 condition: 'Condition',
@@ -981,7 +981,7 @@ print("konec")`
 
         // --- 2. GLOBAL STATE ---
         const importedTemplateKey = '__imported__';
-        let currentLanguage = 'cs';
+        let currentLanguage = 'en';
         let importedTemplate = null;
         let diagramStatusKey = 'diagramGenerated';
         let pythonGenerationStatusKey = 'pythonGenerated';
@@ -1173,7 +1173,7 @@ print("konec")`
             document.querySelectorAll('.language-button').forEach(button => {
                 button.addEventListener('click', () => applyLanguage(button.dataset.language));
             });
-            applyLanguage('cs', false);
+            applyLanguage('en', false);
             loadTemplate(document.getElementById('templateSelect').value);
             document.getElementById('jsonFileInput').addEventListener('change', event => {
                 const [file] = event.target.files;
