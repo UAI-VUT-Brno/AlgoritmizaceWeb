@@ -15,7 +15,7 @@ Jednoduchý výučbový webový nástroj na vizualizáciu základných algoritmo
 - spúšťa Python v prehliadači pomocou Pyodide bez potreby lokálnej inštalácie Pythonu
 - ponúka rozhranie v češtine, angličtine, slovenčine, esperante a francúzštine
 
-Jazyk rozhrania zmeníte tlačidlami s vlajkami a skratkami **CS**, **EN**, **SK**, **EO** a **FR** v pravom hornom rohu. Esperanto používa zelenú vlajku so zelenou hviezdou na bielom poli. Predvoleným jazykom je čeština. Popisy rozhrania sa prekladajú, ale ľudsky čitateľné názvy ukážkových algoritmov zostávajú v angličtine. Termíny pseudokódu ani obsah práve upravovaného algoritmu sa neprekladajú.
+Jazyk rozhrania zmeníte tlačidlami s vlajkami a skratkami **CS**, **EN**, **SK**, **EO** a **FR** v pravom hornom rohu. Esperanto používa zelenú vlajku so zelenou hviezdou na bielom poli. Predvoleným jazykom je angličtina. Popisy rozhrania a podporované termíny pseudokódu sa prekladajú, ale ľudsky čitateľné názvy ukážkových algoritmov zostávajú v angličtine. Pseudokód sa interne prevádza do kanonickej angličtiny; identifikátory a text v úvodzovkách zostávajú zachované.
 
 ## Diagramy a podporovaný pseudokód
 
@@ -64,16 +64,17 @@ Panel Pythonu generuje kód do oblasti medzi komentármi `# BEGIN GENERATED CODE
 
 Kliknite na tlačidlo **Uložiť JSON**. Súbor sa stiahne s ľudsky čitateľným názvom vybraného algoritmu a príponou `.json`. Neplatné znaky v názve súboru sa nahradia podčiarkovníkom. Ak prehliadač zobrazí dialóg na uloženie, názov možno zmeniť.
 
-Tlačidlom **Načítať JSON** možno načítať súbor v rovnakom formáte. Názov importovaného algoritmu sa zobrazí vo výbere a jeho pseudokód nahradí aktuálny pseudokód. JSON neobsahuje Python kód, preto sa pri neupravenom editore Pythonu vygenerovaná oblasť obnoví z pseudokódu a okolitý kód zostane zachovaný.
+Tlačidlom **Načítať JSON** možno načítať súbor v rovnakom formáte. Názov importovaného algoritmu sa zobrazí vo výbere a jeho pseudokód nahradí aktuálny pseudokód. Exportovaný JSON ukladá kanonický anglický pseudokód a obsahuje `"pseudocodeLanguage": "en"`; pri importe sa akceptujú aj podporované lokalizované termíny. JSON neobsahuje Python kód, preto sa pri neupravenom editore Pythonu vygenerovaná oblasť obnoví z pseudokódu a okolitý kód zostane zachovaný.
 
 Export obsahuje názov algoritmu a pseudokód ako pole riadkov. Každý riadok obsahuje `text` bez úvodného odsadenia a `indent` s počtom odsadzovacích medzier; tabulátor sa počíta ako štyri medzery. Prázdne riadky sa zachovajú.
 
 ```json
 {
   "name": "Bubble Sort",
+  "pseudocodeLanguage": "en",
   "pseudocode": [
-    { "text": "ALGORITMUS Example:", "indent": 0 },
-    { "text": "VYPIS value", "indent": 2 }
+    { "text": "ALGORITHM Example:", "indent": 0 },
+    { "text": "WRITE value", "indent": 2 }
   ]
 }
 ```

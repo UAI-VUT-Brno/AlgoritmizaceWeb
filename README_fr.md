@@ -15,7 +15,7 @@ Un outil pédagogique web simple pour visualiser des algorithmes de base et leur
 - exécute Python dans le navigateur grâce à Pyodide, sans installation locale de Python
 - propose une interface en tchèque, anglais, slovaque, espéranto et français
 
-Utilisez les boutons avec drapeaux et codes **CS**, **EN**, **SK**, **EO** et **FR**, en haut à droite, pour changer la langue de l’interface. L’espéranto utilise son drapeau vert avec une étoile verte sur un canton blanc. La langue par défaut est le tchèque. Les libellés de l’interface sont traduits, mais les noms lisibles des algorithmes d’exemple restent en anglais. Les termes du pseudocode et le contenu de l’algorithme en cours de modification ne sont pas traduits.
+Utilisez les boutons avec drapeaux et codes **CS**, **EN**, **SK**, **EO** et **FR**, en haut à droite, pour changer la langue de l’interface. L’espéranto utilise son drapeau vert avec une étoile verte sur un canton blanc. La langue par défaut est l’anglais. Les libellés de l’interface et les termes de pseudocode pris en charge sont traduits, mais les noms lisibles des algorithmes d’exemple restent en anglais. Le pseudocode est converti en anglais canonique en interne ; les identifiants et le texte entre guillemets sont conservés.
 
 ## Organigrammes et pseudocode pris en charge
 
@@ -64,16 +64,17 @@ Le panneau Python génère le code dans la région délimitée par les commentai
 
 Cliquez sur **Enregistrer JSON**. Le fichier est téléchargé avec le nom lisible de l’algorithme sélectionné et l’extension `.json`. Les caractères interdits dans les noms de fichier sont remplacés par des traits de soulignement. Une boîte de dialogue du navigateur peut permettre de modifier le nom.
 
-Utilisez **Charger JSON** pour importer un fichier au même format. Le nom de l’algorithme importé apparaît dans la liste et son pseudocode remplace le pseudocode actuel. JSON ne contient pas de code Python ; la région générée est donc mise à jour à partir du pseudocode si l’éditeur Python n’a pas été modifié manuellement, tandis que le code environnant est préservé.
+Utilisez **Charger JSON** pour importer un fichier au même format. Le nom de l’algorithme importé apparaît dans la liste et son pseudocode remplace le pseudocode actuel. Les exports JSON stockent le pseudocode canonique anglais et contiennent `"pseudocodeLanguage": "en"` ; les imports acceptent également les termes localisés pris en charge. JSON ne contient pas de code Python ; la région générée est donc mise à jour à partir du pseudocode si l’éditeur Python n’a pas été modifié manuellement, tandis que le code environnant est préservé.
 
 L’export contient le nom de l’algorithme et le pseudocode sous forme de tableau de lignes. Chaque ligne possède `text`, qui contient le texte sans indentation initiale, et `indent`, qui indique le nombre d’espaces d’indentation ; une tabulation compte pour quatre espaces. Les lignes vides sont conservées.
 
 ```json
 {
   "name": "Bubble Sort",
+  "pseudocodeLanguage": "en",
   "pseudocode": [
-    { "text": "ALGORITMUS Example:", "indent": 0 },
-    { "text": "VYPIS value", "indent": 2 }
+    { "text": "ALGORITHM Example:", "indent": 0 },
+    { "text": "WRITE value", "indent": 2 }
   ]
 }
 ```

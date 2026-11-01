@@ -648,11 +648,11 @@ print("done")`
                 noExecutionSteps: 'Nebyl zaznamenán žádný krok vykonávání kódového bloku.',
                 pythonRuntimeError: 'Chyba běhu Pythonu:',
                 unknownTerms: 'Neznámé řídicí výrazy: {count}',
-                malformedElse: 'Alternativní větev "{line}" musí být zapsána jako JINAK: nebo ELSE:.',
+                malformedElse: 'Alternativní větev "{line}" musí být zapsána jako {else}:.',
                 malformedBlock: 'Pseudokód nelze zpracovat u řádku: {line}',
-                malformedInput: 'Příkaz VSTUP/INPUT na řádku {line} musí mít tvar VSTUP proměnná nebo INPUT variable.',
+                malformedInput: 'Příkaz {input} na řádku {line} musí mít za příkazem název proměnné.',
                 missingColon: 'Hlavička "{line}" musí končit dvojtečkou.',
-                malformedAlgorithm: 'Hlavička algoritmu na řádku {line} musí mít tvar ALGORITMUS/ALGORITHM název(parametry): a musí být první.',
+                malformedAlgorithm: 'Hlavička algoritmu na řádku {line} musí začínat výrazem {algorithm} a musí být první.',
                 iteratorQuestion: 'Další prvek v {iterable}?',
                 nextIterator: 'další prvek z {iterable}',
                 condition: 'Podmínka',
@@ -727,11 +727,11 @@ print("done")`
                 noExecutionSteps: 'No execution steps were recorded for this code block.',
                 pythonRuntimeError: 'Python runtime error:',
                 unknownTerms: 'Unknown control terms: {count}',
-                malformedElse: 'The alternative branch "{line}" must be written as ELSE:.',
+                malformedElse: 'The alternative branch "{line}" must be written as {else}:.',
                 malformedBlock: 'Could not parse pseudocode at line: {line}',
-                malformedInput: 'The INPUT command on line {line} must have the form INPUT variable.',
+                malformedInput: 'The {input} command on line {line} must be followed by a variable name.',
                 missingColon: 'Header "{line}" must end with a colon.',
-                malformedAlgorithm: 'The algorithm header on line {line} must be ALGORITHM name(parameters): and must come first.',
+                malformedAlgorithm: 'The algorithm header on line {line} must start with {algorithm} and must come first.',
                 iteratorQuestion: 'Next item in {iterable}?',
                 nextIterator: 'next item from {iterable}',
                 condition: 'Condition',
@@ -806,11 +806,11 @@ print("done")`
                 noExecutionSteps: 'Neniu rula paŝo estis registrita por ĉi tiu kodbloko.',
                 pythonRuntimeError: 'Python-rultempa eraro:',
                 unknownTerms: 'Nekonataj stiraj terminoj: {count}',
-                malformedElse: 'La alternativa branĉo "{line}" devas esti skribita kiel JINAK: aŭ ELSE:.',
+                malformedElse: 'La alternativa branĉo "{line}" devas esti skribita kiel {else}:.',
                 malformedBlock: 'Ne eblis analizi pseŭdokodon ĉe linio: {line}',
-                malformedInput: 'La komando VSTUP/INPUT ĉe linio {line} devas havi la formon INPUT variable.',
+                malformedInput: 'La komando {input} ĉe linio {line} devas esti sekvata de variablonomo.',
                 missingColon: 'La kaplinio "{line}" devas finiĝi per dupunkto.',
-                malformedAlgorithm: 'La algoritmo-kapo ĉe linio {line} devas havi la formon ALGORITMUS aŭ ALGORITHM nomo(parametroj): kaj esti la unua.',
+                malformedAlgorithm: 'La algoritmo-kapo ĉe linio {line} devas komenciĝi per {algorithm} kaj esti la unua.',
                 iteratorQuestion: 'Ĉu estas plia elemento en {iterable}?',
                 nextIterator: 'plia elemento el {iterable}',
                 condition: 'Kondiĉo',
@@ -885,11 +885,11 @@ print("done")`
                 noExecutionSteps: 'Aucune étape d’exécution n’a été enregistrée pour ce bloc de code.',
                 pythonRuntimeError: 'Erreur d’exécution Python :',
                 unknownTerms: 'Termes de contrôle inconnus : {count}',
-                malformedElse: 'La branche alternative « {line} » doit être écrite JINAK: ou ELSE:.',
+                malformedElse: 'La branche alternative « {line} » doit être écrite {else}:.',
                 malformedBlock: 'Impossible d’analyser le pseudocode à la ligne : {line}',
-                malformedInput: 'La commande VSTUP/INPUT à la ligne {line} doit avoir la forme INPUT variable.',
+                malformedInput: 'La commande {input} à la ligne {line} doit être suivie d’un nom de variable.',
                 missingColon: 'L’en-tête « {line} » doit se terminer par deux-points.',
-                malformedAlgorithm: 'L’en-tête d’algorithme à la ligne {line} doit avoir la forme ALGORITMUS ou ALGORITHM nom(paramètres): et être en premier.',
+                malformedAlgorithm: 'L’en-tête d’algorithme à la ligne {line} doit commencer par {algorithm} et être en premier.',
                 iteratorQuestion: 'Y a-t-il un autre élément dans {iterable} ?',
                 nextIterator: 'élément suivant de {iterable}',
                 condition: 'Condition',
@@ -964,11 +964,11 @@ print("done")`
                 noExecutionSteps: 'Pre tento blok kódu nebol zaznamenaný žiadny krok vykonávania.',
                 pythonRuntimeError: 'Chyba pri vykonávaní Pythonu:',
                 unknownTerms: 'Neznáme riadiace výrazy: {count}',
-                malformedElse: 'Alternatívna vetva "{line}" musí byť zapísaná ako JINAK: alebo ELSE:.',
+                malformedElse: 'Alternatívna vetva "{line}" musí byť zapísaná ako {else}:.',
                 malformedBlock: 'Pseudokód sa nepodarilo spracovať na riadku: {line}',
-                malformedInput: 'Príkaz VSTUP/INPUT na riadku {line} musí mať tvar INPUT variable.',
+                malformedInput: 'Za príkazom {input} na riadku {line} musí nasledovať názov premennej.',
                 missingColon: 'Hlavička "{line}" musí končiť dvojbodkou.',
-                malformedAlgorithm: 'Hlavička algoritmu na riadku {line} musí mať tvar ALGORITMUS/ALGORITHM názov(parametre): a musí byť prvá.',
+                malformedAlgorithm: 'Hlavička algoritmu na riadku {line} musí začínať výrazom {algorithm} a musí byť prvá.',
                 iteratorQuestion: 'Je ďalší prvok v {iterable}?',
                 nextIterator: 'ďalší prvok z {iterable}',
                 condition: 'Podmienka',
@@ -979,9 +979,227 @@ print("done")`
             }
         };
 
+        const pseudocodeTerms = {
+            en: {
+                algorithm: 'ALGORITHM', if: 'IF', else: 'ELSE', while: 'WHILE',
+                for: 'FOR', in: 'IN', from: 'FROM', to: 'TO',
+                return: 'RETURN', write: 'WRITE', input: 'INPUT',
+                or: 'OR', and: 'AND', mod: 'MOD'
+            },
+            cs: {
+                algorithm: 'ALGORITMUS', if: 'POKUD', else: 'JINAK', while: 'DOKUD',
+                for: 'PRO', in: 'V', from: 'OD', to: 'DO',
+                return: 'VRAT', write: 'VYPIS', input: 'VSTUP',
+                or: 'NEBO', and: 'A', mod: 'MOD'
+            },
+            sk: {
+                algorithm: 'ALGORITMUS', if: 'POKUD', else: 'JINAK', while: 'DOKUD',
+                for: 'PRO', in: 'V', from: 'OD', to: 'DO',
+                return: 'VRAT', write: 'VYPIS', input: 'VSTUP',
+                or: 'ALEBO', and: 'A', mod: 'MOD'
+            },
+            eo: {
+                algorithm: 'ALGORITMO', if: 'SE', else: 'ALIE', while: 'DUM',
+                for: 'POR', in: 'EN', from: 'DE', to: 'ĜIS',
+                return: 'REVENIGU', write: 'SKRIBU', input: 'LEGU',
+                or: 'AŬ', and: 'KAJ', mod: 'MOD'
+            },
+            fr: {
+                algorithm: 'ALGORITHME', if: 'SI', else: 'SINON', while: 'TANTQUE',
+                for: 'POUR', in: 'DANS', from: 'DE', to: "JUSQU'À",
+                return: 'RETOURNER', write: 'ECRIRE', input: 'LIRE',
+                or: 'OU', and: 'ET', mod: 'MOD'
+            }
+        };
+        const pseudocodeTermAliases = new Map();
+        Object.entries(pseudocodeTerms).forEach(([language, terms]) => {
+            Object.entries(terms).forEach(([role, term]) => {
+                const key = term.toLocaleUpperCase();
+                const definitions = pseudocodeTermAliases.get(key) || [];
+                definitions.push({ language, role });
+                pseudocodeTermAliases.set(key, definitions);
+            });
+        });
+
+        function escapeRegularExpression(text) {
+            return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        }
+
+        function isStandaloneAndOperator(text, tokenStart, tokenLength, token) {
+            if (token !== 'A') return true;
+            const previous = text.slice(0, tokenStart).match(/(\S)\s*$/)?.[1] || '';
+            const next = text.slice(tokenStart + tokenLength).match(/^\s*(\S)/)?.[1] || '';
+            return /[\p{L}\p{N}_)\]]/u.test(previous)
+                && /[\p{L}\p{N}_(['"]/u.test(next);
+        }
+
+        function replacePseudocodeAliases(text, roles, language) {
+            const terms = pseudocodeTerms[language];
+            const aliases = [...new Set(Object.values(pseudocodeTerms)
+                .flatMap(languageTerms => roles.flatMap(role => [languageTerms[role]])))]
+                .sort((left, right) => right.length - left.length);
+            if (aliases.length === 0) return text;
+
+            const pattern = new RegExp(
+                `(^|[^\\p{L}\\p{N}_])(${aliases.map(escapeRegularExpression).join('|')})(?=$|[^\\p{L}\\p{N}_])`,
+                'giu'
+            );
+            return text.replace(pattern, (match, prefix, alias, offset, source) => {
+                const tokenStart = offset + prefix.length;
+                if (alias.toLocaleUpperCase() === 'A'
+                    && (alias !== 'A' || !isStandaloneAndOperator(source, tokenStart, alias.length, alias))) {
+                    return match;
+                }
+                const definition = pseudocodeTermAliases.get(alias.toLocaleUpperCase())
+                    ?.find(candidate => roles.includes(candidate.role));
+                return definition
+                    ? `${prefix}${terms[definition.role]}`
+                    : match;
+            });
+        }
+
+        function replacePseudocodeAliasesOutsideStrings(text, roles, language) {
+            return text.split(/("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')/g)
+                .map((part, index) => index % 2 === 1
+                    ? part
+                    : replacePseudocodeAliases(part, roles, language))
+                .join('');
+        }
+
+        function findPseudocodeAlias(text, roles, startIndex = 0) {
+            const aliases = [...new Set(Object.values(pseudocodeTerms)
+                .flatMap(languageTerms => roles.flatMap(role => [languageTerms[role]])))]
+                .sort((left, right) => right.length - left.length);
+            if (aliases.length === 0) return null;
+
+            const pattern = new RegExp(
+                `(^|[^\\p{L}\\p{N}_])(${aliases.map(escapeRegularExpression).join('|')})(?=$|[^\\p{L}\\p{N}_])`,
+                'giu'
+            );
+            pattern.lastIndex = startIndex;
+            let match;
+            while ((match = pattern.exec(text)) !== null) {
+                const tokenStart = match.index + match[1].length;
+                if (match[2].toLocaleUpperCase() === 'A'
+                    && (match[2] !== 'A'
+                        || !isStandaloneAndOperator(text, tokenStart, match[2].length, match[2]))) {
+                    continue;
+                }
+                const definition = pseudocodeTermAliases.get(match[2].toLocaleUpperCase())
+                    ?.find(candidate => roles.includes(candidate.role));
+                if (definition) {
+                    return {
+                        index: match.index + match[1].length,
+                        end: match.index + match[0].length,
+                        role: definition.role
+                    };
+                }
+            }
+            return null;
+        }
+
+        function findPseudocodeAliasAtStart(text, roles, startIndex) {
+            const leadingWhitespace = text.slice(startIndex).match(/^\s*/)[0].length;
+            const tokenStart = startIndex + leadingWhitespace;
+            const aliases = [...new Set(Object.values(pseudocodeTerms)
+                .flatMap(languageTerms => roles.map(role => languageTerms[role])))]
+                .sort((left, right) => right.length - left.length);
+            const tokenMatch = text.slice(tokenStart).match(new RegExp(
+                `^(${aliases.map(escapeRegularExpression).join('|')})(?=$|[^\\p{L}\\p{N}_])`,
+                'iu'
+            ));
+            if (!tokenMatch) return null;
+            const token = tokenMatch[1];
+            const definitions = pseudocodeTermAliases.get(token.toLocaleUpperCase()) || [];
+            const definition = definitions.find(candidate => roles.includes(candidate.role));
+            if (!definition || (token.toLocaleUpperCase() === 'A'
+                && !isStandaloneAndOperator(text, tokenStart, token.length, token))) {
+                return null;
+            }
+            return {
+                index: tokenStart,
+                end: tokenStart + token.length,
+                role: definition.role
+            };
+        }
+
+        function convertPseudocodeLine(line, language) {
+            const leadingTerm = line.match(/^([\t ]*)([\p{L}_][\p{L}\p{N}_]*)/u);
+            let leadingRole = null;
+            const separatorMarkers = [];
+            if (leadingTerm) {
+                const definition = pseudocodeTermAliases.get(leadingTerm[2].toLocaleUpperCase())
+                    ?.find(candidate => !['in', 'from', 'to', 'or', 'and', 'mod'].includes(candidate.role));
+                if (definition && !['in', 'from', 'to', 'or', 'and', 'mod'].includes(definition.role)) {
+                    leadingRole = definition.role;
+                    line = `${leadingTerm[1]}${pseudocodeTerms[language][leadingRole]}`
+                        + line.slice(leadingTerm[0].length);
+                }
+            }
+
+            if (leadingRole === 'for') {
+                const forPrefixLength = leadingTerm[1].length + pseudocodeTerms[language].for.length;
+                const iterator = line.slice(forPrefixLength)
+                    .match(/^\s+[A-Za-z_][A-Za-z0-9_]*(?=\s)/);
+                const separatorStart = iterator
+                    ? forPrefixLength + iterator[0].length
+                    : line.length;
+                const firstSeparator = findPseudocodeAliasAtStart(line, ['in', 'from'], separatorStart);
+                if (firstSeparator) {
+                    const marker = `__PSEUDOCODE_SEPARATOR_${separatorMarkers.length}__`;
+                    separatorMarkers.push(pseudocodeTerms[language][firstSeparator.role]);
+                    line = `${line.slice(0, firstSeparator.index)}${marker}`
+                        + line.slice(firstSeparator.end);
+                    if (firstSeparator.role === 'from') {
+                        const secondSeparator = findPseudocodeAlias(line, ['to'], firstSeparator.index + marker.length);
+                        if (secondSeparator) {
+                            const secondMarker = `__PSEUDOCODE_SEPARATOR_${separatorMarkers.length}__`;
+                            separatorMarkers.push(pseudocodeTerms[language].to);
+                            line = `${line.slice(0, secondSeparator.index)}${secondMarker}`
+                                + line.slice(secondSeparator.end);
+                        }
+                    }
+                }
+            }
+
+            const operatorRoles = leadingRole === 'for' ? ['or', 'mod'] : ['or', 'and', 'mod'];
+            line = replacePseudocodeAliasesOutsideStrings(line, operatorRoles, language);
+            separatorMarkers.forEach((term, index) => {
+                line = line.replace(`__PSEUDOCODE_SEPARATOR_${index}__`, term);
+            });
+            return line;
+        }
+
+        function convertPseudocode(code, language) {
+            return code.split('\n')
+                .map(line => convertPseudocodeLine(line, language))
+                .join('\n');
+        }
+
+        function pseudocodeHelpExample(key) {
+            const terms = pseudocodeTerms[currentLanguage];
+            const examples = {
+                termAlgorithm: `${terms.algorithm} name(...):`,
+                termIf: terms.if,
+                termElse: `${terms.else}:`,
+                termWhile: `${terms.while} condition:`,
+                termForEach: `${terms.for} item ${terms.in} collection:`,
+                termForCount: `${terms.for} i ${terms.from} start ${terms.to} end:`,
+                termReturn: `${terms.return} value`,
+                termWrite: `${terms.write} value`,
+                termInput: `${terms.input} variable`
+            };
+            if (!Object.hasOwn(examples, key)) return null;
+            const description = translations[currentLanguage][key]
+                .match(/<\/code>(?:\s*\/\s*<code[^>]*>[\s\S]*?<\/code>)?([\s\S]*)$/);
+            return `<code class="text-indigo-300">${examples[key]}</code>${description ? description[1] : ''}`;
+        }
+
         // --- 2. GLOBAL STATE ---
         const importedTemplateKey = '__imported__';
         let currentLanguage = 'en';
+        let canonicalPseudocode = '';
+        let isSettingPseudocodeProgrammatically = false;
         let importedTemplate = null;
         let diagramStatusKey = 'diagramGenerated';
         let pythonGenerationStatusKey = 'pythonGenerated';
@@ -1002,14 +1220,24 @@ print("done")`
         let pseudocodePythonUpdateTimer = null;
         let diagramRenderVersion = 0;
         const pseudocodeDiagramUpdateDelay = 350;
-        const supportedPseudocodeLeadingTerms = new Set([
-            'ALGORITMUS', 'ALGORITHM', 'POKUD', 'IF', 'JINAK', 'ELSE', 'DOKUD', 'WHILE',
-            'PRO', 'FOR', 'VRAT', 'RETURN', 'VYPIS', 'WRITE', 'VSTUP', 'INPUT'
-        ]);
+        const supportedPseudocodeLeadingTerms = new Set(
+            [...pseudocodeTermAliases]
+                .filter(([, definitions]) => definitions.some(definition =>
+                    ['algorithm', 'if', 'else', 'while', 'for', 'return', 'write', 'input']
+                        .includes(definition.role)
+                ))
+                .map(([term]) => term)
+        );
 
         function translate(key, values = {}) {
             let text = translations[currentLanguage][key];
-            for (const [name, value] of Object.entries(values)) {
+            const replacements = {
+                algorithm: pseudocodeTerms[currentLanguage].algorithm,
+                else: pseudocodeTerms[currentLanguage].else,
+                input: pseudocodeTerms[currentLanguage].input,
+                ...values
+            };
+            for (const [name, value] of Object.entries(replacements)) {
                 text = text.replaceAll(`{${name}}`, value);
             }
             return text;
@@ -1055,11 +1283,53 @@ print("done")`
                     : 'max-w-[200px] truncate text-[10px] text-amber-300';
         }
 
+        function renderCanonicalPseudocode(preserveSelection = false) {
+            if (!pseudoEditor) return;
+            const pseudocode = convertPseudocode(canonicalPseudocode, currentLanguage);
+            if (pseudoEditor.getValue() === pseudocode) return;
+            const newLines = pseudocode.split('\n');
+            const selections = preserveSelection
+                ? pseudoEditor.listSelections().map(selection => ({
+                    anchor: { ...selection.anchor },
+                    head: { ...selection.head }
+                }))
+                : null;
+            isSettingPseudocodeProgrammatically = true;
+            try {
+                pseudoEditor.setValue(pseudocode);
+                if (selections) {
+                    const mapPosition = position => {
+                        const newLine = newLines[position.line] || '';
+                        return {
+                            line: Math.min(position.line, newLines.length - 1),
+                            ch: Math.max(0, Math.min(position.ch, newLine.length))
+                        };
+                    };
+                    pseudoEditor.setSelections(selections.map(selection => ({
+                        anchor: mapPosition(selection.anchor),
+                        head: mapPosition(selection.head)
+                    })));
+                }
+            } finally {
+                isSettingPseudocodeProgrammatically = false;
+            }
+        }
+
+        function setCanonicalPseudocode(code) {
+            canonicalPseudocode = convertPseudocode(code, 'en');
+            renderCanonicalPseudocode();
+        }
+
+        function getCanonicalPseudocode() {
+            return canonicalPseudocode;
+        }
+
         function applyLanguage(language, refreshDiagram = true) {
             if (!Object.hasOwn(translations, language)) return;
             currentLanguage = language;
             document.documentElement.lang = language;
             document.title = translate('documentTitle');
+            renderCanonicalPseudocode(true);
 
             document.querySelectorAll('[data-i18n]').forEach(element => {
                 const text = translate(element.dataset.i18n);
@@ -1067,6 +1337,12 @@ print("done")`
                     element.innerHTML = text;
                 } else {
                     element.textContent = text;
+                }
+            });
+            document.querySelectorAll('[data-i18n-html="true"]').forEach(element => {
+                if (element.dataset.i18n.startsWith('term')) {
+                    const example = pseudocodeHelpExample(element.dataset.i18n);
+                    if (example !== null) element.innerHTML = example;
                 }
             });
             document.querySelectorAll('[data-i18n-title]').forEach(element => {
@@ -1142,6 +1418,8 @@ print("done")`
                 lineWrapping: true
             });
             pseudoEditor.on('change', () => {
+                if (isSettingPseudocodeProgrammatically) return;
+                canonicalPseudocode = convertPseudocode(pseudoEditor.getValue(), 'en');
                 updatePseudocodeWarning();
                 scheduleDiagramUpdate();
                 schedulePythonGeneration();
@@ -1198,7 +1476,7 @@ print("done")`
         });
 
         function updatePseudocodeWarning() {
-            const unknownTerms = pseudoEditor.getValue()
+            const unknownTerms = getCanonicalPseudocode()
                 .split('\n')
                 .filter(line => getUnknownPseudocodeControlWord(line));
             const warning = document.getElementById('pseudocodeWarning');
@@ -1253,7 +1531,7 @@ print("done")`
             if (key === importedTemplateKey && importedTemplate) {
                 clearTimeout(pseudocodeDiagramUpdateTimer);
                 clearTimeout(pseudocodePythonUpdateTimer);
-                pseudoEditor.setValue(importedTemplate.pseudocode);
+                setCanonicalPseudocode(importedTemplate.pseudocode);
                 clearTimeout(pseudocodeDiagramUpdateTimer);
                 clearTimeout(pseudocodePythonUpdateTimer);
                 updateDiagramFromPseudocode();
@@ -1271,7 +1549,7 @@ print("done")`
 
             clearTimeout(pseudocodeDiagramUpdateTimer);
             clearTimeout(pseudocodePythonUpdateTimer);
-            pseudoEditor.setValue(tmpl.pseudocode);
+            setCanonicalPseudocode(tmpl.pseudocode);
             isSettingPythonProgrammatically = true;
             try {
                 pyEditor.setValue(tmpl.python);
@@ -1326,9 +1604,9 @@ print("done")`
 
             importedTemplate = {
                 name: data.name,
-                pseudocode: data.pseudocode
+                pseudocode: convertPseudocode(data.pseudocode
                     .map(line => `${' '.repeat(line.indent)}${line.text}`)
-                    .join('\n')
+                    .join('\n'), 'en')
             };
             populateTemplateSelect();
             const select = document.getElementById('templateSelect');
@@ -1341,7 +1619,7 @@ print("done")`
             const selectedTemplate = select.value === importedTemplateKey
                 ? importedTemplate
                 : templates[select.value];
-            const pseudocode = pseudoEditor.getValue();
+            const pseudocode = getCanonicalPseudocode();
             if (!selectedTemplate) {
                 alert(translate('saveError'));
                 return;
@@ -1360,6 +1638,7 @@ print("done")`
             });
             const json = JSON.stringify({
                 name: selectedTemplate.name,
+                pseudocodeLanguage: 'en',
                 pseudocode: pseudocodeLines
             }, null, 2);
             const blob = new Blob([json], { type: 'application/json;charset=utf-8' });
@@ -1465,6 +1744,7 @@ print("done")`
         }
 
         function parsePseudocode(code) {
+            code = convertPseudocode(code, 'en');
             const lines = code.split('\n')
                 .map((text, index) => ({
                     indent: text.match(/^[\t ]*/)[0].replace(/\t/g, '    ').length,
@@ -1476,7 +1756,9 @@ print("done")`
                 isElse(line.text) && !/^(?:JINAK|ELSE):$/i.test(line.text)
             );
             if (malformedElse) {
-                throw new Error(translate('malformedElse', { line: malformedElse.text }));
+                throw new Error(translate('malformedElse', {
+                    line: convertPseudocode(malformedElse.text, currentLanguage)
+                }));
             }
             let lineIndex = 0;
 
@@ -1507,12 +1789,16 @@ print("done")`
                     if (current.indent < indent || (current.indent === indent && isElse(current.text))) break;
                     if (current.indent > indent) {
                         if (isElse(current.text)) {
-                            throw new Error(translate('malformedBlock', { line: current.text }));
+                            throw new Error(translate('malformedBlock', {
+                                line: convertPseudocode(current.text, currentLanguage)
+                            }));
                         }
                         const previousLineIndex = lineIndex;
                         statements.push(...parseBlock(current.indent));
                         if (lineIndex === previousLineIndex) {
-                            throw new Error(translate('malformedBlock', { line: current.text }));
+                            throw new Error(translate('malformedBlock', {
+                                line: convertPseudocode(current.text, currentLanguage)
+                            }));
                         }
                         continue;
                     }
@@ -1560,7 +1846,9 @@ print("done")`
                         lineIndex++;
                     }
                     if (!conditionText.trimEnd().endsWith(':')) {
-                        throw new Error(translate('missingColon', { line: current.text }));
+                        throw new Error(translate('missingColon', {
+                            line: convertPseudocode(current.text, currentLanguage)
+                        }));
                     }
                     const statement = {
                         type: isLoop ? 'loop' : 'decision',
@@ -1585,7 +1873,9 @@ print("done")`
                             statement.start = countedHeader[2] || countedHeader[3];
                             statement.end = countedHeader[4].replace(/:\s*$/, '');
                         } else if (isFor(current.text)) {
-                            throw new Error(translate('malformedBlock', { line: current.text }));
+                            throw new Error(translate('malformedBlock', {
+                                line: convertPseudocode(current.text, currentLanguage)
+                            }));
                         }
                     }
                     let thenIndent = null;
@@ -1609,7 +1899,9 @@ print("done")`
 
             const statements = lines.length > 0 ? parseBlock(lines[0].indent) : [];
             if (lineIndex < lines.length) {
-                throw new Error(translate('malformedBlock', { line: lines[lineIndex].text }));
+                throw new Error(translate('malformedBlock', {
+                    line: convertPseudocode(lines[lineIndex].text, currentLanguage)
+                }));
             }
             return statements;
         }
@@ -1637,6 +1929,11 @@ print("done")`
                     const statementStartIndex = nodes.length;
                     if (statement.type === 'decision' || statement.type === 'loop' || statement.type === 'forEach' || statement.type === 'countedLoop') {
                         const decision = makeNode(statement.type === 'countedLoop' ? 'countedLoop' : 'decision', statement.text || translate('condition'));
+                        if (statement.type === 'countedLoop') {
+                            decision.iterator = statement.iterator;
+                            decision.start = statement.start;
+                            decision.end = statement.end;
+                        }
                         exits.forEach(edge => edges.push({ from: edge.from, to: decision.id, label: edge.label }));
                         const loopBodyStartIndex = nodes.length;
                         let loopBodyIncoming = [{ from: decision.id, label: translate('yes') }];
@@ -1712,9 +2009,15 @@ print("done")`
 
             let mermaidStr = 'graph TD\n';
             nodes.forEach(node => {
+                const nodeText = node.type === 'countedLoop'
+                    ? `${node.iterator} ${pseudocodeTerms[currentLanguage].from} `
+                        + `${convertPseudocode(node.start, currentLanguage)} `
+                        + `${pseudocodeTerms[currentLanguage].to} `
+                        + convertPseudocode(node.end, currentLanguage)
+                    : convertPseudocode(node.text, currentLanguage);
                 const label = node.type === 'decision'
-                    ? formatDecisionLabel(node.text)
-                    : escapeLabel(node.text);
+                    ? formatDecisionLabel(nodeText)
+                    : escapeLabel(nodeText);
                 if (node.type === 'decision') {
                     mermaidStr += `  ${node.id}{"${label}"}\n`;
                 } else if (node.type === 'countedLoop') {
@@ -1745,7 +2048,7 @@ print("done")`
         function updateDiagramFromPseudocode() {
             clearTimeout(pseudocodeDiagramUpdateTimer);
             try {
-                renderMermaid(generateMermaidFromPseudocode(pseudoEditor.getValue()));
+                renderMermaid(generateMermaidFromPseudocode(getCanonicalPseudocode()));
             } catch (error) {
                 console.error("Pseudocode Parse Error:", error);
                 showDiagramError(translate('diagramCreateError'), error);
@@ -1759,7 +2062,6 @@ print("done")`
                     return part
                         .replace(/\bMOD\b/gi, '%')
                         .replace(/\bNEBO\b/gi, 'or')
-                        .replace(/\bA\b/g, 'and')
                         .replace(/\bAND\b/gi, 'and')
                         .replace(/\bOR\b/gi, 'or')
                         .replace(/\bNOT\b/gi, 'not')
@@ -1915,7 +2217,7 @@ print("done")`
                     throw new Error(translate('pythonMarkersInvalid'));
                 }
 
-                const generatedCode = generatePythonCode(pseudoEditor.getValue());
+                const generatedCode = generatePythonCode(getCanonicalPseudocode());
                 const updatedLines = [
                     ...lines.slice(0, startMarkers[0] + 1),
                     ...generatedCode.split('\n'),
