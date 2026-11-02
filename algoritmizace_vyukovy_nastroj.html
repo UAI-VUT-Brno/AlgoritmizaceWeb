@@ -1043,11 +1043,15 @@ print("done")`
                 && /[\p{L}\p{N}_(['"]/u.test(next);
         }
 
-        function replacePseudocodeAliases(text, roles, language) {
-            const terms = pseudocodeTerms[language];
-            const aliases = [...new Set(Object.values(pseudocodeTerms)
+        function getPseudocodeAliases(roles) {
+            return [...new Set(Object.values(pseudocodeTerms)
                 .flatMap(languageTerms => roles.flatMap(role => [languageTerms[role]])))]
                 .sort((left, right) => right.length - left.length);
+        }
+
+        function replacePseudocodeAliases(text, roles, language) {
+            const terms = pseudocodeTerms[language];
+            const aliases = getPseudocodeAliases(roles);
             if (aliases.length === 0) return text;
 
             const pattern = new RegExp(
@@ -1077,9 +1081,7 @@ print("done")`
         }
 
         function findPseudocodeAlias(text, roles, startIndex = 0) {
-            const aliases = [...new Set(Object.values(pseudocodeTerms)
-                .flatMap(languageTerms => roles.flatMap(role => [languageTerms[role]])))]
-                .sort((left, right) => right.length - left.length);
+            const aliases = getPseudocodeAliases(roles);
             if (aliases.length === 0) return null;
 
             const pattern = new RegExp(
@@ -1111,9 +1113,7 @@ print("done")`
         function findPseudocodeAliasAtStart(text, roles, startIndex) {
             const leadingWhitespace = text.slice(startIndex).match(/^\s*/)[0].length;
             const tokenStart = startIndex + leadingWhitespace;
-            const aliases = [...new Set(Object.values(pseudocodeTerms)
-                .flatMap(languageTerms => roles.map(role => languageTerms[role])))]
-                .sort((left, right) => right.length - left.length);
+            const aliases = getPseudocodeAliases(roles);
             const tokenMatch = text.slice(tokenStart).match(new RegExp(
                 `^(${aliases.map(escapeRegularExpression).join('|')})(?=$|[^\\p{L}\\p{N}_])`,
                 'iu'
@@ -1206,40 +1206,57 @@ print("done")`
         }
 
         // --- 2. GLOBAL STATE ---
+        // Canonical source and editor synchronization.
         const importedTemplateKey = '__imported__';
         let currentLanguage = 'en';
         let canonicalPseudocode = '';
+        let parsedPseudocodeCache = {
+            source: null,
+            language: null,
+            statements: null
+        };
         let isSettingPseudocodeProgrammatically = false;
         let importedTemplate = null;
+        let pseudoEditor, pyEditor;
+
+        const supportedPseudocodeControlRoles = new Set([
+            'algorithm', 'if', 'else', 'while', 'for', 'return', 'write', 'input'
+        ]);
+        const supportedPseudocodeLeadingTerms = new Set(
+            [...pseudocodeTermAliases]
+                .filter(([, definitions]) => definitions.some(definition =>
+                    supportedPseudocodeControlRoles.has(definition.role)
+                ))
+                .map(([term]) => term)
+        );
+
+        // Diagram rendering and source mapping.
         let diagramStatusKey = 'diagramGenerated';
+        let diagramZoom = 1;
+        let diagramResizeObserver = null;
+        let diagramRenderVersion = 0;
+        let diagramNodeIdByPseudocodeLine = new Map();
+
+        // Python generation and runtime.
         let pythonGenerationStatusKey = 'pythonGenerated';
         let pythonGenerationErrorDetail = '';
         let pyodideStatusKey = 'pyodideLoading';
-        let pyEditor, pseudoEditor;
         let pythonCodeRevision = 0;
         let pythonCodeDirty = false;
         let isSettingPythonProgrammatically = false;
         let pyodideInstance = null;
+        let generatedPythonSourceLines = new Map();
+
+        // Execution trace and playback.
         let executionTrace = [];
         let currentStepIndex = -1;
-        let generatedPythonSourceLines = new Map();
-        let diagramNodeIdByPseudocodeLine = new Map();
         let isPlaying = false;
         let playInterval = null;
-        let diagramZoom = 1;
-        let diagramResizeObserver = null;
+
+        // Debounced editor updates.
         let pseudocodeDiagramUpdateTimer = null;
         let pseudocodePythonUpdateTimer = null;
-        let diagramRenderVersion = 0;
         const pseudocodeDiagramUpdateDelay = 350;
-        const supportedPseudocodeLeadingTerms = new Set(
-            [...pseudocodeTermAliases]
-                .filter(([, definitions]) => definitions.some(definition =>
-                    ['algorithm', 'if', 'else', 'while', 'for', 'return', 'write', 'input']
-                        .includes(definition.role)
-                ))
-                .map(([term]) => term)
-        );
 
         function translate(key, values = {}) {
             let text = translations[currentLanguage][key];
@@ -1336,9 +1353,7 @@ print("done")`
             return canonicalPseudocode;
         }
 
-        function applyLanguage(language, refreshDiagram = true) {
-            if (!Object.hasOwn(translations, language)) return;
-            currentLanguage = language;
+        function updateLocalizedDocument(language) {
             document.documentElement.lang = language;
             document.title = translate('documentTitle');
             renderCanonicalPseudocode(true);
@@ -1366,7 +1381,9 @@ print("done")`
             document.querySelectorAll('.language-button').forEach(button => {
                 button.setAttribute('aria-pressed', String(button.dataset.language === language));
             });
+        }
 
+        function refreshLanguageDependentUi(refreshDiagram) {
             populateTemplateSelect();
             document.getElementById('playText').textContent = translate(isPlaying ? 'pause' : 'play');
             setDiagramStatus(diagramStatusKey);
@@ -1382,6 +1399,13 @@ print("done")`
                     `<span class="text-slate-500 italic text-[11px]">${translate('startStepping')}</span>`;
             }
             if (refreshDiagram && pseudoEditor) updateDiagramFromPseudocode();
+        }
+
+        function applyLanguage(language, refreshDiagram = true) {
+            if (!Object.hasOwn(translations, language)) return;
+            currentLanguage = language;
+            updateLocalizedDocument(language);
+            refreshLanguageDependentUi(refreshDiagram);
         }
 
         function getUnknownPseudocodeControlWord(line) {
@@ -1420,8 +1444,7 @@ print("done")`
             }
         }));
 
-        // Initialize CodeMirror Editors
-        window.addEventListener('DOMContentLoaded', () => {
+        function initializeEditors() {
             // Pseudocode Editor
             pseudoEditor = CodeMirror.fromTextArea(document.getElementById('pseudocodeEditor'), {
                 mode: 'pseudocode',
@@ -1453,31 +1476,37 @@ print("done")`
                     setPythonGenerationStatus('pythonNeedsGeneration');
                 }
             });
+        }
 
-            // Init Mermaid
+        function initializeMermaid() {
             mermaid.initialize({
                 startOnLoad: false,
                 theme: 'dark',
                 securityLevel: 'loose',
                 flowchart: { curve: 'basis' }
             });
+        }
+
+        function initializeLanguageControls() {
             document.querySelectorAll('.language-button').forEach(button => {
                 button.addEventListener('click', () => applyLanguage(button.dataset.language));
             });
-            applyLanguage('en', false);
-            loadTemplate(document.getElementById('templateSelect').value);
+        }
+
+        function initializeJsonImport() {
             document.getElementById('jsonFileInput').addEventListener('change', event => {
                 const [file] = event.target.files;
                 if (file) importAlgorithmJson(file);
                 event.target.value = '';
             });
+        }
+
+        function initializeDiagramResize() {
             diagramResizeObserver = new ResizeObserver(() => applyDiagramZoom());
             diagramResizeObserver.observe(document.getElementById('diagramContainer'));
+        }
 
-            // Initialize Pyodide WASM
-            initPyodide();
-
-            // Handle speed slider change
+        function initializeExecutionSpeedControl() {
             document.getElementById('speedSlider').addEventListener('input', (e) => {
                 const val = e.target.value;
                 document.getElementById('speedVal').innerText = `${val}ms`;
@@ -1486,7 +1515,21 @@ print("done")`
                     startPlay();
                 }
             });
-        });
+        }
+
+        function initializeApp() {
+            initializeEditors();
+            initializeMermaid();
+            initializeLanguageControls();
+            applyLanguage('en', false);
+            loadTemplate(document.getElementById('templateSelect').value);
+            initializeJsonImport();
+            initializeDiagramResize();
+            initPyodide();
+            initializeExecutionSpeedControl();
+        }
+
+        window.addEventListener('DOMContentLoaded', initializeApp);
 
         function updatePseudocodeWarning() {
             const unknownTerms = getCanonicalPseudocode()
@@ -1922,8 +1965,19 @@ print("done")`
             return statements;
         }
 
-        function generateMermaidFromPseudocode(code) {
-            const statements = parsePseudocode(code);
+        function getParsedPseudocode(code) {
+            if (parsedPseudocodeCache.source !== code
+                || parsedPseudocodeCache.language !== currentLanguage) {
+                parsedPseudocodeCache = {
+                    source: code,
+                    language: currentLanguage,
+                    statements: parsePseudocode(code)
+                };
+            }
+            return parsedPseudocodeCache.statements;
+        }
+
+        function generateMermaidFromPseudocode(code, statements = getParsedPseudocode(code)) {
             let nodeIndex = 0;
             const nodes = [];
             const nodeIdByPseudocodeLine = new Map();
@@ -2115,8 +2169,7 @@ print("done")`
             return /^[A-Za-z_]/.test(snakeCaseName) ? snakeCaseName : `_${snakeCaseName}`;
         }
 
-        function generatePythonCode(code) {
-            const statements = parsePseudocode(code);
+        function generatePythonCode(code, statements = getParsedPseudocode(code)) {
             const algorithmIndex = statements.findIndex(statement => statement.type === 'algorithm');
             const algorithm = algorithmIndex >= 0 ? statements[algorithmIndex] : null;
             const body = statements.filter(statement => statement.type !== 'algorithm');
