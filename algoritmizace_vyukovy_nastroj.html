@@ -668,6 +668,7 @@ print("done")`
                 condition: 'Podmínka',
                 yes: 'Ano',
                 no: 'Ne',
+                endLoop: 'Konec cyklu',
                 startNode: 'Start',
                 endNode: 'Konec'
             },
@@ -747,6 +748,7 @@ print("done")`
                 condition: 'Condition',
                 yes: 'Yes',
                 no: 'No',
+                endLoop: 'End loop',
                 startNode: 'Start',
                 endNode: 'End'
             },
@@ -826,6 +828,7 @@ print("done")`
                 condition: 'Kondiĉo',
                 yes: 'Jes',
                 no: 'Ne',
+                endLoop: 'Fino de la ciklo',
                 startNode: 'Starto',
                 endNode: 'Fino'
             },
@@ -905,6 +908,7 @@ print("done")`
                 condition: 'Condition',
                 yes: 'Oui',
                 no: 'Non',
+                endLoop: 'Fin de boucle',
                 startNode: 'Début',
                 endNode: 'Fin'
             },
@@ -984,6 +988,7 @@ print("done")`
                 condition: 'Podmienka',
                 yes: 'Áno',
                 no: 'Nie',
+                endLoop: 'Koniec cyklu',
                 startNode: 'Štart',
                 endNode: 'Koniec'
             }
@@ -2016,7 +2021,11 @@ print("done")`
                         }
                         exits.forEach(edge => edges.push({ from: edge.from, to: decision.id, label: edge.label }));
                         const loopBodyStartIndex = nodes.length;
-                        let loopBodyIncoming = [{ from: decision.id, label: translate('yes') }];
+                        const isCountedLoop = statement.type === 'countedLoop';
+                        let loopBodyIncoming = [{
+                            from: decision.id,
+                            label: isCountedLoop ? '' : translate('yes')
+                        }];
                         if (statement.type === 'forEach') {
                             const iteratorStep = makeNode(
                                 'step',
@@ -2029,8 +2038,15 @@ print("done")`
                         const thenExits = emitBlock(statement.thenBranch, loopBodyIncoming);
                         const thenBranchNodes = nodes.slice(loopBodyStartIndex);
                         if (statement.type === 'loop' || statement.type === 'forEach' || statement.type === 'countedLoop') {
-                            thenExits.forEach(edge => edges.push({ from: edge.from, to: decision.id, label: edge.label }));
-                            exits = [{ from: decision.id, label: translate('no') }];
+                            thenExits.forEach(edge => edges.push({
+                                from: edge.from,
+                                to: decision.id,
+                                label: edge.label
+                            }));
+                            exits = [{
+                                from: decision.id,
+                                label: isCountedLoop ? translate('endLoop') : translate('no')
+                            }];
                             if (thenBranchNodes.length > 0) {
                                 pendingLoopLayoutSources.push(...thenBranchNodes.map(node => node.id));
                             }
