@@ -4,10 +4,11 @@ A simple educational web tool for visualizing basic algorithms and their executi
 
 ## Features
 
-- includes example algorithms: Bubble Sort, Factorial (Recursion/Loops), Find Maximum in an Array, Euclidean Algorithm (GCD), Triangle Area from Three Sides, Pedestrian Crossing (Basic), and Pedestrian Crossing (Unsignalized, Complex)
+- includes an Empty Algorithm (Starter) example with a Hello, world! step, plus Bubble Sort, Factorial (Recursion/Loops), Find Maximum in an Array, Euclidean Algorithm (GCD), Triangle Area from Three Sides, Pedestrian Crossing (Basic), and Pedestrian Crossing (Unsignalized, Complex)
 - displays pseudocode and the corresponding flowchart
 - converts indented pseudocode into Mermaid diagrams with branches and loops
 - supports stepping through Python code and inspecting variables over time
+- highlights the corresponding flowchart block while stepping through generated Python
 - displays program output and highlights the current source-code line
 - exports the current pseudocode to JSON, with one entry per line and indentation metadata
 - imports pseudocode from a JSON file in the same format
@@ -25,7 +26,7 @@ Example diagrams are generated from their pseudocode; separate predefined diagra
 
 The pedestrian-crossing examples model crossings without traffic signals. The basic example waits for traffic to clear; its Python input uses `True` when traffic is approaching. The complex example checks every lane in each observation before crossing; each Python snapshot is a list where `True` means that lane is unsafe to cross.
 
-The supported-terms help panel has a default height of **224 px**. Resize it by dragging the divider between the help and editor, or focus the divider and use the Up/Down arrow keys. You can also resize the Python editor and variable inspector, and the variable inspector and console, by dragging their dividers or focusing them and using the Up/Down arrow keys.
+The supported-terms help panel has a default height of **320 px**. Resize it by dragging the divider between the help and editor, or focus the divider and use the Up/Down arrow keys. The Python editor and variable inspector each use half of their pane by default; the variable inspector and console use a 60:40 split. Both dividers remain resizable by dragging or focusing them and using the Up/Down arrow keys.
 
 Supported control structures:
 
@@ -35,8 +36,8 @@ Supported control structures:
 - Optional alternative branch: `JINAK:` or `ELSE:`. Align `JINAK`/`ELSE` either with its matching `POKUD`/`IF` or with the statements in the first branch.
 - Conditional loop: `DOKUD condition:` or `WHILE condition:`.
 - Iterate over a collection: `PRO item V collection:` or `FOR item IN collection:`. The diagram shows a decision for whether another item is available, assigns the item, and includes the loop-back edge.
-- Counted loop: `PRO i OD start DO end:` or `FOR i FROM start TO end:`. The loop header is shown as a hexagon with a loop-back edge; iteration steps and bounds are not evaluated.
-- The following `Ne` branch is placed below all blocks in the `Ano` branch, including in nested loops.
+- Counted loop: `PRO i OD start DO end:` or `FOR i FROM start TO end:`. The loop header is shown as a hexagon; its body and loop-back arrows are unlabeled, and its terminating arrow is labeled **End loop**. Iteration steps and bounds are not evaluated. `WHILE` and collection-loop arrows retain their **Yes**/**No** labels.
+- The **No** branch is placed below all blocks in the **Yes** branch, including in nested loops.
 - All listed structures can be nested. Their bodies must be indented relative to the header.
 
 `VYPIS value` or `WRITE value` displays output as a regular flowchart step. `VSTUP variable` or `INPUT variable` reads a value and appears as an input parallelogram. The pseudocode editor underlines unknown uppercase words at the beginning of a line in red and shows their count. This is only a hint, not pseudocode validation: ordinary assignments and words inside a line are not checked, and unknown commands are still rendered as regular steps.
@@ -62,13 +63,13 @@ The Python pane generates code from the pseudocode into the region between the c
 
 The supported pseudocode structures and commands (`ALGORITMUS`/`ALGORITHM`, `IF`/`POKUD`, `ELSE`/`JINAK`, `WHILE`/`DOKUD`, both `FOR`/`PRO` forms, `WRITE`/`VYPIS`, `INPUT`/`VSTUP`, and `RETURN`/`VRAT`) generate Python. Input assigns the result of Python's `input()` to one variable; the value is a string. Counted-loop end bounds are inclusive. Basic expressions are retained, with `MOD`, `NEBO`, standalone `A`, `AND`, `OR`, `NOT`, `true`, `false`, and `length(...)` translated to their Python equivalents. Other statement text is emitted as Python and must be valid Python.
 
-Pseudocode edits regenerate the marked section automatically until the Python editor is edited manually. After a manual edit, use **Generate Python** to explicitly replace only the marked section. Generation errors are shown beside the button and leave the existing code unchanged. Imported JSON contains only pseudocode; it updates the generated region when the Python editor has not been manually edited.
+Pseudocode edits regenerate the marked section automatically until the Python editor is edited manually. After a manual edit, use **Generate Python** to explicitly replace only the marked section. Generation errors are shown beside the button and leave the existing code unchanged. Imported JSON contains only pseudocode; it updates the generated region when the Python editor has not been manually edited. While stepping through Python, the corresponding diagram block is highlighted using the generated source mapping.
 
 ### Saving an algorithm
 
 Click **Save JSON**. The file is downloaded using the selected algorithm's human-readable name and the `.json` extension. Invalid filename characters are replaced with underscores. A browser save dialog may allow you to change the filename.
 
-Use **Load JSON** to import a file in this format. The imported algorithm name appears in the selector, and its pseudocode replaces the current pseudocode. JSON exports store canonical English pseudocode with `"pseudocodeLanguage": "en"`; imports also accept the supported localized terms. Because JSON does not contain Python code, the generated region is regenerated from the imported pseudocode when possible; code outside that region is preserved.
+Use **Load JSON** to import a file in this format. The imported algorithm appears in the selector under the uploaded filename without its extension, and its pseudocode replaces the current pseudocode. JSON exports store canonical English pseudocode with `"pseudocodeLanguage": "en"`; imports also accept the supported localized terms. Because JSON does not contain Python code, the generated region is regenerated from the imported pseudocode when possible; code outside that region is preserved.
 
 The export contains the algorithm name and pseudocode as an array of lines. Each line has `text`, containing the content without leading indentation, and `indent`, containing the indentation in spaces; tabs count as four spaces. Blank lines are preserved.
 
@@ -117,4 +118,4 @@ Then open `http://localhost:8000`.
 
 ## Usage
 
-Select an algorithm from the drop-down menu and edit its pseudocode or Python code. Update the diagram with the button in the pseudocode pane. To step through Python execution, click **Start**, then use **Run** or the step controls. Editing the Python code clears the recorded execution; click **Start** again to prepare the updated code.
+Select an algorithm from the drop-down menu and edit its pseudocode or Python code. The diagram updates automatically after pseudocode edits. To step through Python execution, click **Start**, then use **Run** or the step controls. Editing the Python code clears the recorded execution; click **Start** again to prepare the updated code.

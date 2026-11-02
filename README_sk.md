@@ -4,10 +4,11 @@ Jednoduchý výučbový webový nástroj na vizualizáciu základných algoritmo
 
 ## Funkcie
 
-- obsahuje ukážkové algoritmy: Bubble Sort, Factorial (Recursion/Loops), Find Maximum in an Array, Euclidean Algorithm (GCD), Triangle Area from Three Sides, Pedestrian Crossing (Basic) a Pedestrian Crossing (Unsignalized, Complex)
+- obsahuje prázdny štartovací algoritmus s krokom „Hello, world!“ a ukážky Bubble Sort, Factorial (Recursion/Loops), Find Maximum in an Array, Euclidean Algorithm (GCD), Triangle Area from Three Sides, Pedestrian Crossing (Basic) a Pedestrian Crossing (Unsignalized, Complex)
 - zobrazuje pseudokód a príslušný vývojový diagram
 - prevádza odsadený pseudokód na diagramy Mermaid vrátane vetvenia a cyklov
 - umožňuje krokovať Python kód a sledovať hodnoty premenných
+- pri krokovaní Pythonu zvýrazňuje príslušný blok vývojového diagramu
 - zobrazuje výstup programu a zvýrazňuje aktuálny riadok zdrojového kódu
 - exportuje aktuálny pseudokód do JSON; každý riadok je samostatná položka s údajom o odsadení
 - načíta pseudokód zo súboru JSON v rovnakom formáte
@@ -25,7 +26,7 @@ Diagramy ukážkových algoritmov sa generujú z ich pseudokódu; samostatné pr
 
 Príklady prechádzania cez cestu opisujú priechod bez semafora. Základný príklad čaká, kým bude cesta voľná; v jeho ukážke Pythonu znamená `True`, že sa približuje vozidlo. Zložitejší príklad pred prechodom kontroluje každý jazdný pruh; každá dopravná situácia v jeho ukážke Pythonu je zoznam, kde `True` znamená, že je daný pruh nebezpečné prechádzať.
 
-Panel pomocníka s podporovanými termínmi má predvolenú výšku **224 px**. Výšku možno zmeniť ťahaním oddeľovača medzi pomocníkom a editorom alebo zameraním oddeľovača a použitím šípok nahor/nadol. Rovnakým spôsobom možno meniť výšku editora Pythonu a inšpektora premenných, ako aj panela premenných a konzoly, ťahaním ich oddeľovačov alebo ich zameraním a použitím šípok nahor/nadol.
+Panel pomocníka s podporovanými termínmi má predvolenú výšku **320 px**. Výšku možno zmeniť ťahaním oddeľovača medzi pomocníkom a editorom alebo zameraním oddeľovača a použitím šípok nahor/nadol. Editor Pythonu a inšpektor premenných majú predvolene každý polovicu panela; premenné a konzola sú rozdelené v pomere 60:40. Oba oddeľovače možno ďalej upraviť ťahaním alebo zameraním a použitím šípok nahor/nadol.
 
 Podporované riadiace štruktúry:
 
@@ -35,8 +36,8 @@ Podporované riadiace štruktúry:
 - Voliteľná alternatívna vetva: `JINAK:` alebo `ELSE:`. Riadok `JINAK`/`ELSE` zarovnajte buď s príslušným `POKUD`/`IF`, alebo s príkazmi prvej vetvy.
 - Podmienený cyklus: `DOKUD podmienka:` alebo `WHILE podmienka:`.
 - Prechod kolekciou: `PRO prvok V kolekcia:` alebo `FOR prvok IN collection:`. Diagram znázorňuje rozhodnutie, či je dostupný ďalší prvok, jeho priradenie a návratovú hranu cyklu.
-- Počítaný cyklus: `PRO i OD začiatok DO koniec:` alebo `FOR i FROM start TO end:`. Hlavička cyklu sa zobrazí ako šesťuholník s návratovou hranou; kroky a hranice iterácií sa nevyhodnocujú.
-- Nasledujúci blok vetvy `Ne` sa v diagrame umiestni pod všetky bloky vetvy `Ano`, a to aj pri vnorených cykloch.
+- Počítaný cyklus: `PRO i OD začiatok DO koniec:` alebo `FOR i FROM start TO end:`. Hlavička cyklu sa zobrazí ako šesťuholník; šípky do tela a späť nemajú popis a ukončovacia šípka má popis **Koniec cyklu**. Kroky ani hranice iterácií sa nevyhodnocujú. Šípky cyklov `WHILE` a prechodu kolekciou naďalej používajú popisy **Áno**/**Nie**.
+- Blok vetvy **Nie** sa v diagrame umiestni pod všetky bloky vetvy **Áno**, a to aj pri vnorených cykloch.
 - Všetky uvedené štruktúry možno vnárať. Ich telá musia byť odsadené voči hlavičke.
 
 Príkaz `VYPIS hodnota` alebo `WRITE value` zobrazí výpis hodnoty ako bežný krok diagramu. `VSTUP premenná` alebo `INPUT variable` načíta hodnotu a zobrazí ju ako vstupný rovnobežník. Editor pseudokódu červenou farbou podčiarkuje neznáme slová napísané veľkými písmenami na začiatku riadka a zobrazuje ich počet. Je to iba upozornenie, nie kontrola pseudokódu: bežné priradenia ani slová uprostred riadka nekontroluje a neznáme príkazy sa stále zobrazia ako bežné kroky.
@@ -58,13 +59,13 @@ ALGORITMUS IterateMatrix(matrix):
 
 ### Generovanie Pythonu
 
-Panel Pythonu generuje kód do oblasti medzi komentármi `# BEGIN GENERATED CODE` a `# END GENERATED CODE`. Importy a predpoklady ponechajte pred prvým komentárom, ukážkové dáta a volania za druhým; pri generovaní sa zachová všetok kód mimo tejto oblasti. Po úprave pseudokódu sa oblasť aktualizuje automaticky, kým používateľ ručne neupraví editor Pythonu. Potom možno oblasť prepísať tlačidlom **Generovať Python**. Podporované sú hlavičky algoritmov, podmienky, cykly, `WRITE`/`VYPIS`, `INPUT`/`VSTUP` a `RETURN`/`VRAT`; vstup sa načíta pomocou `input()` a má typ reťazec. Počítaný cyklus zahŕňa koncovú hodnotu. Ostatné príkazy musia byť platné príkazy Pythonu.
+Panel Pythonu generuje kód z pseudokódu do oblasti medzi komentármi `# BEGIN GENERATED CODE` a `# END GENERATED CODE`. Každý komentár musí byť uvedený práve raz a v správnom poradí. Importy a predpoklady ponechajte pred prvým komentárom, ukážkové dáta a volania za druhým; pri generovaní sa zachová všetok kód mimo tejto oblasti. Podporované sú hlavičky algoritmov, `IF`/`POKUD`, `ELSE`/`JINAK`, `WHILE`/`DOKUD`, obe podoby `FOR`/`PRO`, `WRITE`/`VYPIS`, `INPUT`/`VSTUP` a `RETURN`/`VRAT`. Vstup sa načíta pomocou `input()` do jednej premennej a má typ reťazec; koncová hodnota počítaného cyklu je zahrnutá. Základné výrazy sa zachovajú a `MOD`, `NEBO`, samostatné `A`, `AND`, `OR`, `NOT`, `true`, `false` a `length(...)` sa prevedú na ekvivalenty v Pythone. Ostatný text príkazov sa prenáša ako Python a musí mať platnú syntax. Po úprave pseudokódu sa oblasť aktualizuje automaticky, kým používateľ ručne neupraví editor Pythonu. Potom tlačidlo **Generovať Python** prepíše iba túto oblasť; chyby sa zobrazia pri tlačidle a existujúci kód zostane nezmenený. Pri krokovaní Pythonu sa zvýrazní príslušný blok diagramu.
 
 ### Uloženie algoritmu
 
 Kliknite na tlačidlo **Uložiť JSON**. Súbor sa stiahne s ľudsky čitateľným názvom vybraného algoritmu a príponou `.json`. Neplatné znaky v názve súboru sa nahradia podčiarkovníkom. Ak prehliadač zobrazí dialóg na uloženie, názov možno zmeniť.
 
-Tlačidlom **Načítať JSON** možno načítať súbor v rovnakom formáte. Názov importovaného algoritmu sa zobrazí vo výbere a jeho pseudokód nahradí aktuálny pseudokód. Exportovaný JSON ukladá kanonický anglický pseudokód a obsahuje `"pseudocodeLanguage": "en"`; pri importe sa akceptujú aj podporované lokalizované termíny. JSON neobsahuje Python kód, preto sa pri neupravenom editore Pythonu vygenerovaná oblasť obnoví z pseudokódu a okolitý kód zostane zachovaný.
+Tlačidlom **Načítať JSON** možno načítať súbor v rovnakom formáte. Importovaný algoritmus sa vo výbere zobrazí pod názvom súboru bez prípony a jeho pseudokód nahradí aktuálny pseudokód. Exportovaný JSON ukladá kanonický anglický pseudokód a obsahuje `"pseudocodeLanguage": "en"`; pri importe sa akceptujú aj podporované lokalizované termíny. JSON neobsahuje Python kód, preto sa pri neupravenom editore Pythonu vygenerovaná oblasť obnoví z pseudokódu a okolitý kód zostane zachovaný.
 
 Export obsahuje názov algoritmu a pseudokód ako pole riadkov. Každý riadok obsahuje `text` bez úvodného odsadenia a `indent` s počtom odsadzovacích medzier; tabulátor sa počíta ako štyri medzery. Prázdne riadky sa zachovajú.
 
@@ -113,4 +114,4 @@ Potom otvorte adresu `http://localhost:8000`.
 
 ## Použitie
 
-Vyberte algoritmus z rozbaľovacej ponuky a upravte jeho pseudokód alebo Python kód. Diagram aktualizujte tlačidlom v paneli pseudokódu. Krokovanie Pythonu spustíte tlačidlom **Start**; potom použite **Spustiť** alebo ovládacie prvky krokovania.
+Vyberte algoritmus z rozbaľovacej ponuky a upravte jeho pseudokód alebo Python kód. Diagram sa po úprave pseudokódu aktualizuje automaticky. Krokovanie Pythonu spustíte tlačidlom **Start**; potom použite **Spustiť** alebo ovládacie prvky krokovania.

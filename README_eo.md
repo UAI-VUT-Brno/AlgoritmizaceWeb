@@ -4,10 +4,11 @@ Simpla eduka reteja ilo por bildigi bazajn algoritmojn kaj ilian ruladon en Pyth
 
 ## Funkcioj
 
-- enhavas ekzemplajn algoritmojn: Bubble Sort, Factorial (Recursion/Loops), Find Maximum in an Array, Euclidean Algorithm (GCD), Triangle Area from Three Sides, Pedestrian Crossing (Basic) kaj Pedestrian Crossing (Unsignalized, Complex)
+- enhavas malplenan komencan algoritmon kun paŝo „Hello, world!“ kaj ekzemplojn Bubble Sort, Factorial (Recursion/Loops), Find Maximum in an Array, Euclidean Algorithm (GCD), Triangle Area from Three Sides, Pedestrian Crossing (Basic), kaj Pedestrian Crossing (Unsignalized, Complex)
 - montras pseŭdokodon kaj la respondan fluodiagramon
 - konvertas indentitan pseŭdokodon al Mermaid-diagramoj kun branĉoj kaj iteracioj
 - ebligas paŝe ruli Python-kodon kaj observi variablojn laŭlonge de la tempo
+- dum paŝa rulado de Python emfazas la respondan blokon en la fluodiagramo
 - montras programan eligon kaj emfazas la aktualan fontkodan linion
 - eksportas la aktualan pseŭdokodon al JSON, unu ero por linio kun informo pri indento
 - importas pseŭdokodon el JSON-dosiero en la sama formato
@@ -25,7 +26,7 @@ La diagramoj de ekzemplaj algoritmoj estas generataj el ilia pseŭdokodo; aparta
 
 La ekzemploj pri strattransiro modelas transiron sen trafiklumoj. La baza ekzemplo atendas ĝis la vojo estas libera; en ĝia Python-enigo `True` signifas, ke veturilo alproksimiĝas. La kompleksa ekzemplo kontrolas ĉiun vojstrion antaŭ transiri; ĉiu Python-a trafika stato estas listo, kie `True` signifas, ke tiu vojstrio estas danĝera por transiri.
 
-La help-panelo kun subtenataj terminoj havas defaŭltan altecon de **224 px**. Ŝanĝu ĝin trenante la dividilon inter la helpo kaj redaktilo, aŭ fokusante la dividilon kaj uzante la sagoklavojn Supren/Malsupren. Vi ankaŭ povas ŝanĝi la altecon inter la Python-redaktilo kaj variabla inspektilo, kaj inter la variabla inspektilo kaj konzolo, trenante iliajn dividilojn aŭ fokusante ilin kaj uzante la sagoklavojn Supren/Malsupren.
+La help-panelo kun subtenataj terminoj havas defaŭltan altecon de **320 px**. Ŝanĝu ĝin trenante la dividilon inter la helpo kaj redaktilo, aŭ fokusante la dividilon kaj uzante la sagoklavojn Supren/Malsupren. Defaŭlte, la Python-redaktilo kaj variabla inspektilo dividas sian panelon egale; variabloj kaj konzolo estas dividitaj laŭ proporcio 60:40. Ambaŭ dividiloj restas regrandigeblaj per trenado aŭ per la sagoklavoj Supren/Malsupren.
 
 Subtenataj kontrolstrukturoj:
 
@@ -35,8 +36,8 @@ Subtenataj kontrolstrukturoj:
 - Laŭvola alternativa branĉo: `JINAK:` aŭ `ELSE:`. Vicigu la linion `JINAK`/`ELSE` kun la responda `POKUD`/`IF` aŭ kun la komandoj en la unua branĉo.
 - Kondiĉa iteracio: `DOKUD condition:` aŭ `WHILE condition:`.
 - Trairi kolekton: `PRO item V collection:` aŭ `FOR item IN collection:`. La diagramo montras decidon pri la havebleco de plia elemento, ties atribuon kaj revenan sagon de la iteracio.
-- Nombrila iteracio: `PRO i OD start DO end:` aŭ `FOR i FROM start TO end:`. La kaplinio aperas kiel seslatero kun revena sago; iteraciaj paŝoj kaj limoj ne estas kalkulataj.
-- La sekva bloko de la branĉo `Ne` aperas sub ĉiuj blokoj de la branĉo `Ano`, ankaŭ ĉe nestitaj iteracioj.
+- Nombrila iteracio: `PRO i OD start DO end:` aŭ `FOR i FROM start TO end:`. La kaplinio aperas kiel seslatero; la sagoj al la korpo kaj reen estas sen etikedoj, kaj la elira sago estas etikedita **Fino de la ciklo**. Iteraciaj paŝoj kaj limoj ne estas kalkulataj. La sagoj de `WHILE` kaj kolektaj iteracioj plu uzas **Jes**/**Ne**.
+- La sekva bloko de la branĉo **Ne** aperas sub ĉiuj blokoj de la branĉo **Jes**, ankaŭ ĉe nestitaj iteracioj.
 - Ĉiuj listigitaj strukturoj povas esti nestitaj. Iliaj korpoj devas esti indentitaj rilate al la kaplinio.
 
 La komando `VYPIS value` aŭ `WRITE value` montras valoron kiel ordinaran diagram-paŝon. `VSTUP variable` aŭ `INPUT variable` legas valoron kaj montras ĝin kiel enigan paralelogramon. La pseŭdokoda redaktilo ruĝe substrekas nekonatajn vortojn per majuskloj ĉe la komenco de linio kaj montras ilian nombron. Tio estas nur atentigo, ne validigo de pseŭdokodo: ordinaraj atribuoj kaj vortoj ene de linio ne estas kontrolataj, kaj nekonataj komandoj ankoraŭ aperas kiel ordinaraj paŝoj.
@@ -58,13 +59,13 @@ ALGORITMUS IterateMatrix(matrix):
 
 ### Generi Python
 
-La Python-panelo generas kodon inter la komentoj `# BEGIN GENERATED CODE` kaj `# END GENERATED CODE`. Lasu importojn kaj antaŭkondiĉojn antaŭ la unua komento, kaj ekzemplajn datumojn kaj vokojn post la dua; regenerado konservas la kodon ekster tiu regiono. Pseŭdokodaj ŝanĝoj aŭtomate ĝisdatigas la regionon ĝis la Python-redaktilo estas permane ŝanĝita. Poste la butono **Generi Python** eksplicite anstataŭigas la regionon. Nombrilaj iteracioj inkluzivas sian finan valoron. Algoritmaj kaplinioj, kondiĉoj, iteracioj, `WRITE`/`VYPIS`, `INPUT`/`VSTUP` kaj `RETURN`/`VRAT` estas subtenataj. Enigo estas legata per `input()` kiel ĉeno; aliaj komandoj devas esti validaj Python-komandoj.
+La Python-panelo generas kodon el la pseŭdokodo inter la komentoj `# BEGIN GENERATED CODE` kaj `# END GENERATED CODE`. Ĉiu komento devas aperi precize unufoje kaj en tiu ordo. Metu importojn kaj antaŭkondiĉojn antaŭ la unua komento, kaj ekzemplajn datumojn kaj vokojn post la dua; regenerado konservas la kodon ekster tiu regiono. Subtenataj estas algoritmaj kaplinioj, `IF`/`POKUD`, `ELSE`/`JINAK`, `WHILE`/`DOKUD`, ambaŭ formoj de `FOR`/`PRO`, `WRITE`/`VYPIS`, `INPUT`/`VSTUP` kaj `RETURN`/`VRAT`. Enigo asignas la rezulton de `input()` al unu variablo kaj estas teksto; la fina valoro de nombrila iteracio estas inkluzivita. Bazaj esprimoj estas konservataj, kaj `MOD`, `NEBO`, memstara `A`, `AND`, `OR`, `NOT`, `true`, `false` kaj `length(...)` estas tradukataj al Python-ekvivalentoj. Alia komandteksto estas elsendata kiel Python kaj devas esti valida Python. Pseŭdokodaj ŝanĝoj ĝisdatigas la generitan regionon aŭtomate ĝis mana ŝanĝo de la Python-redaktilo. Poste **Generi Python** anstataŭigas nur tiun regionon; eraroj aperas apud la butono kaj la ekzistanta kodo restas senŝanĝa. Dum paŝa rulado de Python emfaziĝas la responda diagram-bloko.
 
 ### Konservi algoritmon
 
 Alklaku **Konservi JSON**. La dosiero elŝutiĝas kun la homlegebla nomo de la elektita algoritmo kaj la sufikso `.json`. Nevalidaj signoj en la dosiernomo estas anstataŭigitaj per substrekoj. Retumila dialogo por konservi la dosieron povas ebligi ŝanĝi la nomon.
 
-Uzu **Ŝargi JSON** por importi dosieron en la sama formato. La nomo de la importita algoritmo aperas en la elektilo, kaj ĝia pseŭdokodo anstataŭigas la aktualan. Eksportitaj JSON-dosieroj konservas kanonan anglan pseŭdokodon kaj enhavas `"pseudocodeLanguage": "en"`; importado ankaŭ akceptas la subtenatajn lokalizitajn terminojn. Ĉar JSON ne enhavas Python-kodon, la generita regiono estas ĝisdatigita el la pseŭdokodo se la Python-redaktilo ne estis permane ŝanĝita; la ĉirkaŭa kodo estas konservata.
+Uzu **Ŝargi JSON** por importi dosieron en la sama formato. La importita algoritmo aperas en la elektilo sub la alŝutita dosiernomo sen ĝia sufikso, kaj ĝia pseŭdokodo anstataŭigas la aktualan. Eksportitaj JSON-dosieroj konservas kanonan anglan pseŭdokodon kaj enhavas `"pseudocodeLanguage": "en"`; importado ankaŭ akceptas la subtenatajn lokalizitajn terminojn. Ĉar JSON ne enhavas Python-kodon, la generita regiono estas ĝisdatigita el la pseŭdokodo se la Python-redaktilo ne estis permane ŝanĝita; la ĉirkaŭa kodo estas konservata.
 
 La eksporto enhavas la algoritman nomon kaj la pseŭdokodon kiel tabelon de linioj. Ĉiu linio havas `text` kun la enhavo sen komenca indento kaj `indent` kun la nombro de indentaj spacoj; tabo kalkuliĝas kiel kvar spacoj. Malplenaj linioj estas konservataj.
 
@@ -113,4 +114,4 @@ Poste malfermu `http://localhost:8000`.
 
 ## Uzado
 
-Elektu algoritmon el la falmenuo kaj redaktu ĝian pseŭdokodon aŭ Python-kodon. Ĝisdatigu la diagramon per la butono en la pseŭdokoda panelo. Por paŝe ruli Python-kodon, alklaku **Start**, poste uzu **Run** aŭ la paŝajn regilojn.
+Elektu algoritmon el la falmenuo kaj redaktu ĝian pseŭdokodon aŭ Python-kodon. La diagramo aŭtomate ĝisdatiĝas post ŝanĝo de pseŭdokodo. Por paŝe ruli Python-kodon, alklaku **Start**, poste uzu **Run** aŭ la paŝajn regilojn.
