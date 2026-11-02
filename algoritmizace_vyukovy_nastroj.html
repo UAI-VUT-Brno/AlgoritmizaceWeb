@@ -113,14 +113,14 @@
             pointer-events: none;
         }
         #pseudocodeHelp {
-            height: 224px;
+            height: 320px;
             min-height: 96px;
         }
         #pane1 > div:nth-child(2) {
             min-height: 120px;
         }
         #pythonEditorPane {
-            flex: 0 0 55%;
+            flex: 0 0 50%;
             min-height: 100px;
         }
         #pythonEditorPane .CodeMirror {
@@ -139,11 +139,11 @@
             gap: 8px;
         }
         #variablePane {
-            flex: 1 1 0%;
+            flex: 1.5 1 0%;
             min-height: 90px;
         }
         #consolePane {
-            flex: 1 1 112px;
+            flex: 1 1 0%;
             min-height: 70px;
         }
         .language-button[aria-pressed="true"] {
@@ -343,7 +343,7 @@
                 </span>
             </div>
 
-            <!-- Python Editor (Top 55%) -->
+            <!-- Python Editor (Top 50%) -->
             <div id="pythonEditorPane" class="relative border-b border-darkaccent overflow-hidden">
                 <div class="absolute inset-x-0 top-0 z-10 flex h-7 items-center justify-between border-b border-darkaccent bg-slate-900 px-2">
                     <span id="pythonGenerationStatus" class="max-w-[200px] truncate text-[10px] text-slate-400" role="status" aria-live="polite"></span>
@@ -356,7 +356,7 @@
 
             <div id="pythonEditorResizer" class="gutter-vertical" role="separator" data-i18n-aria-label="resizePythonEditor" aria-label="Změnit výšku editoru Pythonu a inspektoru proměnných" aria-orientation="horizontal" aria-valuemin="100" tabindex="0"></div>
 
-            <!-- Variables & Callstack Inspector (Bottom 45%) -->
+            <!-- Variables & Callstack Inspector (Bottom 50%) -->
             <div id="pythonInspectorPane" class="flex flex-col bg-darkcard">
                 <div class="h-8 bg-slate-900 px-3 flex items-center justify-between border-b border-darkaccent text-xs font-medium text-slate-400 flex-shrink-0">
                     <span class="flex items-center space-x-2">
@@ -396,6 +396,16 @@
     <script>
         // --- 1. PRE-DEFINED ALGORITHM TEMPLATES ---
         const templates = {
+            emptyAlgorithm: {
+                name: 'Empty Algorithm (Starter)',
+                pseudocode: `ALGORITHM MyAlgorithm():
+  WRITE "Hello, world!"`,
+                python: `# BEGIN GENERATED CODE
+# END GENERATED CODE
+
+my_algorithm()`
+            },
+
             bubbleSort: {
                 name: 'Bubble Sort',
                 pseudocode: `ALGORITHM BubbleSort(array):
@@ -417,7 +427,7 @@ def bubble_sort(array):
 
 values = [64, 34, 25, 12, 22, 8, -10, -5, 0, 3, 99]
 bubble_sort(values)
-print("done")`
+print(values)`
             },
 
             factorial: {
@@ -1212,6 +1222,8 @@ print("done")`
         let pyodideInstance = null;
         let executionTrace = [];
         let currentStepIndex = -1;
+        let generatedPythonSourceLines = new Map();
+        let diagramNodeIdByPseudocodeLine = new Map();
         let isPlaying = false;
         let playInterval = null;
         let diagramZoom = 1;
@@ -1436,6 +1448,7 @@ print("done")`
                 pythonCodeRevision++;
                 resetExecutionState();
                 if (!isSettingPythonProgrammatically) {
+                    generatedPythonSourceLines.clear();
                     pythonCodeDirty = true;
                     setPythonGenerationStatus('pythonNeedsGeneration');
                 }
@@ -1602,8 +1615,9 @@ print("done")`
                 return;
             }
 
+            const fileNameWithoutExtension = file.name.replace(/\.[^.]+$/, '');
             importedTemplate = {
-                name: data.name,
+                name: fileNameWithoutExtension || file.name,
                 pseudocode: convertPseudocode(data.pseudocode
                     .map(line => `${' '.repeat(line.indent)}${line.text}`)
                     .join('\n'), 'en')
@@ -1653,9 +1667,10 @@ print("done")`
         }
 
         // --- 3. MERMAID FLOWCHART RENDERER ---
-        async function renderMermaid(graphDefinition) {
+        async function renderMermaid(graphDefinition, nodeIdByPseudocodeLine = new Map()) {
             const renderVersion = ++diagramRenderVersion;
             const target = document.getElementById('mermaidTarget');
+            diagramNodeIdByPseudocodeLine = new Map();
             try {
                 target.removeAttribute('data-processed');
                 target.innerHTML = graphDefinition;
@@ -1663,6 +1678,7 @@ print("done")`
                     nodes: [target]
                 });
                 if (renderVersion !== diagramRenderVersion) return;
+                diagramNodeIdByPseudocodeLine = nodeIdByPseudocodeLine;
                 diagramZoom = 1;
                 applyDiagramZoom(true);
                 setDiagramStatus('diagramOk');
@@ -1910,14 +1926,20 @@ print("done")`
             const statements = parsePseudocode(code);
             let nodeIndex = 0;
             const nodes = [];
-            function makeNode(type, text) {
+            const nodeIdByPseudocodeLine = new Map();
+            function makeNode(type, text, sourceLine = null) {
                 const node = { id: `N${nodeIndex++}`, type, text };
                 nodes.push(node);
+                if (sourceLine !== null && !nodeIdByPseudocodeLine.has(sourceLine)) {
+                    nodeIdByPseudocodeLine.set(sourceLine, node.id);
+                }
                 return node;
             }
 
             const start = makeNode('start', translate('startNode'));
             const end = makeNode('end', translate('endNode'));
+            const algorithm = statements.find(statement => statement.type === 'algorithm');
+            if (algorithm) nodeIdByPseudocodeLine.set(algorithm.line, start.id);
             const edges = [];
             const layoutEdges = [];
 
@@ -1928,7 +1950,11 @@ print("done")`
                     const deferredLayoutSources = pendingLoopLayoutSources.splice(0);
                     const statementStartIndex = nodes.length;
                     if (statement.type === 'decision' || statement.type === 'loop' || statement.type === 'forEach' || statement.type === 'countedLoop') {
-                        const decision = makeNode(statement.type === 'countedLoop' ? 'countedLoop' : 'decision', statement.text || translate('condition'));
+                        const decision = makeNode(
+                            statement.type === 'countedLoop' ? 'countedLoop' : 'decision',
+                            statement.text || translate('condition'),
+                            statement.line
+                        );
                         if (statement.type === 'countedLoop') {
                             decision.iterator = statement.iterator;
                             decision.start = statement.start;
@@ -1938,7 +1964,11 @@ print("done")`
                         const loopBodyStartIndex = nodes.length;
                         let loopBodyIncoming = [{ from: decision.id, label: translate('yes') }];
                         if (statement.type === 'forEach') {
-                            const iteratorStep = makeNode('step', `${statement.iterator} = ${translate('nextIterator', { iterable: statement.iterable })}`);
+                            const iteratorStep = makeNode(
+                                'step',
+                                `${statement.iterator} = ${translate('nextIterator', { iterable: statement.iterable })}`,
+                                statement.line
+                            );
                             loopBodyIncoming.forEach(edge => edges.push({ from: edge.from, to: iteratorStep.id, label: edge.label }));
                             loopBodyIncoming = [{ from: iteratorStep.id, label: '' }];
                         }
@@ -1964,7 +1994,7 @@ print("done")`
                             : isReturn
                                 ? 'return'
                                 : 'step';
-                        const node = makeNode(nodeType, statement.text);
+                        const node = makeNode(nodeType, statement.text, statement.line);
                         exits.forEach(edge => edges.push({ from: edge.from, to: node.id, label: edge.label }));
                         if (isReturn) {
                             edges.push({ from: node.id, to: end.id, label: '' });
@@ -2042,14 +2072,16 @@ print("done")`
                 mermaidStr += `  ${edge.from} ~~~ ${edge.to}\n`;
             });
 
-            return mermaidStr;
+            return { graph: mermaidStr, nodeIdByPseudocodeLine };
         }
 
         function updateDiagramFromPseudocode() {
             clearTimeout(pseudocodeDiagramUpdateTimer);
             try {
-                renderMermaid(generateMermaidFromPseudocode(getCanonicalPseudocode()));
+                const diagram = generateMermaidFromPseudocode(getCanonicalPseudocode());
+                renderMermaid(diagram.graph, diagram.nodeIdByPseudocodeLine);
             } catch (error) {
+                diagramNodeIdByPseudocodeLine = new Map();
                 console.error("Pseudocode Parse Error:", error);
                 showDiagramError(translate('diagramCreateError'), error);
             }
@@ -2089,10 +2121,16 @@ print("done")`
             const algorithm = algorithmIndex >= 0 ? statements[algorithmIndex] : null;
             const body = statements.filter(statement => statement.type !== 'algorithm');
             const generatedLines = [];
+            const generatedSourceLines = [];
 
-            function appendBlock(block, indentation) {
+            function appendGeneratedLine(text, sourceLine) {
+                generatedLines.push(text);
+                generatedSourceLines.push(sourceLine);
+            }
+
+            function appendBlock(block, indentation, emptyBlockSourceLine = null) {
                 if (block.length === 0) {
-                    generatedLines.push(`${' '.repeat(indentation)}pass`);
+                    appendGeneratedLine(`${' '.repeat(indentation)}pass`, emptyBlockSourceLine);
                     return;
                 }
 
@@ -2102,11 +2140,11 @@ print("done")`
                         if (!statement.text.trim()) {
                             throw new Error(`Missing condition on line ${statement.line}.`);
                         }
-                        generatedLines.push(`${prefix}if ${translatePythonExpression(statement.text)}:`);
-                        appendBlock(statement.thenBranch, indentation + 4);
+                        appendGeneratedLine(`${prefix}if ${translatePythonExpression(statement.text)}:`, statement.line);
+                        appendBlock(statement.thenBranch, indentation + 4, statement.line);
                         if (statement.elseBranch.length > 0) {
-                            generatedLines.push(`${prefix}else:`);
-                            appendBlock(statement.elseBranch, indentation + 4);
+                            appendGeneratedLine(`${prefix}else:`, statement.line);
+                            appendBlock(statement.elseBranch, indentation + 4, statement.line);
                         }
                         continue;
                     }
@@ -2118,8 +2156,8 @@ print("done")`
                         if (statement.elseBranch.length > 0) {
                             throw new Error(`An ELSE branch is not supported for loops (line ${statement.line}).`);
                         }
-                        generatedLines.push(`${prefix}while ${translatePythonExpression(statement.text)}:`);
-                        appendBlock(statement.thenBranch, indentation + 4);
+                        appendGeneratedLine(`${prefix}while ${translatePythonExpression(statement.text)}:`, statement.line);
+                        appendBlock(statement.thenBranch, indentation + 4, statement.line);
                         continue;
                     }
 
@@ -2131,10 +2169,11 @@ print("done")`
                         if (statement.elseBranch.length > 0) {
                             throw new Error(`An ELSE branch is not supported for loops (line ${statement.line}).`);
                         }
-                        generatedLines.push(
-                            `${prefix}for ${statement.iterator} in ${translatePythonExpression(statement.iterable)}:`
+                        appendGeneratedLine(
+                            `${prefix}for ${statement.iterator} in ${translatePythonExpression(statement.iterable)}:`,
+                            statement.line
                         );
-                        appendBlock(statement.thenBranch, indentation + 4);
+                        appendBlock(statement.thenBranch, indentation + 4, statement.line);
                         continue;
                     }
 
@@ -2149,15 +2188,16 @@ print("done")`
                         }
                         const start = translatePythonExpression(statement.start);
                         const end = translatePythonExpression(statement.end);
-                        generatedLines.push(
-                            `${prefix}for ${statement.iterator} in range(${start}, (${end}) + 1):`
+                        appendGeneratedLine(
+                            `${prefix}for ${statement.iterator} in range(${start}, (${end}) + 1):`,
+                            statement.line
                         );
-                        appendBlock(statement.thenBranch, indentation + 4);
+                        appendBlock(statement.thenBranch, indentation + 4, statement.line);
                         continue;
                     }
 
                     if (statement.type === 'input') {
-                        generatedLines.push(`${prefix}${statement.target} = input()`);
+                        appendGeneratedLine(`${prefix}${statement.target} = input()`, statement.line);
                         continue;
                     }
 
@@ -2169,13 +2209,14 @@ print("done")`
                         if (!write[1]) {
                             throw new Error(`WRITE needs a value on line ${statement.line}.`);
                         }
-                        generatedLines.push(`${prefix}print(${translatePythonExpression(write[1])})`);
+                        appendGeneratedLine(`${prefix}print(${translatePythonExpression(write[1])})`, statement.line);
                         continue;
                     }
                     const result = statement.text.match(/^(?:VRAT|RETURN)(?:\s+([\s\S]*))?$/i);
                     if (result) {
-                        generatedLines.push(
-                            `${prefix}return${result[1] ? ` ${translatePythonExpression(result[1])}` : ''}`
+                        appendGeneratedLine(
+                            `${prefix}return${result[1] ? ` ${translatePythonExpression(result[1])}` : ''}`,
+                            statement.line
                         );
                         continue;
                     }
@@ -2183,24 +2224,28 @@ print("done")`
                         && !/^[A-Z_][A-Z0-9_]*\s*(?:=|←)/i.test(statement.text)) {
                         throw new Error(`Unsupported pseudocode statement on line ${statement.line}: ${statement.text}`);
                     }
-                    generatedLines.push(`${prefix}${translatePythonExpression(statement.text)}`);
+                    appendGeneratedLine(`${prefix}${translatePythonExpression(statement.text)}`, statement.line);
                 }
             }
 
             if (algorithm) {
                 const parameters = translatePythonExpression(algorithm.parameters);
-                generatedLines.push(`def ${toPythonIdentifier(algorithm.name)}(${parameters}):`);
-                appendBlock(body, 4);
+                appendGeneratedLine(`def ${toPythonIdentifier(algorithm.name)}(${parameters}):`, algorithm.line);
+                appendBlock(body, 4, algorithm.line);
             } else {
                 appendBlock(body, 0);
             }
-            return generatedLines.join('\n');
+            return {
+                code: generatedLines.join('\n'),
+                sourceLines: generatedSourceLines
+            };
         }
 
         function generatePythonFromPseudocode() {
             clearTimeout(pseudocodePythonUpdateTimer);
             if (!pseudoEditor || !pyEditor) return;
 
+            generatedPythonSourceLines.clear();
             try {
                 const lines = pyEditor.getValue().split('\n');
                 const startMarkers = [];
@@ -2217,7 +2262,7 @@ print("done")`
                     throw new Error(translate('pythonMarkersInvalid'));
                 }
 
-                const generatedCode = generatePythonCode(getCanonicalPseudocode());
+                const { code: generatedCode, sourceLines } = generatePythonCode(getCanonicalPseudocode());
                 const updatedLines = [
                     ...lines.slice(0, startMarkers[0] + 1),
                     ...generatedCode.split('\n'),
@@ -2232,6 +2277,11 @@ print("done")`
                         isSettingPythonProgrammatically = false;
                     }
                 }
+                sourceLines.forEach((sourceLine, index) => {
+                    if (Number.isInteger(sourceLine)) {
+                        generatedPythonSourceLines.set(startMarkers[0] + 1 + index, sourceLine);
+                    }
+                });
                 pythonCodeDirty = false;
                 setPythonGenerationStatus('pythonGenerated');
             } catch (error) {
@@ -2356,7 +2406,7 @@ sys._getframe().f_trace = _trace_func
             // 3. Update Console
             document.getElementById('consoleOutput').innerText = step.stdout.join('\n');
 
-            // 4. Highlight Flowchart Node (matching heuristically)
+            // 4. Highlight the flowchart node generated from this pseudocode line
             highlightFlowchartStep(step.line);
 
             // 5. Update Counter
@@ -2410,17 +2460,17 @@ sys._getframe().f_trace = _trace_func
         }
 
         function highlightFlowchartStep(lineNum) {
-            // Remove previous active SVG highlights
             const svgNodes = document.querySelectorAll('#mermaidTarget .node');
             svgNodes.forEach(node => node.classList.remove('active-node'));
 
-            if (svgNodes.length === 0) return;
+            const pseudocodeLine = generatedPythonSourceLines.get(lineNum);
+            const nodeId = diagramNodeIdByPseudocodeLine.get(pseudocodeLine);
+            if (!nodeId) return;
 
-            // Map line index roughly to flowchart nodes
-            const nodeIndex = (lineNum % svgNodes.length);
-            if (svgNodes[nodeIndex]) {
-                svgNodes[nodeIndex].classList.add('active-node');
-            }
+            const flowchartNode = [...svgNodes].find(node =>
+                node.id.startsWith(`flowchart-${nodeId}-`)
+            );
+            if (flowchartNode) flowchartNode.classList.add('active-node');
         }
 
         function stepForward() {
@@ -2615,16 +2665,23 @@ sys._getframe().f_trace = _trace_func
         window.addEventListener('resize', () => {
             setPythonEditorHeight(pythonEditorPane.getBoundingClientRect().height);
         });
-        setPythonEditorHeight(pythonEditorPane.getBoundingClientRect().height);
+        setPythonEditorHeight(
+            (pythonEditorPane.getBoundingClientRect().height
+                + pythonInspectorPane.getBoundingClientRect().height) / 2
+        );
 
-        function setVariablePaneHeight(height) {
+        function getVariablePaneAvailableHeight() {
             const contentStyle = getComputedStyle(inspectorContent);
             const verticalPadding = parseFloat(contentStyle.paddingTop) + parseFloat(contentStyle.paddingBottom);
             const gaps = parseFloat(contentStyle.rowGap) * 2;
-            const availableHeight = inspectorContent.clientHeight
+            return inspectorContent.clientHeight
                 - verticalPadding
                 - gaps
                 - variableConsoleResizer.offsetHeight;
+        }
+
+        function setVariablePaneHeight(height) {
+            const availableHeight = getVariablePaneAvailableHeight();
             const maximumHeight = Math.max(
                 minimumVariablePaneHeight,
                 availableHeight - minimumConsolePaneHeight
@@ -2670,7 +2727,7 @@ sys._getframe().f_trace = _trace_func
         window.addEventListener('resize', () => {
             setVariablePaneHeight(variablePane.getBoundingClientRect().height);
         });
-        setVariablePaneHeight(variablePane.getBoundingClientRect().height);
+        setVariablePaneHeight(getVariablePaneAvailableHeight() * 0.6);
 
         gutter1.addEventListener('mousedown', () => activeGutter = 1);
         gutter2.addEventListener('mousedown', () => activeGutter = 2);
