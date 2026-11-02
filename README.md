@@ -15,7 +15,7 @@ A simple educational web tool for visualizing basic algorithms and their executi
 - runs Python in the browser with Pyodide; no local Python installation is required
 - offers Czech, English, Slovak, Esperanto, and French interface languages
 
-Use the flag buttons and language codes **CS**, **EN**, **SK**, **EO**, and **FR** in the upper-right corner to change the interface language. Esperanto uses its green flag with a green star on a white canton. Czech is the default language. Interface labels are translated, while the human-readable example-algorithm names remain in English. Pseudocode terms and the contents of the algorithm being edited are not translated.
+Use the flag buttons and language codes **CS**, **EN**, **SK**, **EO**, and **FR** in the upper-right corner to change the interface language. Esperanto uses its green flag with a green star on a white canton. English is the default language. Interface labels and supported pseudocode terms are translated, while the human-readable example-algorithm names remain in English. Pseudocode is converted to canonical English internally; identifiers and quoted text are preserved.
 
 ## Flowcharts and supported pseudocode
 
@@ -68,16 +68,17 @@ Pseudocode edits regenerate the marked section automatically until the Python ed
 
 Click **Save JSON**. The file is downloaded using the selected algorithm's human-readable name and the `.json` extension. Invalid filename characters are replaced with underscores. A browser save dialog may allow you to change the filename.
 
-Use **Load JSON** to import a file in this format. The imported algorithm name appears in the selector, and its pseudocode replaces the current pseudocode. Because JSON does not contain Python code, the generated region is regenerated from the imported pseudocode when possible; code outside that region is preserved.
+Use **Load JSON** to import a file in this format. The imported algorithm name appears in the selector, and its pseudocode replaces the current pseudocode. JSON exports store canonical English pseudocode with `"pseudocodeLanguage": "en"`; imports also accept the supported localized terms. Because JSON does not contain Python code, the generated region is regenerated from the imported pseudocode when possible; code outside that region is preserved.
 
 The export contains the algorithm name and pseudocode as an array of lines. Each line has `text`, containing the content without leading indentation, and `indent`, containing the indentation in spaces; tabs count as four spaces. Blank lines are preserved.
 
 ```json
 {
   "name": "Bubble Sort",
+  "pseudocodeLanguage": "en",
   "pseudocode": [
-    { "text": "ALGORITMUS Example:", "indent": 0 },
-    { "text": "VYPIS value", "indent": 2 }
+    { "text": "ALGORITHM Example:", "indent": 0 },
+    { "text": "WRITE value", "indent": 2 }
   ]
 }
 ```

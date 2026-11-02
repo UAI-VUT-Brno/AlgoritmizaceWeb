@@ -15,7 +15,7 @@ Simpla eduka reteja ilo por bildigi bazajn algoritmojn kaj ilian ruladon en Pyth
 - rulas Python en la retumilo per Pyodide; loka instalado de Python ne estas bezonata
 - ofertas interfacon en la ĉeĥa, angla, slovaka, Esperanto kaj franca lingvoj
 
-Ŝanĝu la interfaco-lingvon per la flagaj butonoj kaj kodoj **CS**, **EN**, **SK**, **EO** kaj **FR** en la supra dekstra angulo. Esperanto uzas sian verdan flagon kun verda stelo sur blanka kampo. La defaŭlta lingvo estas la ĉeĥa. Interfacaj etikedoj estas tradukitaj, sed la homlegeblaj nomoj de la ekzemplaj algoritmoj restas en la angla. Pseŭdokodaj terminoj kaj la enhavo de la redaktata algoritmo ne estas tradukitaj.
+Ŝanĝu la interfaco-lingvon per la flagaj butonoj kaj kodoj **CS**, **EN**, **SK**, **EO** kaj **FR** en la supra dekstra angulo. Esperanto uzas sian verdan flagon kun verda stelo sur blanka kampo. La defaŭlta lingvo estas la angla. Interfacaj etikedoj kaj subtenataj pseŭdokodaj terminoj estas tradukitaj, sed la homlegeblaj nomoj de la ekzemplaj algoritmoj restas en la angla. Pseŭdokodo estas interne konvertata al kanona angla formo; identigiloj kaj citita teksto estas konservataj.
 
 ## Fluodiagramoj kaj subtenata pseŭdokodo
 
@@ -64,16 +64,17 @@ La Python-panelo generas kodon inter la komentoj `# BEGIN GENERATED CODE` kaj `#
 
 Alklaku **Konservi JSON**. La dosiero elŝutiĝas kun la homlegebla nomo de la elektita algoritmo kaj la sufikso `.json`. Nevalidaj signoj en la dosiernomo estas anstataŭigitaj per substrekoj. Retumila dialogo por konservi la dosieron povas ebligi ŝanĝi la nomon.
 
-Uzu **Ŝargi JSON** por importi dosieron en la sama formato. La nomo de la importita algoritmo aperas en la elektilo, kaj ĝia pseŭdokodo anstataŭigas la aktualan. Ĉar JSON ne enhavas Python-kodon, la generita regiono estas ĝisdatigita el la pseŭdokodo se la Python-redaktilo ne estis permane ŝanĝita; la ĉirkaŭa kodo estas konservata.
+Uzu **Ŝargi JSON** por importi dosieron en la sama formato. La nomo de la importita algoritmo aperas en la elektilo, kaj ĝia pseŭdokodo anstataŭigas la aktualan. Eksportitaj JSON-dosieroj konservas kanonan anglan pseŭdokodon kaj enhavas `"pseudocodeLanguage": "en"`; importado ankaŭ akceptas la subtenatajn lokalizitajn terminojn. Ĉar JSON ne enhavas Python-kodon, la generita regiono estas ĝisdatigita el la pseŭdokodo se la Python-redaktilo ne estis permane ŝanĝita; la ĉirkaŭa kodo estas konservata.
 
 La eksporto enhavas la algoritman nomon kaj la pseŭdokodon kiel tabelon de linioj. Ĉiu linio havas `text` kun la enhavo sen komenca indento kaj `indent` kun la nombro de indentaj spacoj; tabo kalkuliĝas kiel kvar spacoj. Malplenaj linioj estas konservataj.
 
 ```json
 {
   "name": "Bubble Sort",
+  "pseudocodeLanguage": "en",
   "pseudocode": [
-    { "text": "ALGORITMUS Example:", "indent": 0 },
-    { "text": "VYPIS value", "indent": 2 }
+    { "text": "ALGORITHM Example:", "indent": 0 },
+    { "text": "WRITE value", "indent": 2 }
   ]
 }
 ```
