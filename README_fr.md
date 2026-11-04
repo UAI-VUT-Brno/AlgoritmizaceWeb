@@ -1,5 +1,14 @@
 # Algorithmes et organigrammes
 
+## Copyright and license
+
+Copyright © 2026 Jiri Kral. Developed at Brno University of Technology (VUT), Faculty of Mechanical Engineering, Department of Applied Computer Science, for student practice.
+
+- Author: [Jiri Kral](https://www.vut.cz/en/people/jiri-kral-3652)
+- University contact: [VUT Brno, Faculty of Mechanical Engineering, Dept. of Applied Computer Science](https://www.fme.vutbr.cz/en/fakulta/struktura/pracoviste/uai#oai)
+
+This project is released under the [MIT License](./LICENSE). The license applies to this project's code and documentation; third-party dependencies remain under their respective licenses.
+
 Un outil pédagogique web simple pour visualiser des algorithmes de base et leur exécution en Python. L’application associe pseudocode, organigrammes et exécution pas à pas, ce qui la rend adaptée à l’enseignement des algorithmes, du tri et de la logique de programmation.
 
 ## Fonctionnalités

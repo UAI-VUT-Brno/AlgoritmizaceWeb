@@ -1,4 +1,33 @@
 <!DOCTYPE html>
+<!--
+Copyright (c) 2026 Jiri Kral
+Author: https://www.vut.cz/en/people/jiri-kral-3652
+Developed at VUT Brno, Faculty of Mechanical Engineering, Dept. of Applied Computer Science,
+for student practice: https://www.fme.vutbr.cz/en/fakulta/struktura/pracoviste/uai#oai
+SPDX-License-Identifier: MIT
+
+MIT License
+
+Copyright (c) 2026 Jiri Kral
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-->
 <html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
@@ -159,6 +188,9 @@
             border-radius: 2px;
             box-shadow: 0 0 0 1px rgb(148 163 184 / 0.4);
         }
+        #helpDialog::backdrop {
+            background: rgb(2 6 23 / 0.75);
+        }
         @media (max-width: 1499px) {
             .top-controls {
                 width: 100%;
@@ -254,8 +286,34 @@
                     <svg class="language-flag" viewBox="0 0 30 20" aria-hidden="true"><rect width="10" height="20" fill="#000091"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#e1000f"/></svg> FR
                 </button>
             </div>
+            <button id="helpButton" type="button" class="flex items-center gap-1 rounded-lg border border-darkaccent bg-darkbg px-2.5 py-1.5 text-xs text-slate-200 transition hover:bg-darkaccent" data-i18n-title="helpButton" data-i18n-aria-label="helpButton" title="Open help" aria-label="Open help">
+                <i class="fa-regular fa-circle-question" aria-hidden="true"></i>
+                <span data-i18n="helpButton">Help</span>
+            </button>
         </div>
     </header>
+
+    <dialog id="helpDialog" aria-labelledby="helpDialogTitle" class="w-[min(42rem,calc(100%-2rem))] max-h-[85vh] overflow-y-auto rounded-xl border border-darkaccent bg-darkcard p-5 text-slate-100 shadow-2xl">
+        <div class="mb-4 flex items-center justify-between gap-4">
+            <h2 id="helpDialogTitle" data-i18n="helpTitle" class="text-lg font-semibold text-slate-100">Quick help</h2>
+            <button id="closeHelpButton" type="button" data-i18n-title="closeHelp" data-i18n-aria-label="closeHelp" title="Close help" aria-label="Close help" class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded text-slate-400 hover:bg-darkaccent hover:text-white">
+                <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+            </button>
+        </div>
+        <p data-i18n="helpIntro" class="mb-4 text-sm text-slate-300">Use the three panels from left to right to write, visualize, and run an algorithm.</p>
+        <ul class="list-disc space-y-3 pl-5 text-sm leading-relaxed text-slate-300">
+            <li data-i18n="helpChooseAlgorithm">Choose an example from the algorithm menu, or load your own pseudocode from JSON.</li>
+            <li data-i18n="helpPseudocode">Edit pseudocode in the left panel. Put each step on a new line; end control structures with a colon and indent their blocks.</li>
+            <li data-i18n="helpDiagram">The center panel shows the flowchart. It updates when pseudocode changes; use the controls to zoom or fit it.</li>
+            <li data-i18n="helpPython">Review or edit the Python code in the right panel. Select Generate Python to update generated code from your pseudocode.</li>
+            <li data-i18n="helpExecution">Select Start to prepare execution, then use Run or the step controls to inspect execution and variables.</li>
+            <li data-i18n="helpJson">Use Save JSON and Load JSON to export or import pseudocode. Change the interface language with the flag buttons.</li>
+        </ul>
+        <p class="mt-5 border-t border-darkaccent pt-3 text-xs text-slate-400"><span data-i18n="versionLabel">Version</span> 1.0.0</p>
+        <div class="mt-5 flex justify-end">
+            <button id="closeHelpButtonFooter" type="button" data-i18n="closeHelp" class="rounded bg-brand px-3 py-1.5 text-sm font-medium text-white hover:bg-brandhover">Close</button>
+        </div>
+    </dialog>
 
     <!-- Main Container: 3 Panes Layout -->
     <main id="container" class="flex-1 flex overflow-hidden">
@@ -391,6 +449,13 @@
             </div>
         </section>
     </main>
+
+    <footer class="flex-shrink-0 border-t border-darkaccent bg-slate-900 px-2 py-1 text-center text-[10px] leading-4 text-slate-400">
+        &copy; 2026 <a href="https://www.vut.cz/en/people/jiri-kral-3652" class="hover:text-slate-200">Jiri Kral</a>
+        &middot; Developed at Brno University of Technology for student practice
+        &middot; <a href="https://www.fme.vutbr.cz/en/fakulta/struktura/pracoviste/uai#oai" class="hover:text-slate-200">VUT FME, Dept. of Applied Computer Science</a>
+        &middot; MIT License
+    </footer>
 
     <!-- Global Application Scripts -->
     <script>
@@ -596,6 +661,17 @@ print("done")`
                 documentTitle: 'Algoritmizace & Vývojové diagramy | Výukový nástroj',
                 appTitle: 'Algoritmizace & Vývojové Diagramy',
                 languageSelector: 'Výběr jazyka',
+                helpButton: 'Nápověda',
+                helpTitle: 'Stručná nápověda',
+                closeHelp: 'Zavřít',
+                helpIntro: 'Aplikaci používejte zleva doprava k zápisu, znázornění a spuštění algoritmu.',
+                helpChooseAlgorithm: 'V nabídce algoritmů vyberte ukázku nebo načtěte vlastní pseudokód ze souboru JSON.',
+                helpPseudocode: 'Upravujte pseudokód v levém panelu. Každý krok pište na nový řádek; řídicí struktury ukončete dvojtečkou a jejich bloky odsazujte.',
+                helpDiagram: 'Prostřední panel zobrazuje vývojový diagram. Po změně pseudokódu se aktualizuje; pomocí tlačítek můžete měnit měřítko.',
+                helpPython: 'V pravém panelu zkontrolujte nebo upravte Python kód. Tlačítkem Generovat Python aktualizujete kód podle pseudokódu.',
+                helpExecution: 'Tlačítkem Start připravte spuštění a poté pomocí Spustit nebo ovládacích prvků krokování sledujte běh a proměnné.',
+                helpJson: 'Pseudokód exportujte nebo importujte pomocí tlačítek Uložit JSON a Načíst JSON. Jazyk rozhraní změňte tlačítky s vlajkami.',
+                versionLabel: 'Verze',
                 algorithmLabel: 'Algoritmus:',
                 loadJson: 'Načíst JSON',
                 saveJsonButton: 'Uložit JSON',
@@ -676,6 +752,17 @@ print("done")`
                 documentTitle: 'Algorithms & Flowcharts | Learning Tool',
                 appTitle: 'Algorithms & Flowcharts',
                 languageSelector: 'Language selector',
+                helpButton: 'Help',
+                helpTitle: 'Quick help',
+                closeHelp: 'Close',
+                helpIntro: 'Use the three panels from left to right to write, visualize, and run an algorithm.',
+                helpChooseAlgorithm: 'Choose an example from the algorithm menu, or load your own pseudocode from JSON.',
+                helpPseudocode: 'Edit pseudocode in the left panel. Put each step on a new line; end control structures with a colon and indent their blocks.',
+                helpDiagram: 'The center panel shows the flowchart. It updates when pseudocode changes; use the controls to zoom or fit it.',
+                helpPython: 'Review or edit the Python code in the right panel. Select Generate Python to update generated code from your pseudocode.',
+                helpExecution: 'Select Start to prepare execution, then use Run or the step controls to inspect execution and variables.',
+                helpJson: 'Use Save JSON and Load JSON to export or import pseudocode. Change the interface language with the flag buttons.',
+                versionLabel: 'Version',
                 algorithmLabel: 'Algorithm:',
                 loadJson: 'Load JSON',
                 saveJsonButton: 'Save JSON',
@@ -756,6 +843,17 @@ print("done")`
                 documentTitle: 'Algoritmoj kaj fluodiagramoj | Lernilo',
                 appTitle: 'Algoritmoj kaj fluodiagramoj',
                 languageSelector: 'Lingvoelektilo',
+                helpButton: 'Helpo',
+                helpTitle: 'Mallonga helpo',
+                closeHelp: 'Fermi',
+                helpIntro: 'Uzu la tri panelojn de maldekstre dekstren por verki, bildigi kaj ruli algoritmon.',
+                helpChooseAlgorithm: 'Elektu ekzemplon el la algoritma menuo aŭ ŝargu propran pseŭdokodon el JSON-dosiero.',
+                helpPseudocode: 'Redaktu pseŭdokodon en la maldekstra panelo. Skribu ĉiun paŝon sur nova linio; finu kontrolstrukturojn per dupunkto kaj indentu iliajn blokojn.',
+                helpDiagram: 'La centra panelo montras la fluodiagramon. Ĝi ĝisdatiĝas kiam la pseŭdokodo ŝanĝiĝas; uzu la regilojn por zomi aŭ adapti ĝin.',
+                helpPython: 'Kontrolu aŭ redaktu Python-kodon en la dekstra panelo. Elektu Generi Python por ĝisdatigi la generitan kodon el la pseŭdokodo.',
+                helpExecution: 'Elektu Starti por prepari ruladon, poste uzu Ruli aŭ la paŝajn regilojn por observi la ruladon kaj variablojn.',
+                helpJson: 'Uzu Konservi JSON kaj Ŝargi JSON por eksporti aŭ importi pseŭdokodon. Ŝanĝu la interfaco-lingvon per la flagaj butonoj.',
+                versionLabel: 'Versio',
                 algorithmLabel: 'Algoritmo:',
                 loadJson: 'Ŝargi JSON',
                 saveJsonButton: 'Konservi JSON',
@@ -836,6 +934,17 @@ print("done")`
                 documentTitle: 'Algorithmes et organigrammes | Outil pédagogique',
                 appTitle: 'Algorithmes et organigrammes',
                 languageSelector: 'Sélecteur de langue',
+                helpButton: 'Aide',
+                helpTitle: 'Aide rapide',
+                closeHelp: 'Fermer',
+                helpIntro: 'Utilisez les trois panneaux de gauche à droite pour écrire, visualiser et exécuter un algorithme.',
+                helpChooseAlgorithm: 'Choisissez un exemple dans le menu des algorithmes ou chargez votre pseudocode depuis un fichier JSON.',
+                helpPseudocode: 'Modifiez le pseudocode dans le panneau de gauche. Écrivez chaque étape sur une nouvelle ligne ; terminez les structures de contrôle par deux-points et indentez leurs blocs.',
+                helpDiagram: 'Le panneau central affiche l’organigramme. Il est actualisé lorsque le pseudocode change ; utilisez les commandes pour zoomer ou ajuster l’affichage.',
+                helpPython: 'Consultez ou modifiez le code Python dans le panneau de droite. Sélectionnez Générer Python pour actualiser le code généré depuis le pseudocode.',
+                helpExecution: 'Sélectionnez Démarrer pour préparer l’exécution, puis utilisez Exécuter ou les commandes pas à pas pour examiner l’exécution et les variables.',
+                helpJson: 'Utilisez Enregistrer JSON et Charger JSON pour exporter ou importer le pseudocode. Changez la langue de l’interface avec les boutons de drapeau.',
+                versionLabel: 'Version',
                 algorithmLabel: 'Algorithme :',
                 loadJson: 'Charger JSON',
                 saveJsonButton: 'Enregistrer JSON',
@@ -916,6 +1025,17 @@ print("done")`
                 documentTitle: 'Algoritmy a vývojové diagramy | Výučbový nástroj',
                 appTitle: 'Algoritmy a vývojové diagramy',
                 languageSelector: 'Výber jazyka',
+                helpButton: 'Pomocník',
+                helpTitle: 'Stručný pomocník',
+                closeHelp: 'Zavrieť',
+                helpIntro: 'Tri panely používajte zľava doprava na zápis, vizualizáciu a spustenie algoritmu.',
+                helpChooseAlgorithm: 'V ponuke algoritmov vyberte ukážku alebo načítajte vlastný pseudokód zo súboru JSON.',
+                helpPseudocode: 'Upravujte pseudokód v ľavom paneli. Každý krok píšte na nový riadok; riadiace štruktúry ukončite dvojbodkou a ich bloky odsaďte.',
+                helpDiagram: 'Prostredný panel zobrazuje vývojový diagram. Po zmene pseudokódu sa aktualizuje; pomocou ovládacích prvkov môžete meniť mierku.',
+                helpPython: 'V pravom paneli skontrolujte alebo upravte Python kód. Tlačidlom Generovať Python aktualizujete kód podľa pseudokódu.',
+                helpExecution: 'Tlačidlom Štart pripravte spustenie a potom pomocou Spustiť alebo ovládacích prvkov krokovania sledujte beh a premenné.',
+                helpJson: 'Pseudokód exportujte alebo importujte tlačidlami Uložiť JSON a Načítať JSON. Jazyk rozhrania zmeňte tlačidlami s vlajkami.',
+                versionLabel: 'Verzia',
                 algorithmLabel: 'Algoritmus:',
                 loadJson: 'Načítať JSON',
                 saveJsonButton: 'Uložiť JSON',
@@ -1498,6 +1618,26 @@ print("done")`
             });
         }
 
+        function initializeHelpDialog() {
+            const dialog = document.getElementById('helpDialog');
+            document.getElementById('helpButton').addEventListener('click', () => dialog.showModal());
+            document.getElementById('closeHelpButton').addEventListener('click', () => dialog.close());
+            document.getElementById('closeHelpButtonFooter').addEventListener('click', () => dialog.close());
+            dialog.addEventListener('cancel', event => {
+                event.preventDefault();
+                dialog.close();
+            });
+            document.addEventListener('keydown', event => {
+                if (event.key === 'Escape' && dialog.open) {
+                    event.preventDefault();
+                    dialog.close();
+                }
+            }, true);
+            dialog.addEventListener('click', event => {
+                if (event.target === dialog) dialog.close();
+            });
+        }
+
         function initializeJsonImport() {
             document.getElementById('jsonFileInput').addEventListener('change', event => {
                 const [file] = event.target.files;
@@ -1526,6 +1666,7 @@ print("done")`
             initializeEditors();
             initializeMermaid();
             initializeLanguageControls();
+            initializeHelpDialog();
             applyLanguage('en', false);
             loadTemplate(document.getElementById('templateSelect').value);
             initializeJsonImport();

@@ -1,5 +1,14 @@
 # Algoritmoj kaj fluodiagramoj
 
+## Copyright and license
+
+Copyright © 2026 Jiri Kral. Developed at Brno University of Technology (VUT), Faculty of Mechanical Engineering, Department of Applied Computer Science, for student practice.
+
+- Author: [Jiri Kral](https://www.vut.cz/en/people/jiri-kral-3652)
+- University contact: [VUT Brno, Faculty of Mechanical Engineering, Dept. of Applied Computer Science](https://www.fme.vutbr.cz/en/fakulta/struktura/pracoviste/uai#oai)
+
+This project is released under the [MIT License](./LICENSE). The license applies to this project's code and documentation; third-party dependencies remain under their respective licenses.
+
 Simpla eduka reteja ilo por bildigi bazajn algoritmojn kaj ilian ruladon en Python. La aplikaĵo kombinas pseŭdokodon, fluodiagramon kaj paŝan ruladon de kodo, do ĝi taŭgas por instrui algoritmikon, ordigon kaj programan logikon.
 
 ## Funkcioj
