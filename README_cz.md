@@ -39,38 +39,38 @@ Nápověda s podporovanými termíny pseudokódu má výchozí výšku **320 px*
 
 Podporované řídicí struktury:
 
-- Hlavička algoritmu: `ALGORITMUS název(parametry):` nebo `ALGORITHM name(parameters):`.
-- Podmínka: `POKUD podmínka:` nebo `IF podmínka:`.
+- Hlavička algoritmu: `ALGORITMUS nazev(parametry):`.
+- Podmínka: `POKUD podmínka:`.
 - Dlouhé popisky rozhodovacích uzlů se zalamují po slovech, aby se zmenšila výška diagramového kosočtverce.
-- Volitelná alternativní větev: `JINAK:` nebo `ELSE:`. Řádek `JINAK`/`ELSE` zarovnejte buď s odpovídajícím `POKUD`/`IF`, nebo s příkazy první větve.
-- Cyklus s podmínkou: `DOKUD podmínka:` nebo `WHILE podmínka:`.
-- Cyklus přes prvky kolekce: `PRO prvek V kolekce:` nebo `FOR prvek IN kolekce:`. Diagram zobrazuje rozhodnutí, zda je k dispozici další prvek, přiřazení prvku a návratovou hranu cyklu.
-- Počítaný cyklus: `PRO i OD začátek DO konec:` nebo `FOR i FROM start TO end:`. Hlavička cyklu je zobrazena jako šestiúhelník; šipky do těla a zpět jsou bez popisku a ukončovací šipka má popisek **Konec cyklu**. Kroky ani hranice iterací se nevyhodnocují. Šipky cyklů `WHILE` a průchodu kolekcí nadále používají popisky **Ano**/**Ne**.
+- Volitelná alternativní větev: `JINAK:`. Řádek `JINAK` zarovnejte buď s odpovídajícím `POKUD`, nebo s příkazy první větve.
+- Cyklus s podmínkou: `DOKUD podmínka:`.
+- Cyklus přes prvky kolekce: `PRO prvek V kolekce:`. Diagram zobrazuje rozhodnutí, zda je k dispozici další prvek, přiřazení prvku a návratovou hranu cyklu.
+- Počítaný cyklus: `PRO i OD začátek DO konec:`. Hlavička cyklu je zobrazena jako šestiúhelník; šipky do těla a zpět jsou bez popisku a ukončovací šipka má popisek **Konec cyklu**. Kroky ani hranice iterací se nevyhodnocují. Šipky cyklů `DOKUD` a průchodu kolekcí nadále používají popisky **Ano**/**Ne**.
 - Blok větve **Ne** je v diagramu umístěn pod všemi bloky větve **Ano**, a to i u vnořených cyklů.
 - Všechny uvedené struktury lze vnořovat. Jejich těla musí být odsazena vůči hlavičce.
 
-Příkaz `VYPIS hodnota` nebo `WRITE value` zobrazí tisk hodnoty jako běžný krok diagramu. `VSTUP proměnná` nebo `INPUT variable` načte hodnotu a zobrazí ji jako vstupní rovnoběžník. Editor pseudokódu průběžně červeně podtrhává neznámá slova psaná velkými písmeny na začátku řádku a zobrazuje počet nálezů. Jde o orientační upozornění, nikoli o validaci pseudokódu: běžná přiřazení a slova uvnitř řádku nekontroluje a neznámé příkazy se stále zobrazí jako běžné kroky.
+Příkaz `VYPIS hodnota` zobrazí tisk hodnoty jako běžný krok diagramu. `VSTUP proměnná` načte hodnotu a zobrazí ji jako vstupní rovnoběžník. Editor pseudokódu průběžně červeně podtrhává neznámá slova psaná velkými písmeny na začátku řádku a zobrazuje počet nálezů. Jde o orientační upozornění, nikoli o validaci pseudokódu: běžná přiřazení a slova uvnitř řádku nekontroluje a neznámé příkazy se stále zobrazí jako běžné kroky.
 
-Příkazy, které nejsou rozpoznány jako řídicí struktury, se zobrazí jako běžné kroky. Předání výsledku funkce se rozpozná pomocí `VRAT` nebo `RETURN` a zobrazí se jako výstupní rovnoběžník propojený s koncem diagramu. Generátor vytváří přehledový diagram; neinterpretuje výrazy, neověřuje jejich syntaxi ani nespouští pseudokód. Počítané cykly a podmínky jsou tedy znázorněné, ale jejich průběh se nepočítá.
+Příkazy, které nejsou rozpoznány jako řídicí struktury, se zobrazí jako běžné kroky. Předání výsledku funkce se rozpozná pomocí `VRAT` a zobrazí se jako výstupní rovnoběžník propojený s koncem diagramu. Generátor vytváří přehledový diagram; neinterpretuje výrazy, neověřuje jejich syntaxi ani nespouští pseudokód. Počítané cykly a podmínky jsou tedy znázorněné, ale jejich průběh se nepočítá.
 
 Příklad:
 
 ```text
-ALGORITMUS IterateMatrix(matrix):
-  PRO row V matrix:
-    PRO value V row:
-      POKUD value > 0:
-        positive_count = positive_count + 1
+ALGORITMUS ProjdiMatici(matice):
+  PRO radek V matice:
+    PRO hodnota V radek:
+      POKUD hodnota > 0:
+        kladny_pocet = kladny_pocet + 1
       JINAK:
-        nonpositive_count = nonpositive_count + 1
-  VRAT positive_count
+        nekladny_pocet = nekladny_pocet + 1
+  VRAT kladny_pocet
 ```
 
 ### Generování Pythonu
 
 Panel Pythonu generuje kód z pseudokódu do oblasti mezi komentáři `# BEGIN GENERATED CODE` a `# END GENERATED CODE`. Importy nebo předpoklady ponechte před počátečním komentářem, ukázková data a volání za koncovým komentářem; při opětovném generování zůstanou okolní části zachovány. Každý komentář musí být uveden právě jednou a ve správném pořadí.
 
-Podporované struktury a příkazy pseudokódu (`ALGORITMUS`/`ALGORITHM`, `IF`/`POKUD`, `ELSE`/`JINAK`, `WHILE`/`DOKUD`, obě podoby `FOR`/`PRO`, `WRITE`/`VYPIS`, `INPUT`/`VSTUP` a `RETURN`/`VRAT`) se převádějí na Python. `INPUT variable` přiřadí do jedné proměnné výsledek Pythonového `input()`; načtená hodnota je řetězec. Horní mez počítaného cyklu je zahrnuta. Základní výrazy se zachovávají; `MOD`, `NEBO`, samostatné `A`, `AND`, `OR`, `NOT`, `true`, `false` a `length(...)` se převádějí na ekvivalenty v Pythonu. Ostatní text příkazů se přenáší jako Python a musí mít platnou syntaxi.
+Podporované struktury a příkazy pseudokódu se převádějí na Python. Příkaz `VSTUP` přiřadí do jedné proměnné výsledek Pythonového `input()`; načtená hodnota je řetězec. Horní mez počítaného cyklu je zahrnuta. Základní výrazy se zachovávají; podporované operátory a `length(...)` se převádějí na ekvivalenty v Pythonu. Ostatní text příkazů se přenáší jako Python a musí mít platnou syntaxi.
 
 Při úpravě pseudokódu se označená oblast automaticky aktualizuje, dokud uživatel ručně neupraví editor Pythonu. Po ruční úpravě použijte **Generovat Python**; přepíše se pouze označená oblast. Chyba generování se zobrazí vedle tlačítka a stávající kód zůstane zachován. Importovaný JSON obsahuje pouze pseudokód; pokud editor Pythonu nebyl ručně upraven, vygenerovaná oblast se z něj aktualizuje. Při krokování Pythonu se zvýrazní odpovídající blok diagramu.
 

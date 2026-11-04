@@ -39,36 +39,36 @@ Panel pomocníka s podporovanými termínmi má predvolenú výšku **320 px**. 
 
 Podporované riadiace štruktúry:
 
-- Hlavička algoritmu: `ALGORITMUS názov(parametre):` alebo `ALGORITHM name(parameters):`.
-- Podmienka: `POKUD podmienka:` alebo `IF podmienka:`.
+- Hlavička algoritmu: `ALGORITMUS nazov(parametre):`.
+- Podmienka: `POKUD podmienka:`.
 - Dlhé popisy rozhodovacích uzlov sa zalamujú na hraniciach slov, aby sa zmenšila výška kosoštvorca.
-- Voliteľná alternatívna vetva: `JINAK:` alebo `ELSE:`. Riadok `JINAK`/`ELSE` zarovnajte buď s príslušným `POKUD`/`IF`, alebo s príkazmi prvej vetvy.
-- Podmienený cyklus: `DOKUD podmienka:` alebo `WHILE podmienka:`.
-- Prechod kolekciou: `PRO prvok V kolekcia:` alebo `FOR prvok IN collection:`. Diagram znázorňuje rozhodnutie, či je dostupný ďalší prvok, jeho priradenie a návratovú hranu cyklu.
-- Počítaný cyklus: `PRO i OD začiatok DO koniec:` alebo `FOR i FROM start TO end:`. Hlavička cyklu sa zobrazí ako šesťuholník; šípky do tela a späť nemajú popis a ukončovacia šípka má popis **Koniec cyklu**. Kroky ani hranice iterácií sa nevyhodnocujú. Šípky cyklov `WHILE` a prechodu kolekciou naďalej používajú popisy **Áno**/**Nie**.
+- Voliteľná alternatívna vetva: `JINAK:`. Riadok `JINAK` zarovnajte buď s príslušným `POKUD`, alebo s príkazmi prvej vetvy.
+- Podmienený cyklus: `DOKUD podmienka:`.
+- Prechod kolekciou: `PRO prvok V kolekcia:`. Diagram znázorňuje rozhodnutie, či je dostupný ďalší prvok, jeho priradenie a návratovú hranu cyklu.
+- Počítaný cyklus: `PRO i OD začiatok DO koniec:`. Hlavička cyklu sa zobrazí ako šesťuholník; šípky do tela a späť nemajú popis a ukončovacia šípka má popis **Koniec cyklu**. Kroky ani hranice iterácií sa nevyhodnocujú. Šípky cyklov `DOKUD` a prechodu kolekciou naďalej používajú popisy **Áno**/**Nie**.
 - Blok vetvy **Nie** sa v diagrame umiestni pod všetky bloky vetvy **Áno**, a to aj pri vnorených cykloch.
 - Všetky uvedené štruktúry možno vnárať. Ich telá musia byť odsadené voči hlavičke.
 
-Príkaz `VYPIS hodnota` alebo `WRITE value` zobrazí výpis hodnoty ako bežný krok diagramu. `VSTUP premenná` alebo `INPUT variable` načíta hodnotu a zobrazí ju ako vstupný rovnobežník. Editor pseudokódu červenou farbou podčiarkuje neznáme slová napísané veľkými písmenami na začiatku riadka a zobrazuje ich počet. Je to iba upozornenie, nie kontrola pseudokódu: bežné priradenia ani slová uprostred riadka nekontroluje a neznáme príkazy sa stále zobrazia ako bežné kroky.
+Príkaz `VYPIS hodnota` zobrazí výpis hodnoty ako bežný krok diagramu. `VSTUP premenná` načíta hodnotu a zobrazí ju ako vstupný rovnobežník. Editor pseudokódu červenou farbou podčiarkuje neznáme slová napísané veľkými písmenami na začiatku riadka a zobrazuje ich počet. Je to iba upozornenie, nie kontrola pseudokódu: bežné priradenia ani slová uprostred riadka nekontroluje a neznáme príkazy sa stále zobrazia ako bežné kroky.
 
-Príkazy, ktoré nie sú rozpoznané ako riadiace štruktúry, sa zobrazia ako bežné kroky. Výsledok funkcie možno odovzdať pomocou `VRAT` alebo `RETURN`; zobrazí sa ako výstupný rovnobežník prepojený s koncom diagramu. Generátor vytvára prehľadový diagram; neinterpretuje výrazy, nekontroluje ich syntax a nespúšťa pseudokód. Počítané cykly a podmienky sa zobrazia, ale nevyhodnocujú.
+Príkazy, ktoré nie sú rozpoznané ako riadiace štruktúry, sa zobrazia ako bežné kroky. Výsledok funkcie možno odovzdať pomocou `VRAT`; zobrazí sa ako výstupný rovnobežník prepojený s koncom diagramu. Generátor vytvára prehľadový diagram; neinterpretuje výrazy, nekontroluje ich syntax a nespúšťa pseudokód. Počítané cykly a podmienky sa zobrazia, ale nevyhodnocujú.
 
 Príklad:
 
 ```text
-ALGORITMUS IterateMatrix(matrix):
-  PRO row V matrix:
-    PRO value V row:
-      POKUD value > 0:
-        positive_count = positive_count + 1
+ALGORITMUS PrejdiMaticu(matica):
+  PRO riadok V matica:
+    PRO hodnota V riadok:
+      POKUD hodnota > 0:
+        kladny_pocet = kladny_pocet + 1
       JINAK:
-        nonpositive_count = nonpositive_count + 1
-  VRAT positive_count
+        nekladny_pocet = nekladny_pocet + 1
+  VRAT kladny_pocet
 ```
 
 ### Generovanie Pythonu
 
-Panel Pythonu generuje kód z pseudokódu do oblasti medzi komentármi `# BEGIN GENERATED CODE` a `# END GENERATED CODE`. Každý komentár musí byť uvedený práve raz a v správnom poradí. Importy a predpoklady ponechajte pred prvým komentárom, ukážkové dáta a volania za druhým; pri generovaní sa zachová všetok kód mimo tejto oblasti. Podporované sú hlavičky algoritmov, `IF`/`POKUD`, `ELSE`/`JINAK`, `WHILE`/`DOKUD`, obe podoby `FOR`/`PRO`, `WRITE`/`VYPIS`, `INPUT`/`VSTUP` a `RETURN`/`VRAT`. Vstup sa načíta pomocou `input()` do jednej premennej a má typ reťazec; koncová hodnota počítaného cyklu je zahrnutá. Základné výrazy sa zachovajú a `MOD`, `NEBO`, samostatné `A`, `AND`, `OR`, `NOT`, `true`, `false` a `length(...)` sa prevedú na ekvivalenty v Pythone. Ostatný text príkazov sa prenáša ako Python a musí mať platnú syntax. Po úprave pseudokódu sa oblasť aktualizuje automaticky, kým používateľ ručne neupraví editor Pythonu. Potom tlačidlo **Generovať Python** prepíše iba túto oblasť; chyby sa zobrazia pri tlačidle a existujúci kód zostane nezmenený. Pri krokovaní Pythonu sa zvýrazní príslušný blok diagramu.
+Panel Pythonu generuje kód z pseudokódu do oblasti medzi komentármi `# BEGIN GENERATED CODE` a `# END GENERATED CODE`. Každý komentár musí byť uvedený práve raz a v správnom poradí. Importy a predpoklady ponechajte pred prvým komentárom, ukážkové dáta a volania za druhým; pri generovaní sa zachová všetok kód mimo tejto oblasti. Podporované štruktúry a príkazy pseudokódu sa generujú do Pythonu. Vstup sa načíta pomocou `input()` do jednej premennej a má typ reťazec; koncová hodnota počítaného cyklu je zahrnutá. Základné výrazy sa zachovajú; podporované operátory a `length(...)` sa prevedú na ekvivalenty v Pythone. Ostatný text príkazov sa prenáša ako Python a musí mať platnú syntax. Po úprave pseudokódu sa oblasť aktualizuje automaticky, kým používateľ ručne neupraví editor Pythonu. Potom tlačidlo **Generovať Python** prepíše iba túto oblasť; chyby sa zobrazia pri tlačidle a existujúci kód zostane nezmenený. Pri krokovaní Pythonu sa zvýrazní príslušný blok diagramu.
 
 ### Uloženie algoritmu
 

@@ -39,36 +39,36 @@ La help-panelo kun subtenataj terminoj havas defaŭltan altecon de **320 px**. �
 
 Subtenataj kontrolstrukturoj:
 
-- Algoritma kaplinio: `ALGORITMUS name(parameters):` aŭ `ALGORITHM name(parameters):`.
-- Kondiĉo: `POKUD condition:` aŭ `IF condition:`.
+- Algoritma kaplinio: `ALGORITMO nomo(parametroj):`.
+- Kondiĉo: `SE kondiĉo:`.
 - Longaj etikedoj de decidaj nodoj estas falditaj ĉe vortlimoj por malpliigi la altecon de la rombo.
-- Laŭvola alternativa branĉo: `JINAK:` aŭ `ELSE:`. Vicigu la linion `JINAK`/`ELSE` kun la responda `POKUD`/`IF` aŭ kun la komandoj en la unua branĉo.
-- Kondiĉa iteracio: `DOKUD condition:` aŭ `WHILE condition:`.
-- Trairi kolekton: `PRO item V collection:` aŭ `FOR item IN collection:`. La diagramo montras decidon pri la havebleco de plia elemento, ties atribuon kaj revenan sagon de la iteracio.
-- Nombrila iteracio: `PRO i OD start DO end:` aŭ `FOR i FROM start TO end:`. La kaplinio aperas kiel seslatero; la sagoj al la korpo kaj reen estas sen etikedoj, kaj la elira sago estas etikedita **Fino de la ciklo**. Iteraciaj paŝoj kaj limoj ne estas kalkulataj. La sagoj de `WHILE` kaj kolektaj iteracioj plu uzas **Jes**/**Ne**.
+- Laŭvola alternativa branĉo: `ALIE:`. Vicigu la linion `ALIE` kun la responda `SE` aŭ kun la komandoj en la unua branĉo.
+- Kondiĉa iteracio: `DUM kondiĉo:`.
+- Trairi kolekton: `POR elemento EN kolekto:`. La diagramo montras decidon pri la havebleco de plia elemento, ties atribuon kaj revenan sagon de la iteracio.
+- Nombrila iteracio: `POR i DE komenco ĜIS fino:`. La kaplinio aperas kiel seslatero; la sagoj al la korpo kaj reen estas sen etikedoj, kaj la elira sago estas etikedita **Fino de la ciklo**. Iteraciaj paŝoj kaj limoj ne estas kalkulataj. La sagoj de `DUM` kaj kolektaj iteracioj plu uzas **Jes**/**Ne**.
 - La sekva bloko de la branĉo **Ne** aperas sub ĉiuj blokoj de la branĉo **Jes**, ankaŭ ĉe nestitaj iteracioj.
 - Ĉiuj listigitaj strukturoj povas esti nestitaj. Iliaj korpoj devas esti indentitaj rilate al la kaplinio.
 
-La komando `VYPIS value` aŭ `WRITE value` montras valoron kiel ordinaran diagram-paŝon. `VSTUP variable` aŭ `INPUT variable` legas valoron kaj montras ĝin kiel enigan paralelogramon. La pseŭdokoda redaktilo ruĝe substrekas nekonatajn vortojn per majuskloj ĉe la komenco de linio kaj montras ilian nombron. Tio estas nur atentigo, ne validigo de pseŭdokodo: ordinaraj atribuoj kaj vortoj ene de linio ne estas kontrolataj, kaj nekonataj komandoj ankoraŭ aperas kiel ordinaraj paŝoj.
+La komando `SKRIBU valoro` montras valoron kiel ordinaran diagram-paŝon. `LEGU variablo` legas valoron kaj montras ĝin kiel enigan paralelogramon. La pseŭdokoda redaktilo ruĝe substrekas nekonatajn vortojn per majuskloj ĉe la komenco de linio kaj montras ilian nombron. Tio estas nur atentigo, ne validigo de pseŭdokodo: ordinaraj atribuoj kaj vortoj ene de linio ne estas kontrolataj, kaj nekonataj komandoj ankoraŭ aperas kiel ordinaraj paŝoj.
 
-Komandoj, kiuj ne estas rekonataj kiel kontrolstrukturoj, aperas kiel ordinaraj paŝoj. Funkcia rezulto estas redonata per `VRAT` aŭ `RETURN` kaj montriĝas kiel eliga paralelogramo konektita al la fino de la diagramo. La generatoro kreas superrigardan diagramon; ĝi ne interpretas esprimojn, kontrolas ilian sintakson aŭ rulas pseŭdokodon. Nombrilaj iteracioj kaj kondiĉoj do estas montrataj sed ne kalkulataj.
+Komandoj, kiuj ne estas rekonataj kiel kontrolstrukturoj, aperas kiel ordinaraj paŝoj. Funkcia rezulto estas redonata per `REVENIGU` kaj montriĝas kiel eliga paralelogramo konektita al la fino de la diagramo. La generatoro kreas superrigardan diagramon; ĝi ne interpretas esprimojn, kontrolas ilian sintakson aŭ rulas pseŭdokodon. Nombrilaj iteracioj kaj kondiĉoj do estas montrataj sed ne kalkulataj.
 
 Ekzemplo:
 
 ```text
-ALGORITMUS IterateMatrix(matrix):
-  PRO row V matrix:
-    PRO value V row:
-      POKUD value > 0:
-        positive_count = positive_count + 1
-      JINAK:
-        nonpositive_count = nonpositive_count + 1
-  VRAT positive_count
+ALGORITMO TrairuMatrico(matrico):
+  POR vico EN matrico:
+    POR valoro EN vico:
+      SE valoro > 0:
+        pozitiva_nombro = pozitiva_nombro + 1
+      ALIE:
+        nepozitiva_nombro = nepozitiva_nombro + 1
+  REVENIGU pozitiva_nombro
 ```
 
 ### Generi Python
 
-La Python-panelo generas kodon el la pseŭdokodo inter la komentoj `# BEGIN GENERATED CODE` kaj `# END GENERATED CODE`. Ĉiu komento devas aperi precize unufoje kaj en tiu ordo. Metu importojn kaj antaŭkondiĉojn antaŭ la unua komento, kaj ekzemplajn datumojn kaj vokojn post la dua; regenerado konservas la kodon ekster tiu regiono. Subtenataj estas algoritmaj kaplinioj, `IF`/`POKUD`, `ELSE`/`JINAK`, `WHILE`/`DOKUD`, ambaŭ formoj de `FOR`/`PRO`, `WRITE`/`VYPIS`, `INPUT`/`VSTUP` kaj `RETURN`/`VRAT`. Enigo asignas la rezulton de `input()` al unu variablo kaj estas teksto; la fina valoro de nombrila iteracio estas inkluzivita. Bazaj esprimoj estas konservataj, kaj `MOD`, `NEBO`, memstara `A`, `AND`, `OR`, `NOT`, `true`, `false` kaj `length(...)` estas tradukataj al Python-ekvivalentoj. Alia komandteksto estas elsendata kiel Python kaj devas esti valida Python. Pseŭdokodaj ŝanĝoj ĝisdatigas la generitan regionon aŭtomate ĝis mana ŝanĝo de la Python-redaktilo. Poste **Generi Python** anstataŭigas nur tiun regionon; eraroj aperas apud la butono kaj la ekzistanta kodo restas senŝanĝa. Dum paŝa rulado de Python emfaziĝas la responda diagram-bloko.
+La Python-panelo generas kodon el la pseŭdokodo inter la komentoj `# BEGIN GENERATED CODE` kaj `# END GENERATED CODE`. Ĉiu komento devas aperi precize unufoje kaj en tiu ordo. Metu importojn kaj antaŭkondiĉojn antaŭ la unua komento, kaj ekzemplajn datumojn kaj vokojn post la dua; regenerado konservas la kodon ekster tiu regiono. La subtenataj pseŭdokodaj strukturoj kaj komandoj generas Python. Enigo asignas la rezulton de `input()` al unu variablo kaj estas teksto; la fina valoro de nombrila iteracio estas inkluzivita. Bazaj esprimoj konserviĝas; subtenataj operatoroj kaj `length(...)` estas tradukataj al Python-ekvivalentoj. Alia komandteksto estas elsendata kiel Python kaj devas esti valida Python. Pseŭdokodaj ŝanĝoj ĝisdatigas la generitan regionon aŭtomate ĝis mana ŝanĝo de la Python-redaktilo. Poste **Generi Python** anstataŭigas nur tiun regionon; eraroj aperas apud la butono kaj la ekzistanta kodo restas senŝanĝa. Dum paŝa rulado de Python emfaziĝas la responda diagram-bloko.
 
 ### Konservi algoritmon
 

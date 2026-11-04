@@ -39,36 +39,36 @@ Le panneau d’aide des termes pris en charge a une hauteur initiale de **320 px
 
 Structures de contrôle prises en charge :
 
-- En-tête d’algorithme : `ALGORITMUS nom(paramètres):` ou `ALGORITHM name(parameters):`.
-- Condition : `POKUD condition:` ou `IF condition:`.
+- En-tête d’algorithme : `ALGORITHME nom(parametres):`.
+- Condition : `SI condition:`.
 - Les longs libellés des nœuds de décision sont coupés aux limites des mots afin de réduire la hauteur du losange.
-- Branche alternative facultative : `JINAK:` ou `ELSE:`. Alignez `JINAK`/`ELSE` soit avec le `POKUD`/`IF` correspondant, soit avec les instructions de la première branche.
-- Boucle conditionnelle : `DOKUD condition:` ou `WHILE condition:`.
-- Parcours d’une collection : `PRO élément V collection:` ou `FOR élément IN collection:`. Le diagramme représente la décision indiquant s’il reste un élément, son affectation et la flèche de retour de la boucle.
-- Boucle comptée : `PRO i OD début DO fin:` ou `FOR i FROM start TO end:`. L’en-tête est représenté par un hexagone ; les flèches vers le corps et de retour ne portent pas de libellé, et la flèche de sortie porte **Fin de boucle**. Les étapes et les limites des itérations ne sont pas évaluées. Les flèches des boucles `WHILE` et des parcours de collection conservent leurs libellés **Oui**/**Non**.
+- Branche alternative facultative : `SINON:`. Alignez `SINON` soit avec le `SI` correspondant, soit avec les instructions de la première branche.
+- Boucle conditionnelle : `TANTQUE condition:`.
+- Parcours d’une collection : `POUR élément DANS collection:`. Le diagramme représente la décision indiquant s’il reste un élément, son affectation et la flèche de retour de la boucle.
+- Boucle comptée : `POUR i DE début JUSQU'À fin:`. L’en-tête est représenté par un hexagone ; les flèches vers le corps et de retour ne portent pas de libellé, et la flèche de sortie porte **Fin de boucle**. Les étapes et les limites des itérations ne sont pas évaluées. Les flèches des boucles `TANTQUE` et des parcours de collection conservent leurs libellés **Oui**/**Non**.
 - Le bloc suivant de la branche **Non** est placé sous tous les blocs de la branche **Oui**, y compris dans les boucles imbriquées.
 - Toutes les structures indiquées peuvent être imbriquées. Leur corps doit être indenté par rapport à l’en-tête.
 
-La commande `VYPIS valeur` ou `WRITE value` affiche une valeur comme une étape ordinaire du diagramme. `VSTUP variable` ou `INPUT variable` lit une valeur et l’affiche sous forme de parallélogramme d’entrée. L’éditeur de pseudocode souligne en rouge les mots inconnus écrits en majuscules au début d’une ligne et en indique le nombre. Il s’agit d’un simple avertissement, pas d’une validation du pseudocode : les affectations ordinaires et les mots au milieu d’une ligne ne sont pas vérifiés, et les commandes inconnues restent affichées comme des étapes ordinaires.
+La commande `ECRIRE valeur` affiche une valeur comme une étape ordinaire du diagramme. `LIRE variable` lit une valeur et l’affiche sous forme de parallélogramme d’entrée. L’éditeur de pseudocode souligne en rouge les mots inconnus écrits en majuscules au début d’une ligne et en indique le nombre. Il s’agit d’un simple avertissement, pas d’une validation du pseudocode : les affectations ordinaires et les mots au milieu d’une ligne ne sont pas vérifiés, et les commandes inconnues restent affichées comme des étapes ordinaires.
 
-Les commandes qui ne sont pas reconnues comme des structures de contrôle s’affichent comme des étapes ordinaires. Le résultat d’une fonction peut être renvoyé avec `VRAT` ou `RETURN` et apparaît sous forme de parallélogramme de sortie relié à la fin du diagramme. Le générateur crée un diagramme récapitulatif ; il n’interprète pas les expressions, ne vérifie pas leur syntaxe et n’exécute pas le pseudocode. Les boucles comptées et les conditions sont donc représentées, mais pas évaluées.
+Les commandes qui ne sont pas reconnues comme des structures de contrôle s’affichent comme des étapes ordinaires. Le résultat d’une fonction peut être renvoyé avec `RETOURNER` et apparaît sous forme de parallélogramme de sortie relié à la fin du diagramme. Le générateur crée un diagramme récapitulatif ; il n’interprète pas les expressions, ne vérifie pas leur syntaxe et n’exécute pas le pseudocode. Les boucles comptées et les conditions sont donc représentées, mais pas évaluées.
 
 Exemple :
 
 ```text
-ALGORITMUS IterateMatrix(matrix):
-  PRO row V matrix:
-    PRO value V row:
-      POKUD value > 0:
-        positive_count = positive_count + 1
-      JINAK:
-        nonpositive_count = nonpositive_count + 1
-  VRAT positive_count
+ALGORITHME ParcourirMatrice(matrice):
+  POUR ligne DANS matrice:
+    POUR valeur DANS ligne:
+      SI valeur > 0:
+        nombre_positif = nombre_positif + 1
+      SINON:
+        nombre_non_positif = nombre_non_positif + 1
+  RETOURNER nombre_positif
 ```
 
 ### Générer du Python
 
-Le panneau Python génère le code à partir du pseudocode dans la région délimitée par `# BEGIN GENERATED CODE` et `# END GENERATED CODE`. Chaque marqueur doit apparaître une seule fois et dans cet ordre. Placez les imports et préconditions avant le premier marqueur, puis les données d’exemple et appels après le second ; la régénération préserve le code situé hors de cette région. Les en-têtes d’algorithme, `IF`/`POKUD`, `ELSE`/`JINAK`, `WHILE`/`DOKUD`, les deux formes de `FOR`/`PRO`, `WRITE`/`VYPIS`, `INPUT`/`VSTUP` et `RETURN`/`VRAT` sont pris en charge. La saisie affecte le résultat de `input()` à une variable et produit une chaîne ; la borne finale des boucles comptées est incluse. Les expressions simples sont conservées ; `MOD`, `NEBO`, `A` autonome, `AND`, `OR`, `NOT`, `true`, `false` et `length(...)` sont convertis en équivalents Python. Les autres instructions sont émises comme du Python et doivent être valides. Les modifications du pseudocode actualisent automatiquement la région jusqu’à une modification manuelle de l’éditeur Python. Ensuite, **Générer Python** remplace uniquement cette région ; les erreurs sont affichées près du bouton et le code existant reste inchangé. Pendant l’exécution pas à pas, le bloc correspondant de l’organigramme est mis en évidence.
+Le panneau Python génère le code à partir du pseudocode dans la région délimitée par `# BEGIN GENERATED CODE` et `# END GENERATED CODE`. Chaque marqueur doit apparaître une seule fois et dans cet ordre. Placez les imports et préconditions avant le premier marqueur, puis les données d’exemple et appels après le second ; la régénération préserve le code situé hors de cette région. Les structures et commandes de pseudocode prises en charge génèrent du Python. La saisie affecte le résultat de `input()` à une variable et produit une chaîne ; la borne finale des boucles comptées est incluse. Les expressions simples sont conservées ; les opérateurs pris en charge et `length(...)` sont convertis en équivalents Python. Les autres instructions sont émises comme du Python et doivent être valides. Les modifications du pseudocode actualisent automatiquement la région jusqu’à une modification manuelle de l’éditeur Python. Ensuite, **Générer Python** remplace uniquement cette région ; les erreurs sont affichées près du bouton et le code existant reste inchangé. Pendant l’exécution pas à pas, le bloc correspondant de l’organigramme est mis en évidence.
 
 ### Enregistrer un algorithme
 

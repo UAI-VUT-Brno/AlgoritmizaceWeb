@@ -39,38 +39,38 @@ The supported-terms help panel has a default height of **320 px**. Resize it by 
 
 Supported control structures:
 
-- Algorithm header: `ALGORITMUS name(parameters):` or `ALGORITHM name(parameters):`.
-- Condition: `POKUD condition:` or `IF condition:`.
+- Algorithm header: `ALGORITHM name(parameters):`.
+- Condition: `IF condition:`.
 - Long decision labels wrap at word boundaries to reduce the height of the flowchart diamond.
-- Optional alternative branch: `JINAK:` or `ELSE:`. Align `JINAK`/`ELSE` either with its matching `POKUD`/`IF` or with the statements in the first branch.
-- Conditional loop: `DOKUD condition:` or `WHILE condition:`.
-- Iterate over a collection: `PRO item V collection:` or `FOR item IN collection:`. The diagram shows a decision for whether another item is available, assigns the item, and includes the loop-back edge.
-- Counted loop: `PRO i OD start DO end:` or `FOR i FROM start TO end:`. The loop header is shown as a hexagon; its body and loop-back arrows are unlabeled, and its terminating arrow is labeled **End loop**. Iteration steps and bounds are not evaluated. `WHILE` and collection-loop arrows retain their **Yes**/**No** labels.
+- Optional alternative branch: `ELSE:`. Align `ELSE` either with its matching `IF` or with the statements in the first branch.
+- Conditional loop: `WHILE condition:`.
+- Iterate over a collection: `FOR item IN collection:`. The diagram shows a decision for whether another item is available, assigns the item, and includes the loop-back edge.
+- Counted loop: `FOR i FROM start TO end:`. The loop header is shown as a hexagon; its body and loop-back arrows are unlabeled, and its terminating arrow is labeled **End loop**. Iteration steps and bounds are not evaluated. `WHILE` and collection-loop arrows retain their **Yes**/**No** labels.
 - The **No** branch is placed below all blocks in the **Yes** branch, including in nested loops.
 - All listed structures can be nested. Their bodies must be indented relative to the header.
 
-`VYPIS value` or `WRITE value` displays output as a regular flowchart step. `VSTUP variable` or `INPUT variable` reads a value and appears as an input parallelogram. The pseudocode editor underlines unknown uppercase words at the beginning of a line in red and shows their count. This is only a hint, not pseudocode validation: ordinary assignments and words inside a line are not checked, and unknown commands are still rendered as regular steps.
+`WRITE value` displays output as a regular flowchart step. `INPUT variable` reads a value and appears as an input parallelogram. The pseudocode editor underlines unknown uppercase words at the beginning of a line in red and shows their count. This is only a hint, not pseudocode validation: ordinary assignments and words inside a line are not checked, and unknown commands are still rendered as regular steps.
 
-Commands that are not recognized as control structures are displayed as regular steps. Function results can be returned with `VRAT` or `RETURN`, shown as an output parallelogram connected to the diagram end. The generator creates an overview diagram; it does not interpret expressions, validate their syntax, or execute pseudocode. Counted loops and conditions are shown but not evaluated.
+Commands that are not recognized as control structures are displayed as regular steps. Function results can be returned with `RETURN`, shown as an output parallelogram connected to the diagram end. The generator creates an overview diagram; it does not interpret expressions, validate their syntax, or execute pseudocode. Counted loops and conditions are shown but not evaluated.
 
 Example:
 
 ```text
-ALGORITMUS IterateMatrix(matrix):
-  PRO row V matrix:
-    PRO value V row:
-      POKUD value > 0:
+ALGORITHM IterateMatrix(matrix):
+  FOR row IN matrix:
+    FOR value IN row:
+      IF value > 0:
         positive_count = positive_count + 1
-      JINAK:
+      ELSE:
         nonpositive_count = nonpositive_count + 1
-  VRAT positive_count
+  RETURN positive_count
 ```
 
 ### Generating Python
 
 The Python pane generates code from the pseudocode into the region between the comments `# BEGIN GENERATED CODE` and `# END GENERATED CODE`. Keep imports or preconditions before the start marker and example inputs or calls after the end marker; regeneration preserves both surrounding regions. The markers must appear exactly once and in that order.
 
-The supported pseudocode structures and commands (`ALGORITMUS`/`ALGORITHM`, `IF`/`POKUD`, `ELSE`/`JINAK`, `WHILE`/`DOKUD`, both `FOR`/`PRO` forms, `WRITE`/`VYPIS`, `INPUT`/`VSTUP`, and `RETURN`/`VRAT`) generate Python. Input assigns the result of Python's `input()` to one variable; the value is a string. Counted-loop end bounds are inclusive. Basic expressions are retained, with `MOD`, `NEBO`, standalone `A`, `AND`, `OR`, `NOT`, `true`, `false`, and `length(...)` translated to their Python equivalents. Other statement text is emitted as Python and must be valid Python.
+The supported pseudocode structures and commands generate Python. Input assigns the result of Python's `input()` to one variable; the value is a string. Counted-loop end bounds are inclusive. Basic expressions are retained; supported operators and `length(...)` are translated to their Python equivalents. Other statement text is emitted as Python and must be valid Python.
 
 Pseudocode edits regenerate the marked section automatically until the Python editor is edited manually. After a manual edit, use **Generate Python** to explicitly replace only the marked section. Generation errors are shown beside the button and leave the existing code unchanged. Imported JSON contains only pseudocode; it updates the generated region when the Python editor has not been manually edited. While stepping through Python, the corresponding diagram block is highlighted using the generated source mapping.
 
