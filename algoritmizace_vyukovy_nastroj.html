@@ -329,7 +329,7 @@ SOFTWARE.
             </div>
             <div class="flex-1 relative">
                 <textarea id="pseudocodeEditor"></textarea>
-                <div id="pseudocodeWarning" data-i18n-title="pseudocodeWarningTitle" class="hidden absolute top-2 right-3 z-10 rounded border border-red-500/50 bg-slate-900/95 px-2 py-1 text-[10px] text-red-300 shadow" role="status" aria-live="polite" title="Kontrola označuje neznámá slova psaná velkými písmeny na začátku řádku; běžné přiřazení ignoruje.">
+                <div id="pseudocodeWarning" data-i18n-title="pseudocodeWarningTitle" class="hidden absolute top-2 right-3 z-10 rounded border border-red-500/50 bg-slate-900/95 px-2 py-1 text-[10px] text-red-300 shadow" role="status" aria-live="polite" title="Příkazy pseudokódu musí být zapsány přesně velkými písmeny.">
                 </div>
             </div>
             <div id="pseudocodeHelpResizer" class="gutter-vertical" role="separator" data-i18n-aria-label="resizeHelp" aria-label="Změnit výšku nápovědy" aria-orientation="horizontal" aria-valuemin="96" tabindex="0"></div>
@@ -347,7 +347,7 @@ SOFTWARE.
                     <li data-i18n="termInput" data-i18n-html="true"><code class="text-indigo-300">VSTUP proměnná</code> / <code class="text-indigo-300">INPUT variable</code> — načtení textového vstupu (rovnoběžník)</li>
                     <li data-i18n="termIndent" data-i18n-html="true">Bloky pište s dvojtečkou a odsazujte; ostatní řádky se zobrazí jako kroky.</li>
                     <li data-i18n="termPythonGeneration" data-i18n-html="true">Python se generuje mezi komentáři <code class="text-indigo-300"># BEGIN GENERATED CODE</code> a <code class="text-indigo-300"># END GENERATED CODE</code>.</li>
-                    <li data-i18n="termWarning" data-i18n-html="true">Neznámá velká slova na začátku řádku jsou podtržena červeně; upozornění je pouze orientační.</li>
+                    <li data-i18n="termWarning" data-i18n-html="true">Příkazy a operátory pseudokódu pište přesně velkými písmeny; jiný zápis je označen červeně a generátor jej odmítne.</li>
                 </ul>
             </div>
         </section>
@@ -356,7 +356,7 @@ SOFTWARE.
         <div id="gutter1" class="gutter-horizontal"></div>
 
         <!-- PANE 2: Vývojový diagram (1/3) -->
-        <section id="pane2" class="w-1/3 flex flex-col border-r border-darkaccent min-w-[280px]">
+        <section id="pane2" class="w-1/3 flex flex-col border-r border-darkaccent min-w-[280px] relative">
             <div class="h-9 bg-darkcard px-3 flex items-center justify-between border-b border-darkaccent text-xs font-semibold text-slate-300">
                 <span class="flex items-center space-x-2">
                     <i class="fa-solid fa-project-diagram text-emerald-400"></i>
@@ -368,20 +368,20 @@ SOFTWARE.
             </div>
             <!-- Dynamic Flowchart Viewport -->
             <div class="flex-1 bg-darkbg p-4 overflow-auto flex items-center justify-center relative" id="diagramContainer">
-                <div class="absolute top-2 right-2 z-10 flex items-center gap-1 rounded-lg border border-darkaccent bg-darkcard/95 p-1 shadow">
-                    <button onclick="zoomDiagram(-1)" data-i18n-title="zoomOut" data-i18n-aria-label="zoomOut" class="h-7 w-7 rounded text-slate-200 hover:bg-darkaccent" title="Oddálit diagram" aria-label="Oddálit diagram">
-                        <i class="fa-solid fa-magnifying-glass-minus"></i>
-                    </button>
-                    <button onclick="zoomDiagram(1)" data-i18n-title="zoomIn" data-i18n-aria-label="zoomIn" class="h-7 w-7 rounded text-slate-200 hover:bg-darkaccent" title="Přiblížit diagram" aria-label="Přiblížit diagram">
-                        <i class="fa-solid fa-magnifying-glass-plus"></i>
-                    </button>
-                    <button onclick="resetDiagramZoom()" data-i18n-title="fitDiagram" data-i18n-aria-label="fitDiagram" class="h-7 w-7 rounded text-slate-200 hover:bg-darkaccent" title="Přizpůsobit diagram ploše" aria-label="Přizpůsobit diagram ploše">
-                        <i class="fa-solid fa-house"></i>
-                    </button>
-                </div>
                 <div id="mermaidTarget" class="mermaid flex justify-center items-center">
                     %% Diagram se vygeneruje zde %%
                 </div>
+            </div>
+            <div class="absolute top-11 right-2 z-10 flex items-center gap-1 rounded-lg border border-darkaccent bg-darkcard/95 p-1 shadow">
+                <button onclick="zoomDiagram(-1)" data-i18n-title="zoomOut" data-i18n-aria-label="zoomOut" class="h-7 w-7 rounded text-slate-200 hover:bg-darkaccent" title="Oddálit diagram" aria-label="Oddálit diagram">
+                    <i class="fa-solid fa-magnifying-glass-minus"></i>
+                </button>
+                <button onclick="zoomDiagram(1)" data-i18n-title="zoomIn" data-i18n-aria-label="zoomIn" class="h-7 w-7 rounded text-slate-200 hover:bg-darkaccent" title="Přiblížit diagram" aria-label="Přiblížit diagram">
+                    <i class="fa-solid fa-magnifying-glass-plus"></i>
+                </button>
+                <button onclick="resetDiagramZoom()" data-i18n-title="fitDiagram" data-i18n-aria-label="fitDiagram" class="h-7 w-7 rounded text-slate-200 hover:bg-darkaccent" title="Přizpůsobit diagram ploše" aria-label="Přizpůsobit diagram ploše">
+                    <i class="fa-solid fa-house"></i>
+                </button>
             </div>
         </section>
 
@@ -474,7 +474,7 @@ my_algorithm()`
             bubbleSort: {
                 name: 'Bubble Sort',
                 pseudocode: `ALGORITHM BubbleSort(array):
-  n = length(array)
+  n = LENGTH(array)
   FOR i FROM 0 TO n - 1:
     FOR j FROM 0 TO n - i - 2:
       IF array[j] > array[j + 1]:
@@ -598,9 +598,9 @@ print("Triangle area:", area)`
       WRITE "Check traffic again"
     ELSE:
       WRITE "Cross while watching traffic"
-      RETURN true
+      RETURN TRUE
   WRITE "Traffic is still approaching. Keep waiting."
-  RETURN false`,
+  RETURN FALSE`,
                 python: `# BEGIN GENERATED CODE
 def cross_road_basic(traffic_snapshots):
     print("Stop at the curb.")
@@ -626,16 +626,16 @@ print("done")`
   WRITE "Choose a crossing place with a clear view."
   WRITE "Stop before the road, remove distractions, and check both directions."
   FOR snapshot IN traffic_snapshots:
-    all_lanes_clear = true
+    all_lanes_clear = TRUE
     FOR lane_is_unsafe IN snapshot:
       IF lane_is_unsafe:
-        all_lanes_clear = false
+        all_lanes_clear = FALSE
     IF all_lanes_clear:
       WRITE "All lanes have a safe gap. Cross without running and keep watching traffic."
-      RETURN true
+      RETURN TRUE
     WRITE "At least one lane is unsafe. Wait and check both directions again."
   WRITE "No safe gap yet. Keep waiting."
-  RETURN false`,
+  RETURN FALSE`,
                 python: `# BEGIN GENERATED CODE
 def cross_road_complex(traffic_snapshots):
     print("Choose a crossing place with a clear view.")
@@ -684,7 +684,7 @@ print("done")`
                 previousStep: 'Předchozí krok',
                 pseudocodePane: '1. Pseudokód / Struktura',
                 algorithm: 'Algoritmus',
-                pseudocodeWarningTitle: 'Kontrola označuje neznámá slova psaná velkými písmeny na začátku řádku; běžné přiřazení ignoruje.',
+                pseudocodeWarningTitle: 'Příkazy pseudokódu musí být zapsány přesně velkými písmeny.',
                 supportedTerms: 'Podporované termíny pseudokódu',
                 termAlgorithm: '<code class="text-indigo-300">ALGORITMUS název(...):</code> / <code class="text-indigo-300">ALGORITHM name(...):</code> — hlavička algoritmu',
                 termIf: '<code class="text-indigo-300">POKUD</code> / <code class="text-indigo-300">IF</code> — podmínka',
@@ -697,7 +697,7 @@ print("done")`
                 termInput: '<code class="text-indigo-300">VSTUP proměnná</code> / <code class="text-indigo-300">INPUT variable</code> — načtení textového vstupu (rovnoběžník)',
                 termIndent: 'Bloky pište s dvojtečkou a odsazujte; ostatní řádky se zobrazí jako kroky.',
                 termPythonGeneration: 'Python se generuje mezi komentáři <code class="text-indigo-300"># BEGIN GENERATED CODE</code> a <code class="text-indigo-300"># END GENERATED CODE</code>.',
-                termWarning: 'Neznámá velká slova na začátku řádku jsou podtržena červeně; upozornění je pouze orientační.',
+                termWarning: 'Příkazy a operátory pseudokódu pište přesně velkými písmeny; jiný zápis je označen červeně a generátor jej odmítne.',
                 resizeHelp: 'Změnit výšku nápovědy',
                 resizePythonEditor: 'Změnit výšku editoru Pythonu a inspektoru proměnných',
                 resizeVariableConsole: 'Změnit výšku panelu proměnných a konzole',
@@ -775,7 +775,7 @@ print("done")`
                 previousStep: 'Previous step',
                 pseudocodePane: '1. Pseudocode / Structure',
                 algorithm: 'Algorithm',
-                pseudocodeWarningTitle: 'Highlights unknown uppercase words at the beginning of a line; ordinary assignments are ignored.',
+                pseudocodeWarningTitle: 'Pseudocode commands must be written in exact uppercase.',
                 supportedTerms: 'Supported pseudocode terms',
                 termAlgorithm: '<code class="text-indigo-300">ALGORITHM name(...):</code> — algorithm header',
                 termIf: '<code class="text-indigo-300">IF</code> — condition',
@@ -788,7 +788,7 @@ print("done")`
                 termInput: '<code class="text-indigo-300">INPUT variable</code> — read text input (parallelogram)',
                 termIndent: 'End blocks with a colon and indent them; other lines appear as steps.',
                 termPythonGeneration: 'Python is generated between the comments <code class="text-indigo-300"># BEGIN GENERATED CODE</code> and <code class="text-indigo-300"># END GENERATED CODE</code>.',
-                termWarning: 'Unknown uppercase words at the start of a line are underlined in red; this is only a hint.',
+                termWarning: 'Write pseudocode commands and operators in exact uppercase; other casing is highlighted in red and rejected by the generator.',
                 resizeHelp: 'Resize help panel',
                 resizePythonEditor: 'Resize Python editor and variable inspector',
                 resizeVariableConsole: 'Resize variable panel and console',
@@ -866,7 +866,7 @@ print("done")`
                 previousStep: 'Antaŭa paŝo',
                 pseudocodePane: '1. Pseŭdokodo / Strukturo',
                 algorithm: 'Algoritmo',
-                pseudocodeWarningTitle: 'Markas nekonatajn vortojn per majuskloj ĉe la komenco de linio; ordinaraj atribuoj estas ignorataj.',
+                pseudocodeWarningTitle: 'Pseŭdokodaj komandoj devas esti skribitaj precize per majuskloj.',
                 supportedTerms: 'Subtenataj pseŭdokodaj terminoj',
                 termAlgorithm: '<code class="text-indigo-300">ALGORITMUS název(...):</code> / <code class="text-indigo-300">ALGORITHM name(...):</code> — algoritmo-kapo',
                 termIf: '<code class="text-indigo-300">POKUD</code> / <code class="text-indigo-300">IF</code> — kondiĉo',
@@ -879,7 +879,7 @@ print("done")`
                 termInput: '<code class="text-indigo-300">VSTUP proměnná</code> / <code class="text-indigo-300">INPUT variable</code> — legi tekstan enigon (paralelogramo)',
                 termIndent: 'Finu blokojn per dupunkto kaj indentu ilin; aliaj linioj aperas kiel paŝoj.',
                 termPythonGeneration: 'Python estas generata inter la komentoj <code class="text-indigo-300"># BEGIN GENERATED CODE</code> kaj <code class="text-indigo-300"># END GENERATED CODE</code>.',
-                termWarning: 'Nekonataj majusklaj vortoj ĉe la komenco de linio estas substrekataj ruĝe; tio estas nur averto.',
+                termWarning: 'Skribu pseŭdokodajn komandojn kaj operatorojn precize per majuskloj; alia skribo estas markita ruĝe kaj rifuzita de la generatoro.',
                 resizeHelp: 'Ŝanĝi altecon de helpo',
                 resizePythonEditor: 'Ŝanĝi altecon de Python-redaktilo kaj variabla inspektilo',
                 resizeVariableConsole: 'Ŝanĝi altecon de variabla panelo kaj konzolo',
@@ -957,7 +957,7 @@ print("done")`
                 previousStep: 'Étape précédente',
                 pseudocodePane: '1. Pseudocode / Structure',
                 algorithm: 'Algorithme',
-                pseudocodeWarningTitle: 'Signale les mots inconnus en majuscules au début d’une ligne ; les affectations ordinaires sont ignorées.',
+                pseudocodeWarningTitle: 'Les commandes de pseudocode doivent être écrites exactement en majuscules.',
                 supportedTerms: 'Termes de pseudocode pris en charge',
                 termAlgorithm: '<code class="text-indigo-300">ALGORITMUS název(...):</code> / <code class="text-indigo-300">ALGORITHM name(...):</code> — en-tête d’algorithme',
                 termIf: '<code class="text-indigo-300">POKUD</code> / <code class="text-indigo-300">IF</code> — condition',
@@ -970,7 +970,7 @@ print("done")`
                 termInput: '<code class="text-indigo-300">VSTUP proměnná</code> / <code class="text-indigo-300">INPUT variable</code> — lire une entrée textuelle (parallélogramme)',
                 termIndent: 'Terminez les blocs par deux-points et indentez-les ; les autres lignes apparaissent comme des étapes.',
                 termPythonGeneration: 'Python est généré entre les commentaires <code class="text-indigo-300"># BEGIN GENERATED CODE</code> et <code class="text-indigo-300"># END GENERATED CODE</code>.',
-                termWarning: 'Les mots inconnus en majuscules au début d’une ligne sont soulignés en rouge ; il s’agit seulement d’un avertissement.',
+                termWarning: 'Écrivez les commandes et opérateurs de pseudocode exactement en majuscules ; toute autre casse est signalée en rouge et refusée par le générateur.',
                 resizeHelp: 'Modifier la hauteur de l’aide',
                 resizePythonEditor: 'Modifier la hauteur de l’éditeur Python et de l’inspecteur de variables',
                 resizeVariableConsole: 'Modifier la hauteur du panneau des variables et de la console',
@@ -1048,7 +1048,7 @@ print("done")`
                 previousStep: 'Predchádzajúci krok',
                 pseudocodePane: '1. Pseudokód / Štruktúra',
                 algorithm: 'Algoritmus',
-                pseudocodeWarningTitle: 'Označuje neznáme slová písané veľkými písmenami na začiatku riadka; bežné priradenia ignoruje.',
+                pseudocodeWarningTitle: 'Príkazy pseudokódu musia byť zapísané presne veľkými písmenami.',
                 supportedTerms: 'Podporované termíny pseudokódu',
                 termAlgorithm: '<code class="text-indigo-300">ALGORITMUS název(...):</code> / <code class="text-indigo-300">ALGORITHM name(...):</code> — hlavička algoritmu',
                 termIf: '<code class="text-indigo-300">POKUD</code> / <code class="text-indigo-300">IF</code> — podmienka',
@@ -1061,7 +1061,7 @@ print("done")`
                 termInput: '<code class="text-indigo-300">VSTUP premenná</code> / <code class="text-indigo-300">INPUT variable</code> — načítanie textového vstupu (rovnobežník)',
                 termIndent: 'Bloky ukončite dvojbodkou a odsadzujte; ostatné riadky sa zobrazia ako kroky.',
                 termPythonGeneration: 'Python sa generuje medzi komentármi <code class="text-indigo-300"># BEGIN GENERATED CODE</code> a <code class="text-indigo-300"># END GENERATED CODE</code>.',
-                termWarning: 'Neznáme veľké slová na začiatku riadka sú podčiarknuté červenou; upozornenie je iba orientačné.',
+                termWarning: 'Príkazy a operátory pseudokódu píšte presne veľkými písmenami; iný zápis sa označí červenou a generátor ho odmietne.',
                 resizeHelp: 'Zmeniť výšku pomocníka',
                 resizePythonEditor: 'Zmeniť výšku editora Pythonu a inšpektora premenných',
                 resizeVariableConsole: 'Zmeniť výšku panela premenných a konzoly',
@@ -1164,14 +1164,69 @@ print("done")`
             if (token !== 'A') return true;
             const previous = text.slice(0, tokenStart).match(/(\S)\s*$/)?.[1] || '';
             const next = text.slice(tokenStart + tokenLength).match(/^\s*(\S)/)?.[1] || '';
+            const previousWord = text.slice(0, tokenStart)
+                .match(/([\p{L}_][\p{L}\p{N}_]*)\s*$/u)?.[1];
             return /[\p{L}\p{N}_)\]]/u.test(previous)
-                && /[\p{L}\p{N}_(['"]/u.test(next);
+                && /[\p{L}\p{N}_(['"]/u.test(next)
+                && !supportedPseudocodeLeadingTerms.has(previousWord?.toLocaleUpperCase('cs-CZ'));
         }
 
         function getPseudocodeAliases(roles) {
             return [...new Set(Object.values(pseudocodeTerms)
                 .flatMap(languageTerms => roles.flatMap(role => [languageTerms[role]])))]
                 .sort((left, right) => right.length - left.length);
+        }
+
+        function getMisCasedPseudocodeTerms(text) {
+            const expressionTerms = ['LENGTH', 'NOT', 'TRUE', 'FALSE'];
+            const aliases = [...new Set([...pseudocodeTermAliases.keys(), ...expressionTerms])]
+                .sort((left, right) => right.length - left.length);
+            const termPattern = new RegExp(
+                `(^|[^\\p{L}\\p{N}_])(${aliases.map(escapeRegularExpression).join('|')})(?=$|[^\\p{L}\\p{N}_])`,
+                'giu'
+            );
+            const misCasedTerms = [];
+            let partOffset = 0;
+            text.split(/("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')/g)
+                .forEach((part, partIndex) => {
+                    if (partIndex % 2 === 0) {
+                        termPattern.lastIndex = 0;
+                        let match;
+                        while ((match = termPattern.exec(part)) !== null) {
+                            const token = match[2];
+                            const normalizedToken = token.toLocaleUpperCase('cs-CZ');
+                            const definitions = pseudocodeTermAliases.get(normalizedToken) || [];
+                            const isControlOrOperator = definitions.some(definition =>
+                                supportedPseudocodeControlRoles.has(definition.role)
+                                || ['and', 'or', 'mod'].includes(definition.role))
+                                || expressionTerms.includes(normalizedToken);
+                            const tokenStart = match.index + match[1].length;
+                            const loopHeader = text.match(
+                                /^\s*([\p{L}_][\p{L}\p{N}_]*)\s+([A-Za-z_][A-Za-z0-9_]*)\s+([\p{L}_][\p{L}\p{N}_]*)/u
+                            );
+                            const isForHeader = pseudocodeTermAliases.get(
+                                loopHeader?.[1].toLocaleUpperCase('cs-CZ')
+                            )?.some(definition => definition.role === 'for');
+                            const loopSeparatorStart = loopHeader
+                                ? loopHeader.index + loopHeader[0].length - loopHeader[3].length
+                                : -1;
+                            const isLoopSeparator = isForHeader && tokenStart === loopSeparatorStart
+                                && definitions.some(definition => ['in', 'from', 'to'].includes(definition.role));
+                            if ((!isControlOrOperator && !isLoopSeparator) || token === normalizedToken
+                                || (normalizedToken === 'A'
+                                    && !isStandaloneAndOperator(part, tokenStart, token.length, 'A'))) {
+                                continue;
+                            }
+                            misCasedTerms.push({
+                                text: token,
+                                index: partOffset + tokenStart,
+                                end: partOffset + tokenStart + token.length
+                            });
+                        }
+                    }
+                    partOffset += part.length;
+                });
+            return misCasedTerms;
         }
 
         function replacePseudocodeAliases(text, roles, language) {
@@ -1181,15 +1236,14 @@ print("done")`
 
             const pattern = new RegExp(
                 `(^|[^\\p{L}\\p{N}_])(${aliases.map(escapeRegularExpression).join('|')})(?=$|[^\\p{L}\\p{N}_])`,
-                'giu'
+                'gu'
             );
             return text.replace(pattern, (match, prefix, alias, offset, source) => {
                 const tokenStart = offset + prefix.length;
-                if (alias.toLocaleUpperCase() === 'A'
-                    && (alias !== 'A' || !isStandaloneAndOperator(source, tokenStart, alias.length, alias))) {
+                if (alias === 'A' && !isStandaloneAndOperator(source, tokenStart, alias.length, alias)) {
                     return match;
                 }
-                const definition = pseudocodeTermAliases.get(alias.toLocaleUpperCase())
+                const definition = pseudocodeTermAliases.get(alias)
                     ?.find(candidate => roles.includes(candidate.role));
                 return definition
                     ? `${prefix}${terms[definition.role]}`
@@ -1211,18 +1265,17 @@ print("done")`
 
             const pattern = new RegExp(
                 `(^|[^\\p{L}\\p{N}_])(${aliases.map(escapeRegularExpression).join('|')})(?=$|[^\\p{L}\\p{N}_])`,
-                'giu'
+                'gu'
             );
             pattern.lastIndex = startIndex;
             let match;
             while ((match = pattern.exec(text)) !== null) {
                 const tokenStart = match.index + match[1].length;
-                if (match[2].toLocaleUpperCase() === 'A'
-                    && (match[2] !== 'A'
-                        || !isStandaloneAndOperator(text, tokenStart, match[2].length, match[2]))) {
+                if (match[2] === 'A'
+                    && !isStandaloneAndOperator(text, tokenStart, match[2].length, match[2])) {
                     continue;
                 }
-                const definition = pseudocodeTermAliases.get(match[2].toLocaleUpperCase())
+                const definition = pseudocodeTermAliases.get(match[2])
                     ?.find(candidate => roles.includes(candidate.role));
                 if (definition) {
                     return {
@@ -1241,13 +1294,13 @@ print("done")`
             const aliases = getPseudocodeAliases(roles);
             const tokenMatch = text.slice(tokenStart).match(new RegExp(
                 `^(${aliases.map(escapeRegularExpression).join('|')})(?=$|[^\\p{L}\\p{N}_])`,
-                'iu'
+                'u'
             ));
             if (!tokenMatch) return null;
             const token = tokenMatch[1];
-            const definitions = pseudocodeTermAliases.get(token.toLocaleUpperCase()) || [];
+            const definitions = pseudocodeTermAliases.get(token) || [];
             const definition = definitions.find(candidate => roles.includes(candidate.role));
-            if (!definition || (token.toLocaleUpperCase() === 'A'
+            if (!definition || (token === 'A'
                 && !isStandaloneAndOperator(text, tokenStart, token.length, token))) {
                 return null;
             }
@@ -1263,7 +1316,7 @@ print("done")`
             let leadingRole = null;
             const separatorMarkers = [];
             if (leadingTerm) {
-                const definition = pseudocodeTermAliases.get(leadingTerm[2].toLocaleUpperCase())
+                const definition = pseudocodeTermAliases.get(leadingTerm[2])
                     ?.find(candidate => !['in', 'from', 'to', 'or', 'and', 'mod'].includes(candidate.role));
                 if (definition && !['in', 'from', 'to', 'or', 'and', 'mod'].includes(definition.role)) {
                     leadingRole = definition.role;
@@ -1540,31 +1593,52 @@ print("done")`
             const word = match[1];
             const normalizedWord = word.toLocaleUpperCase('cs-CZ');
             const isUppercase = word === normalizedWord;
-            const isAssignment = /^\s*(?:=|←)/u.test(line.slice(match[0].length));
+            const misCasedTerm = getMisCasedPseudocodeTerms(line)
+                .find(term => term.index === match[0].length - word.length);
+            if (misCasedTerm) {
+                return word;
+            }
+            const remainder = line.slice(match[0].length).trimStart();
+            const isAssignment = /^(?:=|←)/u.test(remainder);
+            const isPythonExpression = /^[.(\[]/u.test(remainder);
+            const isPseudocodeTerm = pseudocodeTermAliases.get(normalizedWord)
+                ?.some(definition => supportedPseudocodeControlRoles.has(definition.role));
+            if (isPseudocodeTerm && !isUppercase) return word;
             if (!isUppercase || word.length < 2
                 || supportedPseudocodeLeadingTerms.has(normalizedWord)
-                || isAssignment) {
+                || isAssignment || isPythonExpression) {
                 return null;
             }
             return word;
         }
 
         CodeMirror.defineMode('pseudocode', () => ({
-            startState: () => ({ atLineStart: true }),
-            copyState: state => ({ atLineStart: state.atLineStart }),
+            startState: () => ({ atLineStart: true, misCasedTerms: [] }),
+            copyState: state => ({
+                atLineStart: state.atLineStart,
+                misCasedTerms: [...state.misCasedTerms]
+            }),
             token(stream, state) {
-                if (stream.sol()) state.atLineStart = true;
+                if (stream.sol()) {
+                    state.atLineStart = true;
+                    state.misCasedTerms = getMisCasedPseudocodeTerms(stream.string);
+                }
                 if (stream.eatSpace()) return null;
+                const misCasedTerm = state.misCasedTerms.find(term => term.index === stream.pos);
+                if (misCasedTerm) {
+                    stream.pos = misCasedTerm.end;
+                    return 'unknown-control';
+                }
                 if (state.atLineStart) {
                     state.atLineStart = false;
                     const match = stream.match(/[\p{L}_][\p{L}\p{N}_]*/u);
                     if (match) {
-                        return getUnknownPseudocodeControlWord(stream.string) === match[0]
-                            ? 'unknown-control'
-                            : null;
+                        if (getUnknownPseudocodeControlWord(stream.string) === match[0]) {
+                            return 'unknown-control';
+                        }
                     }
                 }
-                stream.skipToEnd();
+                stream.next();
                 return null;
             }
         }));
@@ -1680,7 +1754,8 @@ print("done")`
         function updatePseudocodeWarning() {
             const unknownTerms = getCanonicalPseudocode()
                 .split('\n')
-                .filter(line => getUnknownPseudocodeControlWord(line));
+                .filter(line => getMisCasedPseudocodeTerms(line).length
+                    || getUnknownPseudocodeControlWord(line));
             const warning = document.getElementById('pseudocodeWarning');
             warning.textContent = unknownTerms.length
                 ? translate('unknownTerms', { count: unknownTerms.length })
@@ -1958,7 +2033,7 @@ print("done")`
                 }))
                 .filter(line => line.text.length > 0);
             const malformedElse = lines.find(line =>
-                isElse(line.text) && !/^(?:JINAK|ELSE):$/i.test(line.text)
+                isElse(line.text) && !/^(?:JINAK|ELSE):$/.test(line.text)
             );
             if (malformedElse) {
                 throw new Error(translate('malformedElse', {
@@ -1968,23 +2043,23 @@ print("done")`
             let lineIndex = 0;
 
             function isIf(line) {
-                return /^(POKUD|IF)\b/i.test(line);
+                return /^(POKUD|IF)\b/.test(line);
             }
 
             function isWhile(line) {
-                return /^(DOKUD|WHILE)\b/i.test(line);
+                return /^(DOKUD|WHILE)\b/.test(line);
             }
 
             function isFor(line) {
-                return /^(PRO|FOR)\b/i.test(line);
+                return /^(PRO|FOR)\b/.test(line);
             }
 
             function isElse(line) {
-                return /^(JINAK|ELSE)\b/i.test(line);
+                return /^(JINAK|ELSE)\b/.test(line);
             }
 
             function isAlgorithm(line) {
-                return /^(ALGORITMUS|ALGORITHM)\b/i.test(line);
+                return /^(ALGORITMUS|ALGORITHM)\b/.test(line);
             }
 
             function parseBlock(indent) {
@@ -2010,7 +2085,7 @@ print("done")`
 
                     lineIndex++;
                     if (isAlgorithm(current.text)) {
-                        const header = current.text.match(/^(?:ALGORITMUS|ALGORITHM)\s+([A-Za-z_][A-Za-z0-9_]*)\s*\((.*?)\)\s*:\s*$/i);
+                        const header = current.text.match(/^(?:ALGORITMUS|ALGORITHM)\s+([A-Za-z_][A-Za-z0-9_]*)\s*\((.*?)\)\s*:\s*$/);
                         if (!header || current.indent !== lines[0].indent || statements.length > 0) {
                             throw new Error(translate('malformedAlgorithm', { line: current.line }));
                         }
@@ -2023,8 +2098,8 @@ print("done")`
                         });
                         continue;
                     }
-                    if (/^(?:VSTUP|INPUT)\b/i.test(current.text)) {
-                        const input = current.text.match(/^(?:VSTUP|INPUT)\s+([A-Za-z_][A-Za-z0-9_]*)$/i);
+                    if (/^(?:VSTUP|INPUT)\b/.test(current.text)) {
+                        const input = current.text.match(/^(?:VSTUP|INPUT)\s+([A-Za-z_][A-Za-z0-9_]*)$/);
                         if (!input) {
                             throw new Error(translate('malformedInput', { line: current.line }));
                         }
@@ -2057,12 +2132,12 @@ print("done")`
                     }
                     const statement = {
                         type: isLoop ? 'loop' : 'decision',
-                        text: conditionText.replace(/^(POKUD|IF|DOKUD|WHILE|PRO|FOR)\s*/i, '').replace(/:\s*$/, ''),
+                        text: conditionText.replace(/^(POKUD|IF|DOKUD|WHILE|PRO|FOR)\s*/, '').replace(/:\s*$/, ''),
                         thenBranch: [],
                         elseBranch: [],
                         line: current.line
                     };
-                    const iterableHeader = isLoop && conditionText.match(/^(?:PRO|FOR)\s+(.+?)\s+(?:V|IN)\s+(.+?):?$/i);
+                    const iterableHeader = isLoop && conditionText.match(/^(?:PRO|FOR)\s+(.+?)\s+(?:V|IN)\s+(.+?):?$/);
                     if (iterableHeader) {
                         statement.type = 'forEach';
                         statement.iterator = iterableHeader[1].trim();
@@ -2070,7 +2145,7 @@ print("done")`
                         statement.text = translate('iteratorQuestion', { iterable: statement.iterable });
                     } else if (isLoop) {
                         const countedHeader = conditionText.match(
-                            /^(?:PRO|FOR)\s+([A-Za-z_][A-Za-z0-9_]*)\s+(?:OD\s+(.+?)\s+DO|FROM\s+(.+?)\s+TO)\s+(.+?):?$/i
+                            /^(?:PRO|FOR)\s+([A-Za-z_][A-Za-z0-9_]*)\s+(?:OD\s+(.+?)\s+DO|FROM\s+(.+?)\s+TO)\s+(.+?):?$/
                         );
                         if (countedHeader) {
                             statement.type = 'countedLoop';
@@ -2199,7 +2274,7 @@ print("done")`
                             exits = [...thenExits, ...elseExits];
                         }
                     } else {
-                        const isReturn = /^(?:VRAT|RETURN)(?=\s|$)/i.test(statement.text);
+                        const isReturn = /^(?:VRAT|RETURN)(?=\s|$)/.test(statement.text);
                         const nodeType = statement.type === 'input'
                             ? 'input'
                             : isReturn
@@ -2303,15 +2378,15 @@ print("done")`
                 .map((part, index) => {
                     if (index % 2 === 1) return part;
                     return part
-                        .replace(/\bMOD\b/gi, '%')
-                        .replace(/\bNEBO\b/gi, 'or')
-                        .replace(/\bAND\b/gi, 'and')
-                        .replace(/\bOR\b/gi, 'or')
-                        .replace(/\bNOT\b/gi, 'not')
+                        .replace(/\bMOD\b/g, '%')
+                        .replace(/\bNEBO\b/g, 'or')
+                        .replace(/\bAND\b/g, 'and')
+                        .replace(/\bOR\b/g, 'or')
+                        .replace(/\bNOT\b/g, 'not')
                         .replace(/<>/g, '!=')
-                        .replace(/\btrue\b/gi, 'True')
-                        .replace(/\bfalse\b/gi, 'False')
-                        .replace(/\blength\s*\(/gi, 'len(')
+                        .replace(/\bTRUE\b/g, 'True')
+                        .replace(/\bFALSE\b/g, 'False')
+                        .replace(/\bLENGTH\s*\(/g, 'len(')
                         .replace(/←/g, '=');
                 })
                 .join('');
@@ -2326,7 +2401,15 @@ print("done")`
             return /^[A-Za-z_]/.test(snakeCaseName) ? snakeCaseName : `_${snakeCaseName}`;
         }
 
-        function generatePythonCode(code, statements = getParsedPseudocode(code)) {
+        function generatePythonCode(code) {
+            const misCasedTerms = code.split('\n')
+                .flatMap((line, index) => getMisCasedPseudocodeTerms(line)
+                    .map(term => ({ ...term, line: index + 1 })));
+            const misCasedTerm = misCasedTerms[0];
+            if (misCasedTerm) {
+                throw new Error(`Pseudocode term "${misCasedTerm.text}" must be uppercase on line ${misCasedTerm.line}.`);
+            }
+            const statements = getParsedPseudocode(code);
             const algorithmIndex = statements.findIndex(statement => statement.type === 'algorithm');
             const algorithm = algorithmIndex >= 0 ? statements[algorithmIndex] : null;
             const body = statements.filter(statement => statement.type !== 'algorithm');
@@ -2414,7 +2497,7 @@ print("done")`
                     if (statement.type !== 'step') {
                         throw new Error(`Unsupported pseudocode structure on line ${statement.line}.`);
                     }
-                    const write = statement.text.match(/^(?:VYPIS|WRITE)(?:\s+([\s\S]*))?$/i);
+                    const write = statement.text.match(/^(?:VYPIS|WRITE)(?:\s+([\s\S]*))?$/);
                     if (write) {
                         if (!write[1]) {
                             throw new Error(`WRITE needs a value on line ${statement.line}.`);
@@ -2422,7 +2505,7 @@ print("done")`
                         appendGeneratedLine(`${prefix}print(${translatePythonExpression(write[1])})`, statement.line);
                         continue;
                     }
-                    const result = statement.text.match(/^(?:VRAT|RETURN)(?:\s+([\s\S]*))?$/i);
+                    const result = statement.text.match(/^(?:VRAT|RETURN)(?:\s+([\s\S]*))?$/);
                     if (result) {
                         appendGeneratedLine(
                             `${prefix}return${result[1] ? ` ${translatePythonExpression(result[1])}` : ''}`,
@@ -2430,8 +2513,7 @@ print("done")`
                         );
                         continue;
                     }
-                    if (/^[A-ZČĎĚŇŘŠŤŮŽ][A-Z0-9_ČĎĚŇŘŠŤŮŽ]*\b/.test(statement.text)
-                        && !/^[A-Z_][A-Z0-9_]*\s*(?:=|←)/i.test(statement.text)) {
+                    if (getUnknownPseudocodeControlWord(statement.text)) {
                         throw new Error(`Unsupported pseudocode statement on line ${statement.line}: ${statement.text}`);
                     }
                     appendGeneratedLine(`${prefix}${translatePythonExpression(statement.text)}`, statement.line);

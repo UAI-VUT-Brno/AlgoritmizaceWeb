@@ -49,7 +49,7 @@ Supported control structures:
 - The **No** branch is placed below all blocks in the **Yes** branch, including in nested loops.
 - All listed structures can be nested. Their bodies must be indented relative to the header.
 
-`WRITE value` displays output as a regular flowchart step. `INPUT variable` reads a value and appears as an input parallelogram. The pseudocode editor underlines unknown uppercase words at the beginning of a line in red and shows their count. This is only a hint, not pseudocode validation: ordinary assignments and words inside a line are not checked, and unknown commands are still rendered as regular steps.
+`WRITE value` displays output as a regular flowchart step. `INPUT variable` reads a value and appears as an input parallelogram. Pseudocode terms and operators are case-sensitive and must be written in uppercase; mis-cased terms are underlined in red and Python generation rejects them. Uppercase identifiers, including Python attribute and method calls such as `L.append(10)`, are not treated as commands. Unknown uppercase commands are still rendered as regular flowchart steps.
 
 Commands that are not recognized as control structures are displayed as regular steps. Function results can be returned with `RETURN`, shown as an output parallelogram connected to the diagram end. The generator creates an overview diagram; it does not interpret expressions, validate their syntax, or execute pseudocode. Counted loops and conditions are shown but not evaluated.
 
@@ -70,7 +70,7 @@ ALGORITHM IterateMatrix(matrix):
 
 The Python pane generates code from the pseudocode into the region between the comments `# BEGIN GENERATED CODE` and `# END GENERATED CODE`. Keep imports or preconditions before the start marker and example inputs or calls after the end marker; regeneration preserves both surrounding regions. The markers must appear exactly once and in that order.
 
-The supported pseudocode structures and commands generate Python. Input assigns the result of Python's `input()` to one variable; the value is a string. Counted-loop end bounds are inclusive. Basic expressions are retained; supported operators and `length(...)` are translated to their Python equivalents. Other statement text is emitted as Python and must be valid Python.
+The supported pseudocode structures and commands generate Python. Write all pseudocode terms in uppercase, including expression operators and `LENGTH(...)`. Input assigns the result of Python's `input()` to one variable; the value is a string. Counted-loop end bounds are inclusive. Basic expressions are retained; supported operators and `LENGTH(...)` are translated to their Python equivalents. Other statement text is emitted as Python and must be valid Python.
 
 Pseudocode edits regenerate the marked section automatically until the Python editor is edited manually. After a manual edit, use **Generate Python** to explicitly replace only the marked section. Generation errors are shown beside the button and leave the existing code unchanged. Imported JSON contains only pseudocode; it updates the generated region when the Python editor has not been manually edited. While stepping through Python, the corresponding diagram block is highlighted using the generated source mapping.
 

@@ -70,7 +70,7 @@ ALGORITMUS ProjdiMatici(matice):
 
 Panel Pythonu generuje kód z pseudokódu do oblasti mezi komentáři `# BEGIN GENERATED CODE` a `# END GENERATED CODE`. Importy nebo předpoklady ponechte před počátečním komentářem, ukázková data a volání za koncovým komentářem; při opětovném generování zůstanou okolní části zachovány. Každý komentář musí být uveden právě jednou a ve správném pořadí.
 
-Podporované struktury a příkazy pseudokódu se převádějí na Python. Příkaz `VSTUP` přiřadí do jedné proměnné výsledek Pythonového `input()`; načtená hodnota je řetězec. Horní mez počítaného cyklu je zahrnuta. Základní výrazy se zachovávají; podporované operátory a `length(...)` se převádějí na ekvivalenty v Pythonu. Ostatní text příkazů se přenáší jako Python a musí mít platnou syntaxi.
+Podporované struktury a příkazy pseudokódu se převádějí na Python a musí být zapsány přesně velkými písmeny. Nesprávně zapsané termíny jsou označeny a generátor Pythonu je odmítne. Příkaz `VSTUP` přiřadí do jedné proměnné výsledek Pythonového `input()`; načtená hodnota je řetězec. Horní mez počítaného cyklu je zahrnuta. Základní výrazy se zachovávají; podporované operátory a `LENGTH(...)` se převádějí na ekvivalenty v Pythonu. Ostatní text příkazů se přenáší jako Python a musí mít platnou syntaxi.
 
 Při úpravě pseudokódu se označená oblast automaticky aktualizuje, dokud uživatel ručně neupraví editor Pythonu. Po ruční úpravě použijte **Generovat Python**; přepíše se pouze označená oblast. Chyba generování se zobrazí vedle tlačítka a stávající kód zůstane zachován. Importovaný JSON obsahuje pouze pseudokód; pokud editor Pythonu nebyl ručně upraven, vygenerovaná oblast se z něj aktualizuje. Při krokování Pythonu se zvýrazní odpovídající blok diagramu.
 
