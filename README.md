@@ -39,6 +39,8 @@ The supported-terms help panel has a default height of **320 px**. Resize it by 
 
 Supported control structures:
 
+The trailing colon is optional in algorithm and control-structure headers. Indentation is still required for blocks, and generated Python includes its required colons.
+
 - Algorithm header: `ALGORITHM name(parameters):`.
 - Condition: `IF condition:`.
 - Long decision labels wrap at word boundaries to reduce the height of the flowchart diamond.

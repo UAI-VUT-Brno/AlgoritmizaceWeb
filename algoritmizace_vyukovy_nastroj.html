@@ -303,7 +303,7 @@ SOFTWARE.
         <p data-i18n="helpIntro" class="mb-4 text-sm text-slate-300">Use the three panels from left to right to write, visualize, and run an algorithm.</p>
         <ul class="list-disc space-y-3 pl-5 text-sm leading-relaxed text-slate-300">
             <li data-i18n="helpChooseAlgorithm">Choose an example from the algorithm menu, or load your own pseudocode from JSON.</li>
-            <li data-i18n="helpPseudocode">Edit pseudocode in the left panel. Put each step on a new line; end control structures with a colon and indent their blocks.</li>
+            <li data-i18n="helpPseudocode">Edit pseudocode in the left panel. Put each step on a new line; colons at the end of algorithm and control-structure headers are optional. Indent their blocks.</li>
             <li data-i18n="helpDiagram">The center panel shows the flowchart. It updates when pseudocode changes; use the controls to zoom or fit it.</li>
             <li data-i18n="helpPython">Review or edit the Python code in the right panel. Select Generate Python to update generated code from your pseudocode.</li>
             <li data-i18n="helpExecution">Select Start to prepare execution, then use Run or the step controls to inspect execution and variables.</li>
@@ -336,7 +336,7 @@ SOFTWARE.
             <div class="h-56 flex-shrink-0 overflow-y-auto border-t border-darkaccent bg-slate-900/70 px-3 py-2 text-[10px] leading-4 text-slate-400" id="pseudocodeHelp">
                 <h2 data-i18n="supportedTerms" class="mb-1 text-[11px] font-semibold text-slate-200">Podporované termíny pseudokódu</h2>
                 <ul class="space-y-0.5">
-                    <li data-i18n="termAlgorithm" data-i18n-html="true"><code class="text-indigo-300">ALGORITMUS název(...):</code> / <code class="text-indigo-300">ALGORITHM name(...):</code> — hlavička algoritmu</li>
+                    <li data-i18n="termAlgorithm" data-i18n-html="true"><code class="text-indigo-300">ALGORITMUS název(...)</code> / <code class="text-indigo-300">ALGORITHM name(...)</code> — hlavička algoritmu</li>
                     <li data-i18n="termIf" data-i18n-html="true"><code class="text-indigo-300">POKUD</code> / <code class="text-indigo-300">IF</code> — podmínka</li>
                     <li data-i18n="termElse" data-i18n-html="true"><code class="text-indigo-300">JINAK</code> / <code class="text-indigo-300">ELSE</code> — alternativní větev</li>
                     <li data-i18n="termWhile" data-i18n-html="true"><code class="text-indigo-300">DOKUD</code> / <code class="text-indigo-300">WHILE</code> — podmíněný cyklus</li>
@@ -345,7 +345,7 @@ SOFTWARE.
                     <li data-i18n="termReturn" data-i18n-html="true"><code class="text-indigo-300">VRAT hodnota</code> / <code class="text-indigo-300">RETURN value</code> — předání výsledku funkce (rovnoběžník)</li>
                     <li data-i18n="termWrite" data-i18n-html="true"><code class="text-indigo-300">VYPIS hodnota</code> / <code class="text-indigo-300">WRITE value</code> — tisk hodnoty</li>
                     <li data-i18n="termInput" data-i18n-html="true"><code class="text-indigo-300">VSTUP proměnná</code> / <code class="text-indigo-300">INPUT variable</code> — načtení textového vstupu (rovnoběžník)</li>
-                    <li data-i18n="termIndent" data-i18n-html="true">Bloky pište s dvojtečkou a odsazujte; ostatní řádky se zobrazí jako kroky.</li>
+                    <li data-i18n="termIndent" data-i18n-html="true">Dvojtečka na konci hlaviček je volitelná; bloky odsazujte. Ostatní řádky se zobrazí jako kroky.</li>
                     <li data-i18n="termPythonGeneration" data-i18n-html="true">Python se generuje mezi komentáři <code class="text-indigo-300"># BEGIN GENERATED CODE</code> a <code class="text-indigo-300"># END GENERATED CODE</code>.</li>
                     <li data-i18n="termWarning" data-i18n-html="true">Příkazy a operátory pseudokódu pište přesně velkými písmeny; jiný zápis je označen červeně a generátor jej odmítne.</li>
                 </ul>
@@ -666,7 +666,7 @@ print("done")`
                 closeHelp: 'Zavřít',
                 helpIntro: 'Aplikaci používejte zleva doprava k zápisu, znázornění a spuštění algoritmu.',
                 helpChooseAlgorithm: 'V nabídce algoritmů vyberte ukázku nebo načtěte vlastní pseudokód ze souboru JSON.',
-                helpPseudocode: 'Upravujte pseudokód v levém panelu. Každý krok pište na nový řádek; řídicí struktury ukončete dvojtečkou a jejich bloky odsazujte.',
+                helpPseudocode: 'Upravujte pseudokód v levém panelu. Každý krok pište na nový řádek; dvojtečka na konci hlaviček algoritmu a řídicích struktur je volitelná. Jejich bloky odsazujte.',
                 helpDiagram: 'Prostřední panel zobrazuje vývojový diagram. Po změně pseudokódu se aktualizuje; pomocí tlačítek můžete měnit měřítko.',
                 helpPython: 'V pravém panelu zkontrolujte nebo upravte Python kód. Tlačítkem Generovat Python aktualizujete kód podle pseudokódu.',
                 helpExecution: 'Tlačítkem Start připravte spuštění a poté pomocí Spustit nebo ovládacích prvků krokování sledujte běh a proměnné.',
@@ -686,7 +686,7 @@ print("done")`
                 algorithm: 'Algoritmus',
                 pseudocodeWarningTitle: 'Příkazy pseudokódu musí být zapsány přesně velkými písmeny.',
                 supportedTerms: 'Podporované termíny pseudokódu',
-                termAlgorithm: '<code class="text-indigo-300">ALGORITMUS název(...):</code> / <code class="text-indigo-300">ALGORITHM name(...):</code> — hlavička algoritmu',
+                termAlgorithm: '<code class="text-indigo-300">ALGORITMUS název(...)</code> / <code class="text-indigo-300">ALGORITHM name(...)</code> — hlavička algoritmu',
                 termIf: '<code class="text-indigo-300">POKUD</code> / <code class="text-indigo-300">IF</code> — podmínka',
                 termElse: '<code class="text-indigo-300">JINAK</code> / <code class="text-indigo-300">ELSE</code> — alternativní větev',
                 termWhile: '<code class="text-indigo-300">DOKUD</code> / <code class="text-indigo-300">WHILE</code> — podmíněný cyklus',
@@ -695,7 +695,7 @@ print("done")`
                 termReturn: '<code class="text-indigo-300">VRAT hodnota</code> / <code class="text-indigo-300">RETURN value</code> — předání výsledku funkce (rovnoběžník)',
                 termWrite: '<code class="text-indigo-300">VYPIS hodnota</code> / <code class="text-indigo-300">WRITE value</code> — tisk hodnoty',
                 termInput: '<code class="text-indigo-300">VSTUP proměnná</code> / <code class="text-indigo-300">INPUT variable</code> — načtení textového vstupu (rovnoběžník)',
-                termIndent: 'Bloky pište s dvojtečkou a odsazujte; ostatní řádky se zobrazí jako kroky.',
+                termIndent: 'Dvojtečka na konci hlaviček je volitelná; bloky odsazujte. Ostatní řádky se zobrazí jako kroky.',
                 termPythonGeneration: 'Python se generuje mezi komentáři <code class="text-indigo-300"># BEGIN GENERATED CODE</code> a <code class="text-indigo-300"># END GENERATED CODE</code>.',
                 termWarning: 'Příkazy a operátory pseudokódu pište přesně velkými písmeny; jiný zápis je označen červeně a generátor jej odmítne.',
                 resizeHelp: 'Změnit výšku nápovědy',
@@ -734,10 +734,9 @@ print("done")`
                 noExecutionSteps: 'Nebyl zaznamenán žádný krok vykonávání kódového bloku.',
                 pythonRuntimeError: 'Chyba běhu Pythonu:',
                 unknownTerms: 'Neznámé řídicí výrazy: {count}',
-                malformedElse: 'Alternativní větev "{line}" musí být zapsána jako {else}:.',
+                malformedElse: 'Zápis alternativní větve "{line}" je neplatný; použijte {else} s volitelnou dvojtečkou.',
                 malformedBlock: 'Pseudokód nelze zpracovat u řádku: {line}',
                 malformedInput: 'Příkaz {input} na řádku {line} musí mít za příkazem název proměnné.',
-                missingColon: 'Hlavička "{line}" musí končit dvojtečkou.',
                 malformedAlgorithm: 'Hlavička algoritmu na řádku {line} musí začínat výrazem {algorithm} a musí být první.',
                 iteratorQuestion: 'Další prvek v {iterable}?',
                 nextIterator: 'další prvek z {iterable}',
@@ -757,7 +756,7 @@ print("done")`
                 closeHelp: 'Close',
                 helpIntro: 'Use the three panels from left to right to write, visualize, and run an algorithm.',
                 helpChooseAlgorithm: 'Choose an example from the algorithm menu, or load your own pseudocode from JSON.',
-                helpPseudocode: 'Edit pseudocode in the left panel. Put each step on a new line; end control structures with a colon and indent their blocks.',
+                helpPseudocode: 'Edit pseudocode in the left panel. Put each step on a new line; colons at the end of algorithm and control-structure headers are optional. Indent their blocks.',
                 helpDiagram: 'The center panel shows the flowchart. It updates when pseudocode changes; use the controls to zoom or fit it.',
                 helpPython: 'Review or edit the Python code in the right panel. Select Generate Python to update generated code from your pseudocode.',
                 helpExecution: 'Select Start to prepare execution, then use Run or the step controls to inspect execution and variables.',
@@ -777,7 +776,7 @@ print("done")`
                 algorithm: 'Algorithm',
                 pseudocodeWarningTitle: 'Pseudocode commands must be written in exact uppercase.',
                 supportedTerms: 'Supported pseudocode terms',
-                termAlgorithm: '<code class="text-indigo-300">ALGORITHM name(...):</code> — algorithm header',
+                termAlgorithm: '<code class="text-indigo-300">ALGORITHM name(...)</code> — algorithm header',
                 termIf: '<code class="text-indigo-300">IF</code> — condition',
                 termElse: '<code class="text-indigo-300">ELSE</code> — alternative branch',
                 termWhile: '<code class="text-indigo-300">WHILE</code> — conditional loop',
@@ -786,7 +785,7 @@ print("done")`
                 termReturn: '<code class="text-indigo-300">RETURN value</code> — return a function result (parallelogram)',
                 termWrite: '<code class="text-indigo-300">WRITE value</code> — print a value',
                 termInput: '<code class="text-indigo-300">INPUT variable</code> — read text input (parallelogram)',
-                termIndent: 'End blocks with a colon and indent them; other lines appear as steps.',
+                termIndent: 'Colons at the end of headers are optional; indent their blocks. Other lines appear as steps.',
                 termPythonGeneration: 'Python is generated between the comments <code class="text-indigo-300"># BEGIN GENERATED CODE</code> and <code class="text-indigo-300"># END GENERATED CODE</code>.',
                 termWarning: 'Write pseudocode commands and operators in exact uppercase; other casing is highlighted in red and rejected by the generator.',
                 resizeHelp: 'Resize help panel',
@@ -825,10 +824,9 @@ print("done")`
                 noExecutionSteps: 'No execution steps were recorded for this code block.',
                 pythonRuntimeError: 'Python runtime error:',
                 unknownTerms: 'Unknown control terms: {count}',
-                malformedElse: 'The alternative branch "{line}" must be written as {else}:.',
+                malformedElse: 'The alternative branch "{line}" is invalid; use {else} with an optional colon.',
                 malformedBlock: 'Could not parse pseudocode at line: {line}',
                 malformedInput: 'The {input} command on line {line} must be followed by a variable name.',
-                missingColon: 'Header "{line}" must end with a colon.',
                 malformedAlgorithm: 'The algorithm header on line {line} must start with {algorithm} and must come first.',
                 iteratorQuestion: 'Next item in {iterable}?',
                 nextIterator: 'next item from {iterable}',
@@ -848,7 +846,7 @@ print("done")`
                 closeHelp: 'Fermi',
                 helpIntro: 'Uzu la tri panelojn de maldekstre dekstren por verki, bildigi kaj ruli algoritmon.',
                 helpChooseAlgorithm: 'Elektu ekzemplon el la algoritma menuo aŭ ŝargu propran pseŭdokodon el JSON-dosiero.',
-                helpPseudocode: 'Redaktu pseŭdokodon en la maldekstra panelo. Skribu ĉiun paŝon sur nova linio; finu kontrolstrukturojn per dupunkto kaj indentu iliajn blokojn.',
+                helpPseudocode: 'Redaktu pseŭdokodon en la maldekstra panelo. Skribu ĉiun paŝon sur nova linio; dupunkto ĉe la fino de algoritmaj kaj kontrolstrukturaj kaplinioj estas nedeviga. Indentu iliajn blokojn.',
                 helpDiagram: 'La centra panelo montras la fluodiagramon. Ĝi ĝisdatiĝas kiam la pseŭdokodo ŝanĝiĝas; uzu la regilojn por zomi aŭ adapti ĝin.',
                 helpPython: 'Kontrolu aŭ redaktu Python-kodon en la dekstra panelo. Elektu Generi Python por ĝisdatigi la generitan kodon el la pseŭdokodo.',
                 helpExecution: 'Elektu Starti por prepari ruladon, poste uzu Ruli aŭ la paŝajn regilojn por observi la ruladon kaj variablojn.',
@@ -868,7 +866,7 @@ print("done")`
                 algorithm: 'Algoritmo',
                 pseudocodeWarningTitle: 'Pseŭdokodaj komandoj devas esti skribitaj precize per majuskloj.',
                 supportedTerms: 'Subtenataj pseŭdokodaj terminoj',
-                termAlgorithm: '<code class="text-indigo-300">ALGORITMUS název(...):</code> / <code class="text-indigo-300">ALGORITHM name(...):</code> — algoritmo-kapo',
+                termAlgorithm: '<code class="text-indigo-300">ALGORITMUS název(...)</code> / <code class="text-indigo-300">ALGORITHM name(...)</code> — algoritmo-kapo',
                 termIf: '<code class="text-indigo-300">POKUD</code> / <code class="text-indigo-300">IF</code> — kondiĉo',
                 termElse: '<code class="text-indigo-300">JINAK</code> / <code class="text-indigo-300">ELSE</code> — alternativa branĉo',
                 termWhile: '<code class="text-indigo-300">DOKUD</code> / <code class="text-indigo-300">WHILE</code> — kondiĉa iteracio',
@@ -877,7 +875,7 @@ print("done")`
                 termReturn: '<code class="text-indigo-300">VRAT hodnota</code> / <code class="text-indigo-300">RETURN value</code> — redoni funkcir rezulton (paralelogramo)',
                 termWrite: '<code class="text-indigo-300">VYPIS hodnota</code> / <code class="text-indigo-300">WRITE value</code> — presi valoron',
                 termInput: '<code class="text-indigo-300">VSTUP proměnná</code> / <code class="text-indigo-300">INPUT variable</code> — legi tekstan enigon (paralelogramo)',
-                termIndent: 'Finu blokojn per dupunkto kaj indentu ilin; aliaj linioj aperas kiel paŝoj.',
+                termIndent: 'Dupunkto ĉe la fino de kaplinioj estas nedeviga; indentu iliajn blokojn. Aliaj linioj aperas kiel paŝoj.',
                 termPythonGeneration: 'Python estas generata inter la komentoj <code class="text-indigo-300"># BEGIN GENERATED CODE</code> kaj <code class="text-indigo-300"># END GENERATED CODE</code>.',
                 termWarning: 'Skribu pseŭdokodajn komandojn kaj operatorojn precize per majuskloj; alia skribo estas markita ruĝe kaj rifuzita de la generatoro.',
                 resizeHelp: 'Ŝanĝi altecon de helpo',
@@ -916,10 +914,9 @@ print("done")`
                 noExecutionSteps: 'Neniu rula paŝo estis registrita por ĉi tiu kodbloko.',
                 pythonRuntimeError: 'Python-rultempa eraro:',
                 unknownTerms: 'Nekonataj stiraj terminoj: {count}',
-                malformedElse: 'La alternativa branĉo "{line}" devas esti skribita kiel {else}:.',
+                malformedElse: 'La alternativa branĉo "{line}" estas nevalida; uzu {else} kun nedeviga dupunkto.',
                 malformedBlock: 'Ne eblis analizi pseŭdokodon ĉe linio: {line}',
                 malformedInput: 'La komando {input} ĉe linio {line} devas esti sekvata de variablonomo.',
-                missingColon: 'La kaplinio "{line}" devas finiĝi per dupunkto.',
                 malformedAlgorithm: 'La algoritmo-kapo ĉe linio {line} devas komenciĝi per {algorithm} kaj esti la unua.',
                 iteratorQuestion: 'Ĉu estas plia elemento en {iterable}?',
                 nextIterator: 'plia elemento el {iterable}',
@@ -939,7 +936,7 @@ print("done")`
                 closeHelp: 'Fermer',
                 helpIntro: 'Utilisez les trois panneaux de gauche à droite pour écrire, visualiser et exécuter un algorithme.',
                 helpChooseAlgorithm: 'Choisissez un exemple dans le menu des algorithmes ou chargez votre pseudocode depuis un fichier JSON.',
-                helpPseudocode: 'Modifiez le pseudocode dans le panneau de gauche. Écrivez chaque étape sur une nouvelle ligne ; terminez les structures de contrôle par deux-points et indentez leurs blocs.',
+                helpPseudocode: 'Modifiez le pseudocode dans le panneau de gauche. Écrivez chaque étape sur une nouvelle ligne ; le deux-points final des en-têtes d’algorithme et de structure de contrôle est facultatif. Indentez leurs blocs.',
                 helpDiagram: 'Le panneau central affiche l’organigramme. Il est actualisé lorsque le pseudocode change ; utilisez les commandes pour zoomer ou ajuster l’affichage.',
                 helpPython: 'Consultez ou modifiez le code Python dans le panneau de droite. Sélectionnez Générer Python pour actualiser le code généré depuis le pseudocode.',
                 helpExecution: 'Sélectionnez Démarrer pour préparer l’exécution, puis utilisez Exécuter ou les commandes pas à pas pour examiner l’exécution et les variables.',
@@ -959,7 +956,7 @@ print("done")`
                 algorithm: 'Algorithme',
                 pseudocodeWarningTitle: 'Les commandes de pseudocode doivent être écrites exactement en majuscules.',
                 supportedTerms: 'Termes de pseudocode pris en charge',
-                termAlgorithm: '<code class="text-indigo-300">ALGORITMUS název(...):</code> / <code class="text-indigo-300">ALGORITHM name(...):</code> — en-tête d’algorithme',
+                termAlgorithm: '<code class="text-indigo-300">ALGORITMUS název(...)</code> / <code class="text-indigo-300">ALGORITHM name(...)</code> — en-tête d’algorithme',
                 termIf: '<code class="text-indigo-300">POKUD</code> / <code class="text-indigo-300">IF</code> — condition',
                 termElse: '<code class="text-indigo-300">JINAK</code> / <code class="text-indigo-300">ELSE</code> — branche alternative',
                 termWhile: '<code class="text-indigo-300">DOKUD</code> / <code class="text-indigo-300">WHILE</code> — boucle conditionnelle',
@@ -968,7 +965,7 @@ print("done")`
                 termReturn: '<code class="text-indigo-300">VRAT hodnota</code> / <code class="text-indigo-300">RETURN value</code> — renvoyer le résultat d’une fonction (parallélogramme)',
                 termWrite: '<code class="text-indigo-300">VYPIS hodnota</code> / <code class="text-indigo-300">WRITE value</code> — afficher une valeur',
                 termInput: '<code class="text-indigo-300">VSTUP proměnná</code> / <code class="text-indigo-300">INPUT variable</code> — lire une entrée textuelle (parallélogramme)',
-                termIndent: 'Terminez les blocs par deux-points et indentez-les ; les autres lignes apparaissent comme des étapes.',
+                termIndent: 'Le deux-points final des en-têtes est facultatif ; indentez leurs blocs. Les autres lignes apparaissent comme des étapes.',
                 termPythonGeneration: 'Python est généré entre les commentaires <code class="text-indigo-300"># BEGIN GENERATED CODE</code> et <code class="text-indigo-300"># END GENERATED CODE</code>.',
                 termWarning: 'Écrivez les commandes et opérateurs de pseudocode exactement en majuscules ; toute autre casse est signalée en rouge et refusée par le générateur.',
                 resizeHelp: 'Modifier la hauteur de l’aide',
@@ -1007,10 +1004,9 @@ print("done")`
                 noExecutionSteps: 'Aucune étape d’exécution n’a été enregistrée pour ce bloc de code.',
                 pythonRuntimeError: 'Erreur d’exécution Python :',
                 unknownTerms: 'Termes de contrôle inconnus : {count}',
-                malformedElse: 'La branche alternative « {line} » doit être écrite {else}:.',
+                malformedElse: 'La branche alternative « {line} » est incorrecte ; utilisez {else} avec un deux-points facultatif.',
                 malformedBlock: 'Impossible d’analyser le pseudocode à la ligne : {line}',
                 malformedInput: 'La commande {input} à la ligne {line} doit être suivie d’un nom de variable.',
-                missingColon: 'L’en-tête « {line} » doit se terminer par deux-points.',
                 malformedAlgorithm: 'L’en-tête d’algorithme à la ligne {line} doit commencer par {algorithm} et être en premier.',
                 iteratorQuestion: 'Y a-t-il un autre élément dans {iterable} ?',
                 nextIterator: 'élément suivant de {iterable}',
@@ -1030,7 +1026,7 @@ print("done")`
                 closeHelp: 'Zavrieť',
                 helpIntro: 'Tri panely používajte zľava doprava na zápis, vizualizáciu a spustenie algoritmu.',
                 helpChooseAlgorithm: 'V ponuke algoritmov vyberte ukážku alebo načítajte vlastný pseudokód zo súboru JSON.',
-                helpPseudocode: 'Upravujte pseudokód v ľavom paneli. Každý krok píšte na nový riadok; riadiace štruktúry ukončite dvojbodkou a ich bloky odsaďte.',
+                helpPseudocode: 'Upravujte pseudokód v ľavom paneli. Každý krok píšte na nový riadok; dvojbodka na konci hlavičiek algoritmov a riadiacich štruktúr je voliteľná. Ich bloky odsaďte.',
                 helpDiagram: 'Prostredný panel zobrazuje vývojový diagram. Po zmene pseudokódu sa aktualizuje; pomocou ovládacích prvkov môžete meniť mierku.',
                 helpPython: 'V pravom paneli skontrolujte alebo upravte Python kód. Tlačidlom Generovať Python aktualizujete kód podľa pseudokódu.',
                 helpExecution: 'Tlačidlom Štart pripravte spustenie a potom pomocou Spustiť alebo ovládacích prvkov krokovania sledujte beh a premenné.',
@@ -1050,7 +1046,7 @@ print("done")`
                 algorithm: 'Algoritmus',
                 pseudocodeWarningTitle: 'Príkazy pseudokódu musia byť zapísané presne veľkými písmenami.',
                 supportedTerms: 'Podporované termíny pseudokódu',
-                termAlgorithm: '<code class="text-indigo-300">ALGORITMUS název(...):</code> / <code class="text-indigo-300">ALGORITHM name(...):</code> — hlavička algoritmu',
+                termAlgorithm: '<code class="text-indigo-300">ALGORITMUS název(...)</code> / <code class="text-indigo-300">ALGORITHM name(...)</code> — hlavička algoritmu',
                 termIf: '<code class="text-indigo-300">POKUD</code> / <code class="text-indigo-300">IF</code> — podmienka',
                 termElse: '<code class="text-indigo-300">JINAK</code> / <code class="text-indigo-300">ELSE</code> — alternatívna vetva',
                 termWhile: '<code class="text-indigo-300">DOKUD</code> / <code class="text-indigo-300">WHILE</code> — podmienený cyklus',
@@ -1059,7 +1055,7 @@ print("done")`
                 termReturn: '<code class="text-indigo-300">VRAT hodnota</code> / <code class="text-indigo-300">RETURN value</code> — odovzdanie výsledku funkcie (rovnobežník)',
                 termWrite: '<code class="text-indigo-300">VYPIS hodnota</code> / <code class="text-indigo-300">WRITE value</code> — výpis hodnoty',
                 termInput: '<code class="text-indigo-300">VSTUP premenná</code> / <code class="text-indigo-300">INPUT variable</code> — načítanie textového vstupu (rovnobežník)',
-                termIndent: 'Bloky ukončite dvojbodkou a odsadzujte; ostatné riadky sa zobrazia ako kroky.',
+                termIndent: 'Dvojbodka na konci hlavičiek je voliteľná; bloky odsaďte. Ostatné riadky sa zobrazia ako kroky.',
                 termPythonGeneration: 'Python sa generuje medzi komentármi <code class="text-indigo-300"># BEGIN GENERATED CODE</code> a <code class="text-indigo-300"># END GENERATED CODE</code>.',
                 termWarning: 'Príkazy a operátory pseudokódu píšte presne veľkými písmenami; iný zápis sa označí červenou a generátor ho odmietne.',
                 resizeHelp: 'Zmeniť výšku pomocníka',
@@ -1098,10 +1094,9 @@ print("done")`
                 noExecutionSteps: 'Pre tento blok kódu nebol zaznamenaný žiadny krok vykonávania.',
                 pythonRuntimeError: 'Chyba pri vykonávaní Pythonu:',
                 unknownTerms: 'Neznáme riadiace výrazy: {count}',
-                malformedElse: 'Alternatívna vetva "{line}" musí byť zapísaná ako {else}:.',
+                malformedElse: 'Zápis alternatívnej vetvy "{line}" je neplatný; použite {else} s voliteľnou dvojbodkou.',
                 malformedBlock: 'Pseudokód sa nepodarilo spracovať na riadku: {line}',
                 malformedInput: 'Za príkazom {input} na riadku {line} musí nasledovať názov premennej.',
-                missingColon: 'Hlavička "{line}" musí končiť dvojbodkou.',
                 malformedAlgorithm: 'Hlavička algoritmu na riadku {line} musí začínať výrazom {algorithm} a musí byť prvá.',
                 iteratorQuestion: 'Je ďalší prvok v {iterable}?',
                 nextIterator: 'ďalší prvok z {iterable}',
@@ -1367,12 +1362,12 @@ print("done")`
         function pseudocodeHelpExample(key) {
             const terms = pseudocodeTerms[currentLanguage];
             const examples = {
-                termAlgorithm: `${terms.algorithm} name(...):`,
+                termAlgorithm: `${terms.algorithm} name(...)`,
                 termIf: terms.if,
                 termElse: `${terms.else}:`,
-                termWhile: `${terms.while} condition:`,
-                termForEach: `${terms.for} item ${terms.in} collection:`,
-                termForCount: `${terms.for} i ${terms.from} start ${terms.to} end:`,
+                termWhile: `${terms.while} condition`,
+                termForEach: `${terms.for} item ${terms.in} collection`,
+                termForCount: `${terms.for} i ${terms.from} start ${terms.to} end`,
                 termReturn: `${terms.return} value`,
                 termWrite: `${terms.write} value`,
                 termInput: `${terms.input} variable`
@@ -1602,8 +1597,9 @@ print("done")`
             const isAssignment = /^(?:=|←)/u.test(remainder);
             const isPythonExpression = /^[.(\[]/u.test(remainder);
             const isPseudocodeTerm = pseudocodeTermAliases.get(normalizedWord)
-                ?.some(definition => supportedPseudocodeControlRoles.has(definition.role));
-            if (isPseudocodeTerm && !isUppercase) return word;
+                ?.some(definition => supportedPseudocodeControlRoles.has(definition.role)
+                    || ['and', 'or', 'mod', 'in', 'from', 'to'].includes(definition.role));
+            if (isPseudocodeTerm && word.length > 1) return isUppercase ? null : word;
             if (!isUppercase || word.length < 2
                 || supportedPseudocodeLeadingTerms.has(normalizedWord)
                 || isAssignment || isPythonExpression) {
@@ -2033,7 +2029,7 @@ print("done")`
                 }))
                 .filter(line => line.text.length > 0);
             const malformedElse = lines.find(line =>
-                isElse(line.text) && !/^(?:JINAK|ELSE):$/.test(line.text)
+                isElse(line.text) && !/^(?:JINAK|ELSE):?$/.test(line.text)
             );
             if (malformedElse) {
                 throw new Error(translate('malformedElse', {
@@ -2062,6 +2058,11 @@ print("done")`
                 return /^(ALGORITMUS|ALGORITHM)\b/.test(line);
             }
 
+            function isStatementHeader(line) {
+                return isIf(line) || isWhile(line) || isFor(line) || isElse(line)
+                    || isAlgorithm(line) || /^(?:VSTUP|INPUT|VYPIS|WRITE|VRAT|RETURN)\b/.test(line);
+            }
+
             function parseBlock(indent) {
                 const statements = [];
                 while (lineIndex < lines.length) {
@@ -2085,7 +2086,7 @@ print("done")`
 
                     lineIndex++;
                     if (isAlgorithm(current.text)) {
-                        const header = current.text.match(/^(?:ALGORITMUS|ALGORITHM)\s+([A-Za-z_][A-Za-z0-9_]*)\s*\((.*?)\)\s*:\s*$/);
+                        const header = current.text.match(/^(?:ALGORITMUS|ALGORITHM)\s+([A-Za-z_][A-Za-z0-9_]*)\s*\((.*?)\)\s*:?\s*$/);
                         if (!header || current.indent !== lines[0].indent || statements.length > 0) {
                             throw new Error(translate('malformedAlgorithm', { line: current.line }));
                         }
@@ -2118,17 +2119,20 @@ print("done")`
 
                     const isLoop = isWhile(current.text) || isFor(current.text);
                     let conditionText = current.text;
-                    while (!conditionText.trimEnd().endsWith(':')
-                        && lineIndex < lines.length
-                        && lines[lineIndex].indent > current.indent
-                        && !isElse(lines[lineIndex].text)) {
-                        conditionText += ` ${lines[lineIndex].text}`;
-                        lineIndex++;
-                    }
                     if (!conditionText.trimEnd().endsWith(':')) {
-                        throw new Error(translate('missingColon', {
-                            line: convertPseudocode(current.text, currentLanguage)
-                        }));
+                        let continuationEnd = lineIndex;
+                        while (continuationEnd < lines.length
+                            && lines[continuationEnd].indent > current.indent
+                            && !isStatementHeader(lines[continuationEnd].text)) {
+                            if (lines[continuationEnd].text.trimEnd().endsWith(':')) {
+                                for (let continuation = lineIndex; continuation <= continuationEnd; continuation++) {
+                                    conditionText += ` ${lines[continuation].text}`;
+                                }
+                                lineIndex = continuationEnd + 1;
+                                break;
+                            }
+                            continuationEnd++;
+                        }
                     }
                     const statement = {
                         type: isLoop ? 'loop' : 'decision',

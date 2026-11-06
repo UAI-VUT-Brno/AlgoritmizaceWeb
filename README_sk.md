@@ -39,6 +39,8 @@ Panel pomocníka s podporovanými termínmi má predvolenú výšku **320 px**. 
 
 Podporované riadiace štruktúry:
 
+Dvojbodka na konci hlavičiek algoritmov a riadiacich štruktúr je voliteľná. Odsadenie blokov je naďalej povinné a generovaný Python obsahuje potrebné dvojbodky.
+
 - Hlavička algoritmu: `ALGORITMUS nazov(parametre):`.
 - Podmienka: `POKUD podmienka:`.
 - Dlhé popisy rozhodovacích uzlov sa zalamujú na hraniciach slov, aby sa zmenšila výška kosoštvorca.
