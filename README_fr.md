@@ -39,6 +39,8 @@ Le panneau d’aide des termes pris en charge a une hauteur initiale de **320 px
 
 Structures de contrôle prises en charge :
 
+Le deux-points final des en-têtes d’algorithme et de structure de contrôle est facultatif. L’indentation des blocs reste obligatoire, et le Python généré contient les deux-points requis.
+
 - En-tête d’algorithme : `ALGORITHME nom(parametres):`.
 - Condition : `SI condition:`.
 - Les longs libellés des nœuds de décision sont coupés aux limites des mots afin de réduire la hauteur du losange.

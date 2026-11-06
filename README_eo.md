@@ -39,6 +39,8 @@ La help-panelo kun subtenataj terminoj havas defaŭltan altecon de **320 px**. �
 
 Subtenataj kontrolstrukturoj:
 
+La dupunkto ĉe la fino de algoritmaj kaj kontrolstrukturaj kaplinioj estas nedeviga. Indentado de blokoj tamen estas bezonata, kaj la generita Python enhavas la bezonatajn dupunktojn.
+
 - Algoritma kaplinio: `ALGORITMO nomo(parametroj):`.
 - Kondiĉo: `SE kondiĉo:`.
 - Longaj etikedoj de decidaj nodoj estas falditaj ĉe vortlimoj por malpliigi la altecon de la rombo.

@@ -39,6 +39,8 @@ Nápověda s podporovanými termíny pseudokódu má výchozí výšku **320 px*
 
 Podporované řídicí struktury:
 
+Dvojtečka na konci hlaviček algoritmu a řídicích struktur je volitelná. Odsazení bloků je stále povinné a generovaný Python obsahuje potřebné dvojtečky.
+
 - Hlavička algoritmu: `ALGORITMUS nazev(parametry):`.
 - Podmínka: `POKUD podmínka:`.
 - Dlouhé popisky rozhodovacích uzlů se zalamují po slovech, aby se zmenšila výška diagramového kosočtverce.
